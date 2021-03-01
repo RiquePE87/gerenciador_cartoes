@@ -2,13 +2,37 @@ class Debit {
   int id;
   String description;
   double value;
-  String ownerName;
+  int quota;
   int creditCardId;
+  List<int> ownerId;
 
   Debit(
       {this.id,
       this.description,
       this.value,
-      this.ownerName,
-      this.creditCardId});
+      this.quota,
+      this.creditCardId,
+      this.ownerId});
+
+  Map<String, dynamic> toMap(){
+
+   return {
+     "id" : id,
+     "description": description,
+     "value" : value,
+     "quota" : quota,
+     "creditCardId" : creditCardId
+   };
+  }
+  Debit fromMap(Map map){
+
+    return Debit(
+      id: map["id"],
+      description: map["description"],
+      value: map["value"],
+      quota: map["quota"],
+      creditCardId: map["creditCardID"],
+      ownerId: []
+    );
+  }
 }

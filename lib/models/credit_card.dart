@@ -3,9 +3,27 @@ import 'package:gerenciador_cartoes/models/debit.dart';
 class CreditCard {
   int id;
   String name;
-  DateTime payDate;
-  double limit;
-  List<Debit> debitList;
+  int payDay;
+  double usedLimit;
+  double limitCredit;
 
-  CreditCard({this.id, this.name, this.payDate, this.limit});
+  CreditCard({this.id, this.name, this.payDay, this.usedLimit, this.limitCredit});
+
+  Map<String, dynamic> toMap() {
+    return {
+      "name": name,
+      "payday": payDay,
+      "usedlimit": usedLimit,
+      "limitcredit": limitCredit
+    };
+  }
+
+  CreditCard fromMap(Map map) {
+    return new CreditCard(
+        id: map["id"],
+        name: map["name"],
+        payDay: map["payday"],
+        usedLimit: map["usedlimit"],
+        limitCredit: map["limitcredit"]);
+  }
 }

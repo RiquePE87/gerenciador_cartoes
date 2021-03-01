@@ -6,4 +6,16 @@ class Owner {
   List<Debit> debitsList;
 
   Owner({this.id, this.name});
+
+  Map<String, dynamic> toMap(){
+    return {
+      "name" : name
+    };
+  }
+  Owner fromMap(Map map){
+    return new Owner(
+      id: map["id"],
+      name: map["name"]
+    );
+  }
 }
