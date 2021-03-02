@@ -80,17 +80,36 @@ class DbRepository {
       list = await db.rawQuery(SELECT_DEBITS);
 
       list.forEach((debit) {
-        if (debit["debit_id"] == list[count]["debit_id"] && list.length < count) {
-          Debit d = Debit().fromMap(debit);
-          d.ownerId.add(list[count + 1]["owner_id"]);
-          d.ownerId.add(debit["owner_id"]);
-          debitsList.add(d);
-        }else{
+        
+        for (Map m in list){
+          if (m["debit_id"] == debit["debit_id"] && m["id"] != debit["id"]){
+            Debit d = Debit().fromMap(debit);
+            d.ownerId.add(debit["owner_id"]);
+            d.ownerId.add(m["owner_id"]);
+            debitsList.add(d);
+          }
+          break;
+        }
+
+        if (!debitsList.contains(Debit().fromMap(debit))){
           Debit d = Debit().fromMap(debit);
           d.ownerId.add(debit["owner_id"]);
           debitsList.add(d);
         }
-        count++;
+        //Map map = list[count];
+        // if (debit["debit_id"] == map["debit_id"]) {
+        //   Debit d = Debit().fromMap(debit);
+        //   d.ownerId.add(map["owner_id"]);
+        //   d.ownerId.add(debit["owner_id"]);
+        //   debitsList.add(d);
+        //   list.remove(map);
+        // } else {
+        //   Debit d = Debit().fromMap(debit);
+        //   d.ownerId.add(debit["owner_id"]);
+        //   debitsList.add(d);
+        //   debitsList.remove(map);
+        // }
+        // count++;
       });
     } catch (ex) {
       print(ex);
