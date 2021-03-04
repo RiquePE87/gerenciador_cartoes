@@ -52,5 +52,6 @@ const String CREATE_OWNER_DEBIT_TABLE = "CREATE TABLE $keyOwnerDebitTable ("
     "FOREIGN KEY ($keyDebitIDOwnerDebit) REFERENCES $keyDebitTable($keyIdDebit),"
     "FOREIGN KEY ($keyOwnerIDOwnerDebit) REFERENCES $keyOwnerTable($keyIdOwner))";
 
-const String SELECT_DEBITS = "select * from $keyDebitTable left join $keyOwnerDebitTable on "
+const String SELECT_DEBITS =
+    "select * from $keyDebitTable left join $keyOwnerDebitTable on "
     "$keyOwnerDebitTable.$keyDebitIDOwnerDebit = $keyDebitTable.$keyIdDebit";

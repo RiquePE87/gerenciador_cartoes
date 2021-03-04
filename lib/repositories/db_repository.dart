@@ -68,52 +68,33 @@ class DbRepository {
   }
 
   Future<List<Debit>> getDebitsEntries() async {
+    List<Map<String, dynamic>> list;
     List<Debit> debitsList = [];
-
-    int count = 1;
+    List<int> owners = [];
+    Map<String, dynamic> map;
 
     try {
-      final Database db = await _getDatabase();
-
-      List<Map<String, dynamic>> list;
+      Database db = await _getDatabase();
 
       list = await db.rawQuery(SELECT_DEBITS);
 
-      list.forEach((debit) {
-        
-        for (Map m in list){
-          if (m["debit_id"] == debit["debit_id"] && m["id"] != debit["id"]){
-            Debit d = Debit().fromMap(debit);
-            d.ownerId.add(debit["owner_id"]);
-            d.ownerId.add(m["owner_id"]);
-            debitsList.add(d);
-          }
-          break;
-        }
+      map = list.first;
 
-        if (!debitsList.contains(Debit().fromMap(debit))){
-          Debit d = Debit().fromMap(debit);
-          d.ownerId.add(debit["owner_id"]);
+      list.forEach((element) {
+        if (element["debit_id"] == map["debit_id"]) {
+          owners.add(element["owner_id"]);
+        } else {
+          Debit d = Debit().fromMap(map);
+          d.ownerId.addAll(owners);
+          owners = [];
           debitsList.add(d);
+          map = element;
         }
-        //Map map = list[count];
-        // if (debit["debit_id"] == map["debit_id"]) {
-        //   Debit d = Debit().fromMap(debit);
-        //   d.ownerId.add(map["owner_id"]);
-        //   d.ownerId.add(debit["owner_id"]);
-        //   debitsList.add(d);
-        //   list.remove(map);
-        // } else {
-        //   Debit d = Debit().fromMap(debit);
-        //   d.ownerId.add(debit["owner_id"]);
-        //   debitsList.add(d);
-        //   debitsList.remove(map);
-        // }
-        // count++;
       });
-    } catch (ex) {
-      print(ex);
+    } catch (e) {
+      print(e);
     }
+    print(debitsList);
     return debitsList;
   }
 }
