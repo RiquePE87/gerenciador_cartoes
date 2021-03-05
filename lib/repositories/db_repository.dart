@@ -78,19 +78,23 @@ class DbRepository {
 
       list = await db.rawQuery(SELECT_DEBITS);
 
-      map = list.first;
+      map = list[0];
 
-      list.forEach((element) {
-        if (element["debit_id"] == map["debit_id"]) {
-          owners.add(element["owner_id"]);
-        } else {
+      for (int i = 0; i <= list.length; i++) {
+        if (list[i]["debit_id"] == map["debit_id"]) {
+          owners.add(list[i]["owner_id"]);
+        } else if (list[i]["debit_id"] != map["debit_id"]) {
           Debit d = Debit().fromMap(map);
           d.ownerId.addAll(owners);
           owners = [];
           debitsList.add(d);
-          map = element;
+          map = list[i];
         }
-      });
+      }
+
+      // list.forEach((element) {
+      //
+      // });
     } catch (e) {
       print(e);
     }
