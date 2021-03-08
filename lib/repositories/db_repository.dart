@@ -69,6 +69,7 @@ class DbRepository {
 
   Future<List<Debit>> getDebitsEntries() async {
     List<Map<String, dynamic>> list;
+    List<Map<String, dynamic>> list2 = [];
     List<Debit> debitsList = [];
     List<int> owners = [];
     Map<String, dynamic> map;
@@ -78,27 +79,27 @@ class DbRepository {
 
       list = await db.rawQuery(SELECT_DEBITS);
 
-      map = list[0];
+      int count = 0;
 
-      for (int i = 0; i <= list.length; i++) {
-        if (list[i]["debit_id"] == map["debit_id"]) {
-          owners.add(list[i]["owner_id"]);
-        } else if (list[i]["debit_id"] != map["debit_id"]) {
-          Debit d = Debit().fromMap(map);
-          d.ownerId.addAll(owners);
-          owners = [];
-          debitsList.add(d);
-          map = list[i];
+      for (int i = 1; i <= list.last["debit_id"]; i++) {
+        while (list[count]["debit_id"] == i) {
+          owners.add(list[count]["owner_id"]);
+          count++;
+          if (count == list.length) {
+            Debit d = Debit().fromMap(list[count - 1]);
+            d.ownerId.addAll(owners);
+            owners.clear();
+            debitsList.add(d);
+          }
         }
+        Debit d = Debit().fromMap(list[count - 1]);
+        d.ownerId.addAll(owners);
+        owners.clear();
+        debitsList.add(d);
       }
-
-      // list.forEach((element) {
-      //
-      // });
     } catch (e) {
       print(e);
     }
-    print(debitsList);
     return debitsList;
   }
 }

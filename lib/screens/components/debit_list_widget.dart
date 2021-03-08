@@ -21,7 +21,12 @@ class DebitListWidget extends StatelessWidget {
                   Text(value.debitsList[index].description),
                   Text(value.debitsList[index].quota.toString()),
                   Text(value.debitsList[index].value.toString()),
-                  Text(value.debitsList[index].ownerId.length == 0 ? "0" : value.debitsList[index].ownerId[0].toString()),
+                  Container(
+                    width: 20,
+                    child: ListView.builder(shrinkWrap: true,itemBuilder: (context, index){
+                      return Text(value.debitsList[index].ownerId[index]);
+                    }),
+                  )
                 ],
               );
             },
