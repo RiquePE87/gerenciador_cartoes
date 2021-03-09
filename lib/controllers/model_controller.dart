@@ -31,10 +31,7 @@ class ModelController extends GetxController {
 
   Future<void> getDebits() async {
     isLoading = false;
-    debitsList = await dbRepository.getDebitsEntries();
-    // debitsList = await dbRepository
-    //     .getEntries(keyDebitTable, whereArgs: selectedCard.id)
-    //     .whenComplete(() => isLoading = false);
+    debitsList = await dbRepository.getDebitEntries(selectedCard.id);
     update();
   }
 

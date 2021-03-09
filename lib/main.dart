@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: ThemeData(
-        primaryColor: Colors.purple
+        primaryColor: Colors.purple,
       ),
       title: 'Material App',
       home: Scaffold(
@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
           title: Text('Gerenciador de Cartões'),
         ),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.purple,
           child: Icon(Icons.credit_card),
           onPressed: () => Get.to(() => CreditCardScreen()),
         ),

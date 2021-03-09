@@ -4,6 +4,7 @@ import 'package:gerenciador_cartoes/models/owner.dart';
 import 'package:gerenciador_cartoes/repositories/constants.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:list_ext/list_ext.dart';
 
 class DbRepository {
   Future<Database> _getDatabase() async {
@@ -44,20 +45,18 @@ class DbRepository {
       switch (table) {
         case keyCreditCardTable:
           list = await db.query(table);
-          return List.generate(
+          return List<CreditCard>.generate(
               list.length, (index) => CreditCard().fromMap(list[index]));
           break;
         case keyOwnerTable:
           list = await db.query(table);
-          return List.generate(
+          return List<Owner>.generate(
               list.length, (index) => Owner().fromMap(list[index]));
           break;
         case keyDebitTable:
-          //list = await db.query(keyOwnerDebitTable);
-          //list = await db.rawQuery(SELECT_DEBITS);
           list = await db.query(table,
               where: "$keyCreditCardIdDebit = ?", whereArgs: [whereArgs]);
-          return List.generate(
+          return List<Debit>.generate(
               list.length, (index) => Debit().fromMap(list[index]));
           break;
       }
@@ -67,39 +66,52 @@ class DbRepository {
     }
   }
 
-  Future<List<Debit>> getDebitsEntries() async {
-    List<Map<String, dynamic>> list;
-    List<Map<String, dynamic>> list2 = [];
-    List<Debit> debitsList = [];
-    List<int> owners = [];
-    Map<String, dynamic> map;
+  Future<List<Debit>> getDebitEntries(int cardId) async{
 
-    try {
+    List<Map<String, dynamic>> list;
+    List<Map<String, dynamic>> selected;
+    List<Debit> debitsList = [];
+    List<int> idList = [];
+    List<int> ids = [];
+    List<Owner> owners = [];
+    List<Owner> ownerList = await getEntries(keyOwnerTable);
+
+    try{
       Database db = await _getDatabase();
 
-      list = await db.rawQuery(SELECT_DEBITS);
+      String query = "$SELECT_DEBITS ${cardId.toString()}";
 
-      int count = 0;
+      list = await db.rawQuery(query);
 
-      for (int i = 1; i <= list.last["debit_id"]; i++) {
-        while (list[count]["debit_id"] == i) {
-          owners.add(list[count]["owner_id"]);
-          count++;
-          if (count == list.length) {
-            Debit d = Debit().fromMap(list[count - 1]);
-            d.ownerId.addAll(owners);
-            owners.clear();
-            debitsList.add(d);
-          }
+      list.forEach((element) {
+        idList.add(element["debit_id"]);
+      });
+
+      ids = idList.toSet().toList();
+
+      ids.forEach((element) async{
+        selected = await db.rawQuery("$SELECT_DEBITS_WHERE ${element.toString()}");
+
+        for (int i = 0; i < selected.length; i++){
+          owners.add(_getOwner(ownerList, selected[i]["owner_id"]));
         }
-        Debit d = Debit().fromMap(list[count - 1]);
+        Debit d = Debit().fromMap(selected[0]);
         d.ownerId.addAll(owners);
-        owners.clear();
         debitsList.add(d);
-      }
-    } catch (e) {
+        owners.clear();
+      });
+      return debitsList;
+    }catch (e){
       print(e);
     }
-    return debitsList;
+  }
+
+  Owner _getOwner(List<Owner> list, int id) {
+    Owner owner;
+    list.forEach((element) {
+      if (element.id == id)
+        owner = element;
+    });
+    return owner;
   }
 }

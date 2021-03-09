@@ -14,23 +14,29 @@ class DebitDetails extends StatelessWidget {
     return GetBuilder<ModelController>(
       init: ModelController(),
       builder: (value){
-        return Card(
-          child: Row(
-            children: [
-              Column(
-                children: [
-                  Text(debit.description),
-                  Text("${debit.value.toStringAsFixed(2)} X ${debit.quota.toString()}")
-                ],
-              ),
-              Column(
-                children: [
-                  ListView.builder(itemBuilder: (context, index){
-                    List<Owner> owners = value.ownerList;
-                  })
-                ],
-              )
-            ],
+        return Container(
+          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+          child: Card(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(debit.description),
+                    Text("${debit.value.toStringAsFixed(2)} X ${debit.quota.toString()}")
+                  ],
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         );
       },

@@ -1,10 +1,12 @@
+import 'owner.dart';
+
 class Debit {
   int id;
   String description;
   double value;
   int quota;
   int creditCardId;
-  List<int> ownerId;
+  List<Owner> ownerId;
 
   Debit(
       {this.id,
@@ -17,7 +19,7 @@ class Debit {
   Map<String, dynamic> toMap(){
 
    return {
-     "id" : id,
+     //"id" : id,
      "description": description,
      "value" : value,
      "quota" : quota,

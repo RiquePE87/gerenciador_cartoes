@@ -54,4 +54,10 @@ const String CREATE_OWNER_DEBIT_TABLE = "CREATE TABLE $keyOwnerDebitTable ("
 
 const String SELECT_DEBITS =
     "select * from $keyDebitTable left join $keyOwnerDebitTable on "
-    "$keyOwnerDebitTable.$keyDebitIDOwnerDebit = $keyDebitTable.$keyIdDebit";
+    "$keyOwnerDebitTable.$keyDebitIDOwnerDebit = $keyDebitTable.$keyIdDebit where $keyCreditCardIdDebit = ";
+
+const String SELECT_DEBITS2 = "select * from $keyOwnerDebitTable left join "
+    "$keyDebitTable on $keyDebitTable.$keyIdDebit = $keyOwnerDebitTable.$keyDebitIDOwnerDebit where $keyCreditCardIdDebit = ";
+
+const String SELECT_DEBITS_WHERE = "select * from $keyDebitTable left join $keyOwnerDebitTable on "
+    "$keyOwnerDebitTable.$keyDebitIDOwnerDebit = $keyDebitTable.$keyIdDebit where $keyDebitIDOwnerDebit = ";

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
+import 'package:gerenciador_cartoes/screens/components/debit_details.dart';
 import 'package:get/get.dart';
 
 class DebitListWidget extends StatelessWidget {
@@ -15,20 +16,7 @@ class DebitListWidget extends StatelessWidget {
             shrinkWrap: true,
             separatorBuilder: (BuildContext context, int index) => Divider(),
             itemBuilder: (context, index) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(value.debitsList[index].description),
-                  Text(value.debitsList[index].quota.toString()),
-                  Text(value.debitsList[index].value.toString()),
-                  Container(
-                    width: 20,
-                    child: ListView.builder(shrinkWrap: true,itemBuilder: (context, index){
-                      return Text(value.debitsList[index].ownerId[index]);
-                    }),
-                  )
-                ],
-              );
+              return DebitDetails(debitList[index]);
             },
             itemCount: value.debitsList.length),
       );
