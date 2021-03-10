@@ -4,7 +4,6 @@ import 'package:gerenciador_cartoes/models/owner.dart';
 import 'package:gerenciador_cartoes/repositories/constants.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:list_ext/list_ext.dart';
 
 class DbRepository {
   Future<Database> _getDatabase() async {
@@ -66,8 +65,7 @@ class DbRepository {
     }
   }
 
-  Future<List<Debit>> getDebitEntries(int cardId) async{
-
+  Future<List<Debit>> getDebitEntries(int cardId) async {
     List<Map<String, dynamic>> list;
     List<Map<String, dynamic>> selected;
     List<Debit> debitsList = [];
@@ -76,7 +74,7 @@ class DbRepository {
     List<Owner> owners = [];
     List<Owner> ownerList = await getEntries(keyOwnerTable);
 
-    try{
+    try {
       Database db = await _getDatabase();
 
       String query = "$SELECT_DEBITS ${cardId.toString()}";
@@ -89,10 +87,11 @@ class DbRepository {
 
       ids = idList.toSet().toList();
 
-      ids.forEach((element) async{
-        selected = await db.rawQuery("$SELECT_DEBITS_WHERE ${element.toString()}");
+      ids.forEach((element) async {
+        selected = await db.transaction((txn) async =>
+            await txn.rawQuery("$SELECT_DEBITS_WHERE ${element.toString()}"));
 
-        for (int i = 0; i < selected.length; i++){
+        for (int i = 0; i < selected.length; i++) {
           owners.add(_getOwner(ownerList, selected[i]["owner_id"]));
         }
         Debit d = Debit().fromMap(selected[0]);
@@ -101,7 +100,7 @@ class DbRepository {
         owners.clear();
       });
       return debitsList;
-    }catch (e){
+    } catch (e) {
       print(e);
     }
   }
@@ -109,8 +108,7 @@ class DbRepository {
   Owner _getOwner(List<Owner> list, int id) {
     Owner owner;
     list.forEach((element) {
-      if (element.id == id)
-        owner = element;
+      if (element.id == id) owner = element;
     });
     return owner;
   }

@@ -16,7 +16,7 @@ class DebitListWidget extends StatelessWidget {
             shrinkWrap: true,
             separatorBuilder: (BuildContext context, int index) => Divider(),
             itemBuilder: (context, index) {
-              return DebitDetails(debitList[index]);
+              return debitList != null ? DebitDetails(debitList[index]) : CircularProgressIndicator();
             },
             itemCount: value.debitsList.length),
       );
