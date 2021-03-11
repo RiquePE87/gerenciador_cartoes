@@ -6,8 +6,9 @@ class CreditCard {
   int payDay;
   double usedLimit;
   double limitCredit;
+  double total;
 
-  CreditCard({this.id, this.name, this.payDay, this.usedLimit, this.limitCredit});
+  CreditCard({this.id, this.name, this.payDay, this.usedLimit, this.limitCredit, this.total = 0});
 
   Map<String, dynamic> toMap() {
     return {

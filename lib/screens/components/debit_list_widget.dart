@@ -11,14 +11,14 @@ class DebitListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ModelController>(builder: (value) {
-      return Container(
-        child: ListView.separated(
-            shrinkWrap: true,
-            separatorBuilder: (BuildContext context, int index) => Divider(),
-            itemBuilder: (context, index) {
-              return debitList != null ? DebitDetails(debitList[index]) : CircularProgressIndicator();
-            },
-            itemCount: value.debitsList.length),
+      return Expanded(
+        child: Container(
+          child: ListView.builder(
+              itemBuilder: (context, index) {
+                return !value.isLoading ? DebitDetails(debitList[index]) : Center(child: CircularProgressIndicator());
+              },
+              itemCount: debitList.length != null ? debitList.length : 0),
+        ),
       );
     });
   }

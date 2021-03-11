@@ -61,7 +61,7 @@ class DbRepository {
       }
     } catch (ex) {
       print(ex);
-      return new List<Map<String, dynamic>>();
+      return <Map<String, dynamic>>[];
     }
   }
 
@@ -87,18 +87,20 @@ class DbRepository {
 
       ids = idList.toSet().toList();
 
-      ids.forEach((element) async {
-        selected = await db.transaction((txn) async =>
-            await txn.rawQuery("$SELECT_DEBITS_WHERE ${element.toString()}"));
+      for (int i = 0; i < ids.length; i++) {
+        await db.transaction((txn) async => selected =
+            await txn.rawQuery("$SELECT_DEBITS_WHERE", [ids[i].toString()]));
 
         for (int i = 0; i < selected.length; i++) {
-          owners.add(_getOwner(ownerList, selected[i]["owner_id"]));
+          if (selected != null)
+            owners.add(_getOwner(ownerList, selected[i]["owner_id"]));
         }
         Debit d = Debit().fromMap(selected[0]);
         d.ownerId.addAll(owners);
         debitsList.add(d);
         owners.clear();
-      });
+      }
+      print(debitsList);
       return debitsList;
     } catch (e) {
       print(e);

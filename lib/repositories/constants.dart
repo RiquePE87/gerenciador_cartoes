@@ -60,4 +60,4 @@ const String SELECT_DEBITS2 = "select * from $keyOwnerDebitTable left join "
     "$keyDebitTable on $keyDebitTable.$keyIdDebit = $keyOwnerDebitTable.$keyDebitIDOwnerDebit where $keyCreditCardIdDebit = ";
 
 const String SELECT_DEBITS_WHERE = "select * from $keyDebitTable left join $keyOwnerDebitTable on "
-    "$keyOwnerDebitTable.$keyDebitIDOwnerDebit = $keyDebitTable.$keyIdDebit where $keyDebitIDOwnerDebit = ";
+    "$keyOwnerDebitTable.$keyDebitIDOwnerDebit = $keyDebitTable.$keyIdDebit where $keyDebitIDOwnerDebit = ?";

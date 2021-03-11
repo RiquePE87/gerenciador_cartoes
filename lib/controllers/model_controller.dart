@@ -7,10 +7,10 @@ import 'package:get/get.dart';
 
 class ModelController extends GetxController {
   var isLoading = true;
-  var creditCards = new List<dynamic>();
-  var debitsList = new List<dynamic>();
-  var ownerList = new List<dynamic>();
-  var selectedOwners = new List<dynamic>();
+  var creditCards = <dynamic>[];
+  var debitsList = <dynamic>[];
+  var ownerList = <dynamic>[];
+  var selectedOwners = <dynamic>[];
   var name;
   var payDay;
   var usedLimit;
@@ -21,6 +21,13 @@ class ModelController extends GetxController {
   Owner owner = new Owner();
   Debit debit = new Debit();
 
+  void getTotalDebit(){
+    selectedCard.total = 0.0;
+    debitsList.forEach((element) {
+      selectedCard.total+= (element.value / element.quota);
+    });
+  }
+
   Future<void> getCreditCards() async {
     isLoading = false;
     creditCards = await dbRepository
@@ -30,8 +37,9 @@ class ModelController extends GetxController {
   }
 
   Future<void> getDebits() async {
-    isLoading = false;
-    debitsList = await dbRepository.getDebitEntries(selectedCard.id);
+    isLoading = true;
+    debitsList = await dbRepository.getDebitEntries(selectedCard.id).whenComplete(() => isLoading = false);
+    getTotalDebit();
     update();
   }
 
@@ -60,7 +68,6 @@ class ModelController extends GetxController {
   Future<void> insertDebit() async {
     debit.creditCardId = selectedCard.id;
     int debitId;
-    Map<String, dynamic> map = {};
     debitId = await dbRepository.insert(debit.toMap(), keyDebitTable);
     selectedOwners.forEach((e) async {
       Map<String, dynamic> map = {};
