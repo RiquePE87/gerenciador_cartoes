@@ -17,32 +17,71 @@ class MyApp extends StatelessWidget {
       ),
       title: 'Material App',
       home: Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(icon: Icon(Icons.person), onPressed: ()=> Get.dialog(OwnerDialog()))
-          ],
-          title: Text('Gerenciador de Cartões'),
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.purple,
-          child: Icon(Icons.credit_card),
-          onPressed: () => Get.to(() => CreditCardScreen()),
-        ),
-        body: Center(
-            child: GetBuilder(
+        backgroundColor: Colors.purple.shade500,
+        body: GetBuilder(
           init: ModelController(),
           builder: (value) {
-            return Container(
-              child: value.isLoading
-                  ? Center(child: CircularProgressIndicator())
-                  : ListView.builder(
-                      itemCount: value.creditCards.length,
-                      itemBuilder: (context, index) {
-                        return CardCreditCard(value.creditCards[index]);
-                      }),
+            return SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      child: value.isLoading
+                          ? Center(child: CircularProgressIndicator())
+                          : ListView.builder(
+                              itemCount: value.creditCards.length,
+                              itemBuilder: (context, index) {
+                                return CardCreditCard(value.creditCards[index]);
+                              }),
+                    ),
+                  ),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: ListView(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children: [
+                              SizedBox(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                        icon: Icon(Icons.person_add),
+                                        onPressed: () {}),
+                                    Text("Adicionar Devedor")
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                        icon: Icon(Icons.credit_card),
+                                        onPressed: () {}),
+                                    Text("Adicionar Devedor")
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             );
           },
-        )),
+        ),
       ),
     );
   }

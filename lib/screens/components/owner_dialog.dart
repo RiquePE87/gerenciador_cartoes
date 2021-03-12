@@ -20,9 +20,9 @@ class OwnerDialog extends StatelessWidget {
                       border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)))
                   ),
                 ),
+                Text(value.message),
                 FlatButton(onPressed: (){
                   value.insertOwner();
-                  Get.back();
                 }, child: Text("Salvar")),
                 FlatButton(onPressed: (){
                   Get.back();

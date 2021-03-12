@@ -52,17 +52,16 @@ class DebitDialog extends StatelessWidget {
                     IconButton(icon: Icon(Icons.person_add), onPressed: ()=> Get.dialog(OwnerSelectDialog()))
                   ],
                 ),
+                Text(value.message),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     FlatButton(onPressed: (){
                       value.insertDebit();
-                      Get.back();
                     }, child: Text("Salvar")),
                     FlatButton(onPressed: (){
                       Get.back();
                     }, child: Text("Cancelar")),
-
                   ],
                 )
               ],

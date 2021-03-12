@@ -11,66 +11,70 @@ class CreditCardScreen extends StatelessWidget {
     const OutlineInputBorder border =
         OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)));
 
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          GetBuilder(
-            init: ModelController(),
-              builder: (value) => IconButton(icon: Icon(Icons.save), onPressed: (){
-                value.insertCreditCard();
-                Get.back();
-              }))
-        ],
-        title: const Text("Novo Cartão"),
-      ),
-      body: GetBuilder(
-        init: ModelController(),
-        builder: (value){
-          return Center(
-            child: Card(
-              margin: const EdgeInsets.all(10),
-              color: Colors.grey[100],
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    onChanged: (txt) => value.name = txt,
-                    decoration:
-                    InputDecoration(
-                        isDense: true,
-                        hintText: "Nome do cartão", border: border),
-                  ),
-                  SizedBox(height: 10,),
-                  TextField(
-                    onChanged: (txt) => value.payDay = txt,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        isDense: true,
-                        hintText: "Dia do vencimento", border: border),
-                  ),
-                  SizedBox(height: 10,),
-                  TextField(
-                    onChanged: (txt) => value.limitCredit = txt,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        isDense: true,
-                        hintText: "Limite do cartão R\$:", border: border),
-                  ),
-                  SizedBox(height: 10,),
-                  TextField(
-                    onChanged: (txt) => value.usedLimit = txt,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        isDense: true,
-                        hintText: "Limite disponível R\$:", border: border),
-                  ),
-                  SizedBox(height: 10,),
-                ],
+    return Dialog(
+        child: GetBuilder<ModelController>(
+      init: ModelController(),
+      builder: (value) {
+        return Card(
+          margin: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                onChanged: (txt) => value.name = txt,
+                decoration: InputDecoration(
+                    isDense: true,
+                    hintText: "Nome do cartão",
+                    border: border),
               ),
-            ),
-          );
-        },
-      ),
-    );
+              SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                onChanged: (txt) => value.payDay = txt,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    isDense: true,
+                    hintText: "Dia do vencimento",
+                    border: border),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                onChanged: (txt) => value.limitCredit = txt,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    isDense: true,
+                    hintText: "Limite do cartão R\$:",
+                    border: border),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                onChanged: (txt) => value.usedLimit = txt,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    isDense: true,
+                    hintText: "Limite disponível R\$:",
+                    border: border),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(value.message),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(onPressed: ()=> value.insertCreditCard(), child: Text("Salvar")),
+                  TextButton(onPressed: ()=> Get.back(), child: Text("Cancelar"))
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    ));
   }
 }

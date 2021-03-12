@@ -87,7 +87,7 @@ class CardCreditCard extends StatelessWidget {
                       ],
                     ),
                     Row(children: [
-                      IconButton(icon: Icon(Icons.add_business_rounded), onPressed: (){
+                      IconButton(icon: Icon(Icons.add_business_rounded, color: Colors.white,), onPressed: (){
                         value.selectedCard = card;
                         Get.dialog(DebitDialog());
                       })
