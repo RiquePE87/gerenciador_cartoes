@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       theme: ThemeData(
         primaryColor: Colors.purple,
+        iconTheme: IconThemeData(color: Colors.white)
       ),
       title: 'Material App',
       home: Scaffold(
@@ -37,14 +38,16 @@ class MyApp extends StatelessWidget {
                     ),
                   ),
                   Container(
+                    height: 80,
+                    padding: const EdgeInsets.only(bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
                         Expanded(
                           flex: 1,
                           child: ListView(
-                            scrollDirection: Axis.vertical,
+                            scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
                             children: [
                               SizedBox(
@@ -70,7 +73,32 @@ class MyApp extends StatelessWidget {
                                     Text("Adicionar Devedor")
                                   ],
                                 ),
-                              )
+                              ),
+                              SizedBox(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                        icon: Icon(Icons.person_add),
+                                        onPressed: () {}),
+                                    Text("Adicionar Devedor")
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                        icon: Icon(Icons.person_add),
+                                        onPressed: () {}),
+                                    Text("Adicionar Devedor")
+                                  ],
+                                ),
+                              ),
+
                             ],
                           ),
                         )
