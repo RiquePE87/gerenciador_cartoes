@@ -13,6 +13,7 @@ class DebitListWidget extends StatelessWidget {
     return GetBuilder<ModelController>(builder: (value) {
       return Expanded(
         child: Container(
+          color: Colors.transparent,
           child: ListView.builder(
               itemBuilder: (context, index) {
                 return !value.isLoading ? DebitDetails(debitList[index]) : Center(child: CircularProgressIndicator());

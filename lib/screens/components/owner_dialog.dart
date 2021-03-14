@@ -21,12 +21,17 @@ class OwnerDialog extends StatelessWidget {
                   ),
                 ),
                 Text(value.message),
-                FlatButton(onPressed: (){
-                  value.insertOwner();
-                }, child: Text("Salvar")),
-                FlatButton(onPressed: (){
-                  Get.back();
-                }, child: Text("Cancelar"))
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(onPressed: (){
+                      value.insertOwner();
+                    }, child: Text("Salvar")),
+                    TextButton(onPressed: (){
+                      Get.back();
+                    }, child: Text("Cancelar"))
+                  ],
+                )
               ],
             );
           },

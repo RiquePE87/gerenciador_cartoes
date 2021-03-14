@@ -26,11 +26,27 @@ class DbRepository {
     }
   }
 
-  Future<void> delete(dynamic entry) async {
+  Future<void> delete({String table, dynamic entry}) async {
+    final Database db = await _getDatabase();
+    var batch = db.batch();
     try {
-      final Database db = await _getDatabase();
-      await db.delete(keyCreditCardTable,
-          where: "$keyIdCreditCard = ?", whereArgs: [entry.id]);
+      if (table == keyDebitTable) {
+        Debit d = entry;
+        var result;
+        await db.transaction((txn) async {
+          result = await txn.rawDelete("delete from $table where id = ?;",[d.id]);
+        });
+        print(result);
+      } else if (table == keyCreditCardTable) {
+        CreditCard c = entry;
+        batch.delete(table, where: "id = ?", whereArgs: [c.id]);
+        batch.delete(keyDebitTable,
+            where: "$keyCreditCardIdDebit = ?", whereArgs: [c.id]);
+        batch.delete(keyOwnerDebitTable,
+            where: "$keyCreditCardIDOwnerDebit = ?", whereArgs: [c.id]);
+        var results = await batch.commit();
+        print(results);
+      }
     } catch (ex) {
       print(ex);
     }
@@ -100,7 +116,6 @@ class DbRepository {
         debitsList.add(d);
         owners.clear();
       }
-      print(debitsList);
       return debitsList;
     } catch (e) {
       print(e);

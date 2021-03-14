@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
 import 'package:gerenciador_cartoes/models/credit_card.dart';
 import 'package:gerenciador_cartoes/screens/card_details_screen.dart';
-import 'package:gerenciador_cartoes/screens/debit_dialog.dart';
 import 'package:get/get.dart';
 
 class CardCreditCard extends StatelessWidget {
@@ -17,13 +16,24 @@ class CardCreditCard extends StatelessWidget {
         init: ModelController(),
         builder: (value) {
           return GestureDetector(
-            onTap: (){
+            onTap: () {
               value.selectedCard = card;
               value.getDebits();
               Get.to(() => CardDetailsScreen());
             },
             onLongPress: () {
-              value.deleteCreditCard(card);
+              Get.defaultDialog(
+                  title: "Atenção",
+                  middleText: "Você deseja excluir o cartão?",
+                  onConfirm: (){
+                    value.deleteCreditCard(card);
+                    Get.back();
+                  },
+                  textConfirm: "Sim",
+                  buttonColor: Colors.white,
+                  onCancel: () => Get.back(),
+                  textCancel: "Cancelar");
+              //
             },
             child: Card(
               color: Colors.purple.shade400,
@@ -86,12 +96,6 @@ class CardCreditCard extends StatelessWidget {
                                 color: Colors.white)),
                       ],
                     ),
-                    Row(children: [
-                      IconButton(icon: Icon(Icons.add_business_rounded, color: Colors.white,), onPressed: (){
-                        value.selectedCard = card;
-                        Get.dialog(DebitDialog());
-                      })
-                    ],)
                   ],
                 ),
               ),

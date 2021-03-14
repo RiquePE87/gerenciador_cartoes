@@ -46,7 +46,6 @@ class ModelController extends GetxController {
       return true;
     else {
       showErrorMessage("Campo Obrigatório");
-
       return false;
     }
   }
@@ -63,8 +62,7 @@ class ModelController extends GetxController {
   bool validateDebit() {
     if (debit.description != null &&
         debit.value != null &&
-        debit.quota != null &&
-        debit.ownerId != null) {
+        debit.quota != null) {
       return true;
     } else {
       showErrorMessage("Campo Obrigatório");
@@ -73,7 +71,7 @@ class ModelController extends GetxController {
   }
 
   Future<void> getCreditCards() async {
-    isLoading = false;
+    isLoading = true;
     creditCards = await dbRepository
         .getEntries(keyCreditCardTable)
         .whenComplete(() => isLoading = false);
@@ -110,23 +108,23 @@ class ModelController extends GetxController {
       await dbRepository.insert(owner.toMap(), keyOwnerTable);
       getOwners();
       update();
-      Get.back();
     }
   }
 
   Future<void> insertDebit() async {
+    debit.creditCardId = selectedCard.id;
     if (validateDebit()) {
-      debit.creditCardId = selectedCard.id;
       int debitId;
       debitId = await dbRepository.insert(debit.toMap(), keyDebitTable);
       selectedOwners.forEach((e) async {
         Map<String, dynamic> map = {};
         map.addAll(
-            {"$keyOwnerIDOwnerDebit": e.id, "$keyDebitIDOwnerDebit": debitId});
+            {"$keyOwnerIDOwnerDebit": e.id, "$keyDebitIDOwnerDebit": debitId, "$keyCreditCardIDOwnerDebit" : debit.creditCardId});
         await dbRepository.insert(map, keyOwnerDebitTable);
       });
+      selectedOwners.clear();
+      getDebits();
       update();
-      Get.back();
     }
   }
 
@@ -139,14 +137,20 @@ class ModelController extends GetxController {
       dbRepository.insert(cc.toMap(), keyCreditCardTable);
       getCreditCards();
       update();
-      Get.back();
     }
   }
 
   Future<void> deleteCreditCard(CreditCard card) async {
-    await dbRepository.delete(card);
+    await dbRepository.delete(table: keyCreditCardTable ,entry: card);
+    Get.snackbar("Cartão Excluido!", "Excluido com sucesso!", snackPosition: SnackPosition.BOTTOM);
     getCreditCards();
-    Get.snackbar("Cartão Excluido!", "Excluido com sucesso!");
+    update();
+  }
+
+  Future<void> deleteDebit(Debit debit) async {
+    await dbRepository.delete(table: keyDebitTable ,entry: debit);
+    Get.snackbar("Débito Excluido!", "Excluido com sucesso!", snackPosition: SnackPosition.BOTTOM);
+    getDebits();
     update();
   }
 

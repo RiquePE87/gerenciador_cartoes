@@ -23,6 +23,7 @@ const String keyNameOwner = "name";
 const String keyIDdOwnerDebit = "id";
 const String keyDebitIDOwnerDebit = "debit_id";
 const String keyOwnerIDOwnerDebit = "owner_id";
+const String keyCreditCardIDOwnerDebit = "credit_card_id";
 
 const String DATABASE = "database.db";
 
@@ -49,8 +50,10 @@ const String CREATE_OWNER_DEBIT_TABLE = "CREATE TABLE $keyOwnerDebitTable ("
     "$keyIDdOwnerDebit INTEGER PRIMARY KEY AUTOINCREMENT,"
     "$keyDebitIDOwnerDebit INTEGER NOT NULL,"
     "$keyOwnerIDOwnerDebit INTEGER NOT NULL,"
-    "FOREIGN KEY ($keyDebitIDOwnerDebit) REFERENCES $keyDebitTable($keyIdDebit),"
-    "FOREIGN KEY ($keyOwnerIDOwnerDebit) REFERENCES $keyOwnerTable($keyIdOwner))";
+    "$keyCreditCardIDOwnerDebit INTEGER NOT NULL,"
+    "FOREIGN KEY ($keyDebitIDOwnerDebit) REFERENCES $keyDebitTable($keyIdDebit) ON DELETE CASCADE ,"
+    "FOREIGN KEY ($keyOwnerIDOwnerDebit) REFERENCES $keyOwnerTable($keyIdOwner) ON DELETE CASCADE "
+    "FOREIGN KEY ($keyOwnerIDOwnerDebit) REFERENCES $keyCreditCardTable($keyIdCreditCard) ON DELETE CASCADE)";
 
 const String SELECT_DEBITS =
     "select * from $keyDebitTable left join $keyOwnerDebitTable on "
