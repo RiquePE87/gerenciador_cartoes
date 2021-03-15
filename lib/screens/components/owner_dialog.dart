@@ -26,6 +26,7 @@ class OwnerDialog extends StatelessWidget {
                   children: [
                     TextButton(onPressed: (){
                       value.insertOwner();
+                      Get.back();
                     }, child: Text("Salvar")),
                     TextButton(onPressed: (){
                       Get.back();

@@ -24,6 +24,7 @@ class ModelController extends GetxController {
 
   void getTotalDebit() {
     selectedCard.total = 0.0;
+    if (debitsList != null)
     debitsList.forEach((element) {
       selectedCard.total += (element.value / element.quota);
     });
@@ -82,9 +83,13 @@ class ModelController extends GetxController {
     isLoading = true;
     debitsList = await dbRepository
         .getDebitEntries(selectedCard.id)
-        .whenComplete(() => isLoading = false);
-    getTotalDebit();
-    update();
+        .whenComplete((){
+          isLoading = false;
+          getTotalDebit();
+          update();
+    });
+
+
   }
 
   void selectOwners(Owner owner) {

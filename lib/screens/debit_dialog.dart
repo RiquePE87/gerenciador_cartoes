@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
-import 'package:gerenciador_cartoes/screens/components/owner_dialog.dart';
 import 'package:gerenciador_cartoes/screens/components/owner_select_dialog.dart';
 import 'package:get/get.dart';
 
@@ -26,6 +25,7 @@ class DebitDialog extends StatelessWidget {
               children: [
                 TextField(
                   onChanged: (txt) => value.debit.value = double.tryParse(txt),
+                  keyboardType: TextInputType.numberWithOptions(),
                   decoration:
                   InputDecoration(
                       isDense: true,
@@ -58,6 +58,7 @@ class DebitDialog extends StatelessWidget {
                   children: [
                     TextButton(onPressed: (){
                       value.insertDebit();
+                      Get.back();
                     }, child: Text("Salvar")),
                     TextButton(onPressed: (){
                       Get.back();

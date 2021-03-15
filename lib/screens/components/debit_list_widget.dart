@@ -18,7 +18,7 @@ class DebitListWidget extends StatelessWidget {
               itemBuilder: (context, index) {
                 return !value.isLoading ? DebitDetails(debitList[index]) : Center(child: CircularProgressIndicator());
               },
-              itemCount: debitList.length != null ? debitList.length : 0),
+              itemCount: debitList != null ? debitList.length : 0),
         ),
       );
     });

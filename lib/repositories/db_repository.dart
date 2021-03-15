@@ -34,7 +34,7 @@ class DbRepository {
         Debit d = entry;
         var result;
         await db.transaction((txn) async {
-          result = await txn.rawDelete("delete from $table where id = ?;",[d.id]);
+          result = await txn.rawDelete("DELETE FROM $table WHERE id = ? AND $keyCreditCardIdDebit = ?;",[d.id.toString(), d.creditCardId]);
         });
         print(result);
       } else if (table == keyCreditCardTable) {

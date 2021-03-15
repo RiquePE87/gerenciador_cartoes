@@ -67,7 +67,10 @@ class CreditCardScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextButton(onPressed: ()=> value.insertCreditCard(), child: Text("Salvar")),
+                  TextButton(onPressed: (){
+                    value.insertCreditCard();
+                    Get.back();
+                  }, child: Text("Salvar")),
                   TextButton(onPressed: ()=> Get.back(), child: Text("Cancelar"))
                 ],
               )
