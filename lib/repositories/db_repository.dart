@@ -26,6 +26,16 @@ class DbRepository {
     }
   }
 
+  Future<void> deleteTest() async{
+    final Database db = await _getDatabase();
+    var result;
+
+    await db.transaction((txn) async {
+      result = await txn.rawDelete("DELETE FROM $keyDebitTable WHERE id = ? AND $keyCreditCardIdDebit = ?;",[12, 1]);
+    });
+    print(result);
+  }
+
   Future<void> delete({String table, dynamic entry}) async {
     final Database db = await _getDatabase();
     var batch = db.batch();
@@ -34,7 +44,7 @@ class DbRepository {
         Debit d = entry;
         var result;
         await db.transaction((txn) async {
-          result = await txn.rawDelete("DELETE FROM $table WHERE id = ? AND $keyCreditCardIdDebit = ?;",[d.id.toString(), d.creditCardId]);
+          result = await txn.rawDelete("DELETE FROM $table WHERE id = ?;",[d.id.toString()]);
         });
         print(result);
       } else if (table == keyCreditCardTable) {

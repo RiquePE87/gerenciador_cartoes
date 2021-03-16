@@ -40,7 +40,7 @@ const String CREATE_DEBIT_TABLE = "CREATE TABLE $keyDebitTable"
     "$keyValueDebit REAL,"
     "$keyQuotaDebit INTEGER,"
     "$keyCreditCardIdDebit INTEGER NOT NULL,"
-    "FOREIGN KEY ($keyCreditCardIdDebit) REFERENCES $keyCreditCardTable($keyIdCreditCard))";
+    "FOREIGN KEY ($keyCreditCardIdDebit) REFERENCES $keyCreditCardTable($keyIdCreditCard) ON DELETE CASCADE)";
 
 const String CREATE_OWNER_TABLE = "CREATE TABLE $keyOwnerTable ("
     "$keyIdOwner INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -51,9 +51,9 @@ const String CREATE_OWNER_DEBIT_TABLE = "CREATE TABLE $keyOwnerDebitTable ("
     "$keyDebitIDOwnerDebit INTEGER NOT NULL,"
     "$keyOwnerIDOwnerDebit INTEGER NOT NULL,"
     "$keyCreditCardIDOwnerDebit INTEGER NOT NULL,"
-    "FOREIGN KEY ($keyDebitIDOwnerDebit) REFERENCES $keyDebitTable($keyIdDebit) ON DELETE CASCADE ,"
-    "FOREIGN KEY ($keyOwnerIDOwnerDebit) REFERENCES $keyOwnerTable($keyIdOwner) ON DELETE CASCADE "
-    "FOREIGN KEY ($keyOwnerIDOwnerDebit) REFERENCES $keyCreditCardTable($keyIdCreditCard) ON DELETE CASCADE)";
+    "FOREIGN KEY ($keyDebitIDOwnerDebit) REFERENCES $keyDebitTable($keyIdDebit) ON DELETE CASCADE "
+    "FOREIGN KEY ($keyOwnerIDOwnerDebit) REFERENCES $keyOwnerTable($keyIdOwner)"
+    "FOREIGN KEY ($keyOwnerIDOwnerDebit) REFERENCES $keyCreditCardTable($keyIdCreditCard) ON DELETE CASCADE))";
 
 const String SELECT_DEBITS =
     "select * from $keyDebitTable left join $keyOwnerDebitTable on "

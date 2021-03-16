@@ -166,6 +166,7 @@ class ModelController extends GetxController {
 
   @override
   void onInit() async {
+    print(CREATE_OWNER_DEBIT_TABLE);
     getCreditCards();
     getOwners();
     super.onInit();
