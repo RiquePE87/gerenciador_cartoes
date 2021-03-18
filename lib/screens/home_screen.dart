@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
+import 'package:gerenciador_cartoes/screens/owner_screen.dart';
 import 'package:get/get.dart';
 
 import 'components/card_credit_card.dart';
@@ -98,7 +99,9 @@ class HomeScreen extends StatelessWidget {
                                     children: [
                                       IconButton(
                                           icon: Icon(Icons.person),
-                                          onPressed: () {}),
+                                          onPressed: () {
+                                            Get.to(OwnerScreen());
+                                          }),
                                       Text("Devedores",
                                           style: TextStyle(color: Colors.white))
                                     ],

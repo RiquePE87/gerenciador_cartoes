@@ -9,7 +9,9 @@ class DbRepository {
   Future<Database> _getDatabase() async {
     //deleteDatabase(DATABASE);
     return openDatabase(join(await getDatabasesPath(), DATABASE),
-        onCreate: (db, version) async {
+        onConfigure: (db) async {
+      await db.execute('PRAGMA foreign_keys = ON');
+    }, onCreate: (db, version) async {
       await db.execute(CREATE_CREDIT_CARD_TABLE);
       await db.execute(CREATE_OWNER_TABLE);
       await db.execute(CREATE_DEBIT_TABLE);
@@ -26,34 +28,18 @@ class DbRepository {
     }
   }
 
-  Future<void> deleteTest() async{
-    final Database db = await _getDatabase();
-    var result;
-
-    await db.transaction((txn) async {
-      result = await txn.rawDelete("DELETE FROM $keyDebitTable WHERE id = ? AND $keyCreditCardIdDebit = ?;",[12, 1]);
-    });
-    print(result);
-  }
-
   Future<void> delete({String table, dynamic entry}) async {
     final Database db = await _getDatabase();
-    var batch = db.batch();
     try {
+      var batch = db.batch();
       if (table == keyDebitTable) {
         Debit d = entry;
-        var result;
-        await db.transaction((txn) async {
-          result = await txn.rawDelete("DELETE FROM $table WHERE id = ?;",[d.id.toString()]);
-        });
-        print(result);
+        await batch.delete(table, where: '$keyIdDebit = ?', whereArgs: [d.id]);
+        var results = await batch.commit();
+        print(results);
       } else if (table == keyCreditCardTable) {
         CreditCard c = entry;
         batch.delete(table, where: "id = ?", whereArgs: [c.id]);
-        batch.delete(keyDebitTable,
-            where: "$keyCreditCardIdDebit = ?", whereArgs: [c.id]);
-        batch.delete(keyOwnerDebitTable,
-            where: "$keyCreditCardIDOwnerDebit = ?", whereArgs: [c.id]);
         var results = await batch.commit();
         print(results);
       }
@@ -91,7 +77,7 @@ class DbRepository {
     }
   }
 
-  Future<List<Debit>> getDebitEntries(int cardId) async {
+  Future<List<Debit>> getDebitEntries({int cardId, int ownerId}) async {
     List<Map<String, dynamic>> list;
     List<Map<String, dynamic>> selected;
     List<Debit> debitsList = [];

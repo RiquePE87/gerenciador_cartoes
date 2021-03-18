@@ -14,7 +14,7 @@ class DebitDetails extends StatelessWidget {
       init: ModelController(),
       builder: (value) {
         return GestureDetector(
-          onLongPress: ()=> value.deleteDebit(debit),
+
           child: Container(
             padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
             child: Card(
@@ -62,7 +62,10 @@ class DebitDetails extends StatelessWidget {
                         ],
                       ),
                     ),
-                  )
+                  ),
+                  IconButton(icon: Icon(Icons.delete), onPressed: (){
+                    value.deleteDebit(debit);
+                  })
                 ],
               ),
             ),

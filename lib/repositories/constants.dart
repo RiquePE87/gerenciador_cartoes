@@ -53,14 +53,14 @@ const String CREATE_OWNER_DEBIT_TABLE = "CREATE TABLE $keyOwnerDebitTable ("
     "$keyCreditCardIDOwnerDebit INTEGER NOT NULL,"
     "FOREIGN KEY ($keyDebitIDOwnerDebit) REFERENCES $keyDebitTable($keyIdDebit) ON DELETE CASCADE "
     "FOREIGN KEY ($keyOwnerIDOwnerDebit) REFERENCES $keyOwnerTable($keyIdOwner)"
-    "FOREIGN KEY ($keyOwnerIDOwnerDebit) REFERENCES $keyCreditCardTable($keyIdCreditCard) ON DELETE CASCADE))";
+    "FOREIGN KEY ($keyCreditCardIDOwnerDebit) REFERENCES $keyCreditCardTable($keyIdCreditCard) ON DELETE CASCADE)";
 
 const String SELECT_DEBITS =
-    "select * from $keyDebitTable left join $keyOwnerDebitTable on "
-    "$keyOwnerDebitTable.$keyDebitIDOwnerDebit = $keyDebitTable.$keyIdDebit where $keyCreditCardIdDebit = ";
+    "SELECT * FROM $keyDebitTable LEFT JOIN $keyOwnerDebitTable ON "
+    "$keyOwnerDebitTable.$keyDebitIDOwnerDebit = $keyDebitTable.$keyIdDebit WHERE $keyCreditCardIdDebit = ";
 
-const String SELECT_DEBITS2 = "select * from $keyOwnerDebitTable left join "
-    "$keyDebitTable on $keyDebitTable.$keyIdDebit = $keyOwnerDebitTable.$keyDebitIDOwnerDebit where $keyCreditCardIdDebit = ";
+const String SELECT_DEBITS2 = "SELECT * FROM $keyOwnerDebitTable LEFT JOIN "
+    "$keyDebitTable ON $keyDebitTable.$keyIdDebit = $keyOwnerDebitTable.$keyDebitIDOwnerDebit WHERE $keyCreditCardIdDebit = ";
 
-const String SELECT_DEBITS_WHERE = "select * from $keyDebitTable left join $keyOwnerDebitTable on "
-    "$keyOwnerDebitTable.$keyDebitIDOwnerDebit = $keyDebitTable.$keyIdDebit where $keyDebitIDOwnerDebit = ?";
+const String SELECT_DEBITS_WHERE = "SELECT * FROM $keyDebitTable LEFT JOIN $keyOwnerDebitTable ON "
+    "$keyOwnerDebitTable.$keyDebitIDOwnerDebit = $keyDebitTable.$keyIdDebit WHERE $keyDebitIDOwnerDebit = ?";
