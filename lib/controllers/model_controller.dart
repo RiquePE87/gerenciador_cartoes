@@ -31,12 +31,26 @@ class ModelController extends GetxController {
       });
   }
 
-  // Future<void> getOwnerDebits(Owner owner, CreditCard card) async {
-  //   isLoading = true;
-  //   List<Debit> ownerDebits = await dbRepository
-  //       .getDebitEntries(ownerId: owner.id, cardId: card.id)
-  //       .whenComplete(() => isLoading = false);
-  // }
+  Future<Map<String, List<Debit>>> getOwnerDebits(Owner owner) async {
+    Map<String, List<Debit>> debits = {};
+
+    for (int i=0; i < creditCards.length; i++){
+      List<Debit> list = await dbRepository.getDebitEntries(cardId: creditCards[i].id);
+      ownerDebits[creditCards[i].name] = list;
+    }
+   ownerDebits.forEach((key, value) {
+     List<Debit> l = [];
+     value.forEach((element) {
+       for (Owner o in element.owners){
+         if (o.id == owner.id){
+           l.add(element);
+         }
+       }
+     });
+     debits[key] = l;
+   });
+    return debits;
+  }
 
   void showErrorMessage(String error) {
     message = error;
@@ -111,6 +125,9 @@ class ModelController extends GetxController {
     ownerList = await dbRepository
         .getEntries(keyOwnerTable)
         .whenComplete(() => isLoading = false);
+    for (int i=0; i < ownerList.length; i++){
+      ownerList[i].debits = await getOwnerDebits(ownerList[i]);
+    }
     update();
   }
 
@@ -122,13 +139,13 @@ class ModelController extends GetxController {
     }
   }
 
-  Future<void> getOwnersDebits(int ownerId) async{
-
-    for (int i=0;i < creditCards.length; i++){
-      List<Debit> list = await dbRepository.getDebitEntries(cardId: creditCards[i].id, ownerId: ownerId);
-        ownerDebits[creditCards[i].name] = list;
+  Future<Map<String, List<Debit>>> getOwnersDebits(int ownerId) async {
+    for (int i = 0; i < creditCards.length; i++) {
+      List<Debit> list = await dbRepository.getDebitEntries(
+          cardId: creditCards[i].id, ownerId: ownerId);
+      ownerDebits[creditCards[i].name] = list;
     }
-    print(ownerDebits);
+    return ownerDebits;
   }
 
   Future<void> insertDebit() async {
