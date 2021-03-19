@@ -6,7 +6,7 @@ class Debit {
   double value;
   int quota;
   int creditCardId;
-  List<Owner> ownerId;
+  List<Owner> owners;
 
   Debit(
       {this.id,
@@ -14,7 +14,7 @@ class Debit {
       this.value,
       this.quota,
       this.creditCardId,
-      this.ownerId});
+      this.owners});
 
   Map<String, dynamic> toMap(){
 
@@ -34,7 +34,7 @@ class Debit {
       value: map["value"],
       quota: map["quota"],
       creditCardId: map["creditCardID"],
-      ownerId: []
+      owners: []
     );
   }
 }

@@ -66,5 +66,5 @@ const String SELECT_DEBITS_WHERE = "SELECT * FROM $keyDebitTable LEFT JOIN $keyO
     "$keyOwnerDebitTable.$keyDebitIDOwnerDebit = $keyDebitTable.$keyIdDebit WHERE $keyDebitIDOwnerDebit = ?";
 
 const String SELECT_DEBITS_WHERE_OWNER = "SELECT * FROM $keyDebitTable LEFT JOIN $keyOwnerDebitTable ON "
-    "$keyOwnerDebitTable.$keyDebitIDOwnerDebit = $keyDebitTable.$keyIdDebit WHERE $keyDebitIDOwnerDebit = ?"
+    "$keyOwnerDebitTable.$keyDebitIDOwnerDebit = $keyDebitTable.$keyIdDebit WHERE $keyCreditCardIDOwnerDebit = ?"
     " AND $keyOwnerIDOwnerDebit = ?";

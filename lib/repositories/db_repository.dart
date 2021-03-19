@@ -89,28 +89,39 @@ class DbRepository {
     try {
       Database db = await _getDatabase();
 
-      String query = "$SELECT_DEBITS ${cardId.toString()}";
+      if (ownerId != null){
 
-      list = await db.rawQuery(query);
+        String query = SELECT_DEBITS_WHERE_OWNER;
+        await db.transaction((txn) async => list = await txn.rawQuery(query, [cardId,ownerId]));
 
-      list.forEach((element) {
-        idList.add(element["debit_id"]);
-      });
+        debitsList = List<Debit>.generate(
+            list.length, (index) => Debit().fromMap(list[index]));
 
-      ids = idList.toSet().toList();
+        print(list);
+      }else{
+        String query = "$SELECT_DEBITS ${cardId.toString()}";
 
-      for (int i = 0; i < ids.length; i++) {
-        await db.transaction((txn) async => selected =
-            await txn.rawQuery("$SELECT_DEBITS_WHERE", [ids[i].toString()]));
+        list = await db.rawQuery(query);
 
-        for (int i = 0; i < selected.length; i++) {
-          if (selected != null)
-            owners.add(_getOwner(ownerList, selected[i]["owner_id"]));
+        list.forEach((element) {
+          idList.add(element["debit_id"]);
+        });
+
+        ids = idList.toSet().toList();
+
+        for (int i = 0; i < ids.length; i++) {
+          await db.transaction((txn) async => selected =
+          await txn.rawQuery("$SELECT_DEBITS_WHERE", [ids[i].toString()]));
+
+          for (int i = 0; i < selected.length; i++) {
+            if (selected != null)
+              owners.add(_getOwner(ownerList, selected[i]["owner_id"]));
+          }
+          Debit d = Debit().fromMap(selected[0]);
+          d.owners.addAll(owners);
+          debitsList.add(d);
+          owners.clear();
         }
-        Debit d = Debit().fromMap(selected[0]);
-        d.ownerId.addAll(owners);
-        debitsList.add(d);
-        owners.clear();
       }
       return debitsList;
     } catch (e) {

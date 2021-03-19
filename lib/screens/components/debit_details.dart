@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 
 class DebitDetails extends StatelessWidget {
   Debit debit;
-
   DebitDetails(this.debit);
   @override
   Widget build(BuildContext context) {
@@ -14,7 +13,7 @@ class DebitDetails extends StatelessWidget {
       init: ModelController(),
       builder: (value) {
         return GestureDetector(
-
+          onTap:()=> value.getOwnersDebits(1),
           child: Container(
             padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
             child: Card(
@@ -50,13 +49,13 @@ class DebitDetails extends StatelessWidget {
                           Container(
                             height: 60,
                             child: ListView.builder(
-                                itemCount: debit.ownerId.length,
+                                itemCount: debit.owners.length,
                                 itemBuilder: (context, index) {
                                   return Container(
                                       padding: const EdgeInsets.all(5),
                                       decoration: BoxDecoration(
                                           border: Border.all(width: 1, color: Colors.white)),
-                                      child: Text(debit.ownerId[index].name, style: TextStyle(fontSize: 12, color: Colors.white),));
+                                      child: Text(debit.owners[index].name, style: TextStyle(fontSize: 12, color: Colors.white),));
                                 }),
                           )
                         ],

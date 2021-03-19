@@ -21,6 +21,7 @@ class ModelController extends GetxController {
   Owner owner = new Owner();
   Debit debit = new Debit();
   var message = "";
+  Map<String, List<Debit>> ownerDebits = {};
 
   void getTotalDebit() {
     selectedCard.total = 0.0;
@@ -30,9 +31,12 @@ class ModelController extends GetxController {
       });
   }
 
-  Future<void> getOwnerDebits(Owner owner) async{
-    List<Debit> ownerDebits = await
-  }
+  // Future<void> getOwnerDebits(Owner owner, CreditCard card) async {
+  //   isLoading = true;
+  //   List<Debit> ownerDebits = await dbRepository
+  //       .getDebitEntries(ownerId: owner.id, cardId: card.id)
+  //       .whenComplete(() => isLoading = false);
+  // }
 
   void showErrorMessage(String error) {
     message = error;
@@ -85,8 +89,9 @@ class ModelController extends GetxController {
 
   Future<void> getDebits() async {
     isLoading = true;
-    debitsList =
-        await dbRepository.getDebitEntries(cardId:selectedCard.id).whenComplete(() {
+    debitsList = await dbRepository
+        .getDebitEntries(cardId: selectedCard.id)
+        .whenComplete(() {
       isLoading = false;
       getTotalDebit();
       update();
@@ -115,6 +120,15 @@ class ModelController extends GetxController {
       getOwners();
       update();
     }
+  }
+
+  Future<void> getOwnersDebits(int ownerId) async{
+
+    for (int i=0;i < creditCards.length; i++){
+      List<Debit> list = await dbRepository.getDebitEntries(cardId: creditCards[i].id, ownerId: ownerId);
+        ownerDebits[creditCards[i].name] = list;
+    }
+    print(ownerDebits);
   }
 
   Future<void> insertDebit() async {
@@ -157,7 +171,9 @@ class ModelController extends GetxController {
   }
 
   Future<void> deleteDebit(Debit debit) async {
-    await dbRepository.delete(table: keyDebitTable, entry: debit).whenComplete((){
+    await dbRepository
+        .delete(table: keyDebitTable, entry: debit)
+        .whenComplete(() {
       Get.snackbar("Débito Excluido!", "Excluido com sucesso!",
           snackPosition: SnackPosition.BOTTOM);
       getDebits();

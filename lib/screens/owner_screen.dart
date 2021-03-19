@@ -17,7 +17,6 @@ class OwnerScreen extends StatelessWidget {
                 itemBuilder: (context, index){
                   Owner owner = owners[index];
                   return Container(
-
                     child: Row(
                       children: [
                         Text(owner.name)

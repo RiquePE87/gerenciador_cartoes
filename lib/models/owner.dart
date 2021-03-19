@@ -3,8 +3,7 @@ import 'package:gerenciador_cartoes/models/debit.dart';
 class Owner {
   int id;
   String name;
-  List<Debit> debits;
-
+  Map<String,List<Debit>> debits;
 
   Owner({this.id, this.name});
 
