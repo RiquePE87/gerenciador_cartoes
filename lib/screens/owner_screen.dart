@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
 import 'package:gerenciador_cartoes/models/owner.dart';
+import 'package:gerenciador_cartoes/screens/components/owner_details.dart';
 import 'package:get/get.dart';
 
 class OwnerScreen extends StatelessWidget {
@@ -16,13 +17,7 @@ class OwnerScreen extends StatelessWidget {
                 itemCount: owners.length,
                 itemBuilder: (context, index){
                   Owner owner = owners[index];
-                  return Container(
-                    child: Row(
-                      children: [
-                        Text(owner.name)
-                      ],
-                    ),
-                  );
+                  return OwnerDetails(owner);
                 },
               ),
             ),

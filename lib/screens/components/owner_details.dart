@@ -16,6 +16,7 @@ class OwnerDetails extends StatelessWidget {
             Expanded(
               child: Container(
                 child: ListView.builder(
+                  shrinkWrap: true,
                     itemCount: owner.debits.length != null ? owner.debits.length : 0,
                     itemBuilder: (context, index) {
                       Debit d = owner.debits[index][0];

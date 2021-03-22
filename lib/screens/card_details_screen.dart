@@ -38,7 +38,7 @@ class CardDetailsScreen extends StatelessWidget {
                               height: 5,
                             ),
                             Text(
-                                "Total R\$:${value.selectedCard.total.toStringAsFixed(2)}",style: TextStyle(color: Colors.white))
+                                "Total R\$:${value.selectedCard.getTotal.toStringAsFixed(2)}",style: TextStyle(color: Colors.white))
                           ],
                         ),
                         IconButton(icon: Icon(Icons.add_business_rounded, color: Colors.white,), onPressed: (){

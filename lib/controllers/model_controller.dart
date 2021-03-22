@@ -23,13 +23,14 @@ class ModelController extends GetxController {
   var message = "";
   Map<String, List<Debit>> ownerDebits = {};
 
-  void getTotalDebit() {
-    selectedCard.total = 0.0;
-    if (debitsList != null)
-      debitsList.forEach((element) {
-        selectedCard.total += (element.value / element.quota);
-      });
-  }
+  // void getTotalDebit() {
+  //   selectedCard.total = 0.0;
+  //   if (debitsList != null)
+  //     debitsList.forEach((element) {
+  //       selectedCard.total += (element.value / element.quota);
+  //     });
+  //   update();
+  // }
 
   Future<Map<String, List<Debit>>> getOwnerDebits(Owner owner) async {
     Map<String, List<Debit>> debits = {};
@@ -107,7 +108,8 @@ class ModelController extends GetxController {
         .getDebitEntries(cardId: selectedCard.id)
         .whenComplete(() {
       isLoading = false;
-      getTotalDebit();
+      selectedCard.debits = debitsList;
+      //getTotalDebit();
       update();
     });
   }
@@ -164,6 +166,7 @@ class ModelController extends GetxController {
       });
       selectedOwners.clear();
       getDebits();
+      //getTotalDebit();
       update();
     }
   }

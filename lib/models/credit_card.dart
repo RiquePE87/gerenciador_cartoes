@@ -7,8 +7,9 @@ class CreditCard {
   double usedLimit;
   double limitCredit;
   double total;
+  List<Debit> debits;
 
-  CreditCard({this.id, this.name, this.payDay, this.usedLimit, this.limitCredit, this.total = 0});
+  CreditCard({this.id, this.name, this.payDay, this.usedLimit, this.limitCredit, this.total = 0, this.debits});
 
   Map<String, dynamic> toMap() {
     return {
@@ -26,5 +27,14 @@ class CreditCard {
         payDay: map["payday"],
         usedLimit: map["usedlimit"],
         limitCredit: map["limitcredit"]);
+  }
+
+  double get getTotal{
+    total = 0.0;
+    if (debits != null)
+    debits.forEach((element) {
+      total += (element.value / element.quota);
+    });
+    return total;
   }
 }
