@@ -13,6 +13,7 @@ class DebitListWidget extends StatelessWidget {
     return GetBuilder<ModelController>(builder: (value) {
       return Expanded(
         child: Container(
+          padding: EdgeInsets.all(5),
           color: Colors.transparent,
           child: ListView.builder(
               itemBuilder: (context, index) {

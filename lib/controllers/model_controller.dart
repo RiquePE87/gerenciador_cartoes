@@ -7,10 +7,10 @@ import 'package:get/get.dart';
 
 class ModelController extends GetxController {
   var isLoading = true;
-  var creditCards = <CreditCard>[];
-  var debitsList = <Debit>[];
-  var ownerList = <Owner>[];
-  var selectedOwners = <Owner>[];
+  var creditCards = <CreditCard>[].obs;
+  var debitsList = <Debit>[].obs;
+  var ownerList = <Owner>[].obs;
+  var selectedOwners = <Owner>[].obs;
   var name;
   var payDay;
   var usedLimit;
@@ -20,8 +20,8 @@ class ModelController extends GetxController {
   CreditCard cc = new CreditCard();
   Owner owner = new Owner();
   Debit debit = new Debit();
-  var message = "";
-  Map<String, List<Debit>> ownerDebits = {};
+  var message = "".obs;
+ var ownerDebits =  Map<String, List<Debit>>().obs;
 
   // void getTotalDebit() {
   //   selectedCard.total = 0.0;
@@ -54,11 +54,9 @@ class ModelController extends GetxController {
   }
 
   void showErrorMessage(String error) {
-    message = error;
-    update();
-    Future.delayed(Duration(milliseconds: 2000), () {
-      message = "";
-      update();
+    message.value = error;
+    Future.delayed(Duration(milliseconds: 2000),(){
+      message.value = "";
     });
   }
 
@@ -96,21 +94,21 @@ class ModelController extends GetxController {
 
   Future<void> getCreditCards() async {
     isLoading = true;
-    creditCards = await dbRepository
+    creditCards.value = await dbRepository
         .getEntries(keyCreditCardTable)
         .whenComplete(() => isLoading = false);
-    update();
+    //update();
   }
 
   Future<void> getDebits() async {
     isLoading = true;
-    debitsList = await dbRepository
+    debitsList.value = await dbRepository
         .getDebitEntries(cardId: selectedCard.id)
         .whenComplete(() {
       isLoading = false;
       selectedCard.debits = debitsList;
       //getTotalDebit();
-      update();
+      //update();
     });
   }
 
@@ -119,18 +117,18 @@ class ModelController extends GetxController {
       selectedOwners.remove(owner);
     else
       selectedOwners.add(owner);
-    update();
+    //update();
   }
 
   Future<void> getOwners() async {
     isLoading = false;
-    ownerList = await dbRepository
+    ownerList.value = await dbRepository
         .getEntries(keyOwnerTable)
         .whenComplete(() => isLoading = false);
     for (int i=0; i < ownerList.length; i++){
       ownerList[i].debits = await getOwnerDebits(ownerList[i]);
     }
-    update();
+    //update();
   }
 
   Future<void> insertOwner() async {
@@ -141,14 +139,16 @@ class ModelController extends GetxController {
     }
   }
 
-  Future<Map<String, List<Debit>>> getOwnersDebits(int ownerId) async {
-    for (int i = 0; i < creditCards.length; i++) {
-      List<Debit> list = await dbRepository.getDebitEntries(
-          cardId: creditCards[i].id, ownerId: ownerId);
-      ownerDebits[creditCards[i].name] = list;
-    }
-    return ownerDebits;
-  }
+  // Future<Map<String, List<Debit>>> getOwnersDebits(int ownerId) async {
+  //   for (int i = 0; i < creditCards.length; i++) {
+  //     List<Debit> list = await dbRepository.getDebitEntries(
+  //         cardId: creditCards[i].id, ownerId: ownerId);
+  //     ownerDebits[creditCards[i].name] = list;
+  //   }
+  //   update();
+  //   return ownerDebits;
+  //
+  // }
 
   Future<void> insertDebit() async {
     debit.creditCardId = selectedCard.id;
@@ -195,13 +195,15 @@ class ModelController extends GetxController {
         .delete(table: keyDebitTable, entry: debit)
         .whenComplete(() {
       Get.snackbar("Débito Excluido!", "Excluido com sucesso!",
-          snackPosition: SnackPosition.BOTTOM);
+          snackPosition: SnackPosition.BOTTOM, isDismissible: true, duration: Duration(seconds: 2));
       getDebits();
     });
   }
 
   @override
   void onReady() {
+    getCreditCards();
+    getOwners();
     super.onReady();
   }
 

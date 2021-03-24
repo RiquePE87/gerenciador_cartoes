@@ -4,8 +4,8 @@ import 'package:gerenciador_cartoes/screens/owner_screen.dart';
 import 'package:get/get.dart';
 
 import 'components/card_credit_card.dart';
-import 'components/owner_dialog.dart';
-import 'credit_card_screen.dart';
+import 'dialogs/owner_dialog.dart';
+import 'dialogs/credit_card_dialog.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -100,7 +100,7 @@ class HomeScreen extends StatelessWidget {
                                       IconButton(
                                           icon: Icon(Icons.person),
                                           onPressed: () {
-                                            Get.to(OwnerScreen());
+                                            Get.to(()=> OwnerScreen());
                                           }),
                                       Text("Devedores",
                                           style: TextStyle(color: Colors.white))

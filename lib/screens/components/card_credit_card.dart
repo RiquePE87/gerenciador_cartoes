@@ -18,8 +18,7 @@ class CardCreditCard extends StatelessWidget {
           return GestureDetector(
             onTap: () {
               value.selectedCard = card;
-              value.getDebits();
-              Get.to(() => CardDetailsScreen());
+              value.getDebits().whenComplete(() => Get.to(() => CardDetailsScreen(), preventDuplicates: true));
             },
             onLongPress: () {
               Get.defaultDialog(
@@ -27,7 +26,7 @@ class CardCreditCard extends StatelessWidget {
                   middleText: "Você deseja excluir o cartão?",
                   onConfirm: (){
                     value.deleteCreditCard(card);
-                    Get.back();
+                    Get.back(closeOverlays: true);
                   },
                   textConfirm: "Sim",
                   buttonColor: Colors.white,

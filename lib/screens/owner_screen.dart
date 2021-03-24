@@ -12,13 +12,16 @@ class OwnerScreen extends StatelessWidget {
         builder: (value) {
           List<Owner> owners = value.ownerList;
           return Scaffold(
-            body: Container(
-              child: ListView.builder(
-                itemCount: owners.length,
-                itemBuilder: (context, index){
-                  Owner owner = owners[index];
-                  return OwnerDetails(owner);
-                },
+            backgroundColor: Colors.purple.shade500,
+            body: SafeArea(
+              child: Container(
+                child: ListView.builder(
+                  itemCount: owners.length,
+                  itemBuilder: (context, index){
+                    Owner owner = owners[index];
+                    return OwnerDetails(owner);
+                  },
+                ),
               ),
             ),
           );

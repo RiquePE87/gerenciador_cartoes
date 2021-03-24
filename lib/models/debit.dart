@@ -1,6 +1,6 @@
 import 'owner.dart';
 
-class Debit {
+class Debit{
   int id;
   String description;
   double value;

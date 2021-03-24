@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
 import 'package:gerenciador_cartoes/models/debit.dart';
-import 'package:gerenciador_cartoes/models/owner.dart';
 import 'package:get/get.dart';
 
 class DebitDetails extends StatelessWidget {
@@ -13,7 +12,6 @@ class DebitDetails extends StatelessWidget {
       init: ModelController(),
       builder: (value) {
         return GestureDetector(
-          onTap:()=> value.getOwnersDebits(1),
           child: Container(
             padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
             child: Card(

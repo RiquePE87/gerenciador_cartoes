@@ -3,7 +3,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
 import 'package:get/get.dart';
 
-import '../main.dart';
+import '../../main.dart';
 
 class CreditCardScreen extends StatelessWidget {
   @override
@@ -23,9 +23,7 @@ class CreditCardScreen extends StatelessWidget {
               TextFormField(
                 onChanged: (txt) => value.name = txt,
                 decoration: InputDecoration(
-                    isDense: true,
-                    hintText: "Nome do cartão",
-                    border: border),
+                    isDense: true, hintText: "Nome do cartão", border: border),
               ),
               SizedBox(
                 height: 10,
@@ -63,15 +61,18 @@ class CreditCardScreen extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              Text(value.message),
+              Obx(() => Text("${value.message}")),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextButton(onPressed: (){
-                    value.insertCreditCard();
-                    Get.back();
-                  }, child: Text("Salvar")),
-                  TextButton(onPressed: ()=> Get.back(), child: Text("Cancelar"))
+                  TextButton(
+                      onPressed: () {
+                        value.insertCreditCard();
+                        Get.back();
+                      },
+                      child: Text("Salvar")),
+                  TextButton(
+                      onPressed: () => Get.back(), child: Text("Cancelar"))
                 ],
               )
             ],

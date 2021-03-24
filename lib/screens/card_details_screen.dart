@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
 import 'package:gerenciador_cartoes/screens/components/debit_list_widget.dart';
-import 'package:gerenciador_cartoes/screens/debit_dialog.dart';
+import 'package:gerenciador_cartoes/screens/dialogs/debit_dialog.dart';
 import 'package:get/get.dart';
 
 class CardDetailsScreen extends StatelessWidget {
@@ -27,24 +27,34 @@ class CardDetailsScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: ()=>Get.back(),),
+                        IconButton(
+                          icon: Icon(Icons.arrow_back_ios),
+                          onPressed: () => Get.back(),
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(value.selectedCard.name, style: TextStyle(color: Colors.white)),
+                            Text(value.selectedCard.name,
+                                style: TextStyle(color: Colors.white)),
                             SizedBox(
                               height: 5,
                             ),
                             Text(
-                                "Total R\$:${value.selectedCard.getTotal.toStringAsFixed(2)}",style: TextStyle(color: Colors.white))
+                                "Total R\$:${value.selectedCard.getTotal.toStringAsFixed(2)}",
+                                style: TextStyle(color: Colors.white))
                           ],
                         ),
-                        IconButton(icon: Icon(Icons.add_business_rounded, color: Colors.white,), onPressed: (){
-                          //value.selectedCard = cc;
-                          Get.dialog(DebitDialog());
-                        })
+                        IconButton(
+                            icon: Icon(
+                              Icons.add_business_rounded,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              //value.selectedCard = cc;
+                              Get.dialog(DebitDialog());
+                            })
                       ],
                     ),
                   ),

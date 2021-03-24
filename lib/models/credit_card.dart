@@ -30,7 +30,7 @@ class CreditCard {
   }
 
   double get getTotal{
-    total = 0.0;
+    this.total = 0.0;
     if (debits != null)
     debits.forEach((element) {
       total += (element.value / element.quota);
