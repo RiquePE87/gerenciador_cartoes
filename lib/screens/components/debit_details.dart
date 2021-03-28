@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
 import 'package:gerenciador_cartoes/models/debit.dart';
+import 'package:gerenciador_cartoes/screens/dialogs/debit_dialog.dart';
 import 'package:get/get.dart';
 
 class DebitDetails extends StatelessWidget {
@@ -62,6 +63,9 @@ class DebitDetails extends StatelessWidget {
                   ),
                   IconButton(icon: Icon(Icons.delete), onPressed: (){
                     value.deleteDebit(debit);
+                  }),
+                  IconButton(icon: Icon(Icons.edit), onPressed: (){
+                    Get.dialog(DebitDialog(debit: debit,));
                   })
                 ],
               ),

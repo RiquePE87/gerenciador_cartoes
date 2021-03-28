@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
+import 'package:gerenciador_cartoes/models/debit.dart';
 import 'package:gerenciador_cartoes/screens/dialogs/owner_select_dialog.dart';
 import 'package:get/get.dart';
 
 class DebitDialog extends StatelessWidget {
+
+  final Debit debit;
+
+  DebitDialog({this.debit});
+
   @override
   Widget build(BuildContext context) {
     const OutlineInputBorder border =
-        OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10)));
+        OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5)));
 
     return Dialog(
         child: GetBuilder<ModelController>(
@@ -21,18 +27,21 @@ class DebitDialog extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
+              TextFormField(
+                initialValue: debit != null ? debit.value.toString() : "",
                 onChanged: (txt) => value.debit.value = double.tryParse(txt),
                 keyboardType: TextInputType.numberWithOptions(),
                 decoration: InputDecoration(
                     isDense: true,
+
                     hintText: "Valor total R\$:",
                     border: border),
               ),
               SizedBox(
                 height: 10,
               ),
-              TextField(
+              TextFormField(
+                initialValue: debit != null ? debit.quota.toString() : "",
                 onChanged: (txt) => value.debit.quota = int.tryParse(txt),
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
@@ -43,7 +52,8 @@ class DebitDialog extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              TextField(
+              TextFormField(
+                initialValue: debit != null ? debit.description : "",
                 onChanged: (txt) => value.debit.description = txt,
                 decoration: InputDecoration(
                     isDense: true, hintText: "Descrição", border: border),
@@ -58,7 +68,7 @@ class DebitDialog extends StatelessWidget {
                         Icons.person_add,
                         color: Colors.black87,
                       ),
-                      onPressed: () => Get.dialog(OwnerSelectDialog()))
+                      onPressed: () => Get.dialog(OwnerSelectDialog(debit.owners)))
                 ],
               ),
               Obx(() => Text("${value.message}")),
@@ -67,8 +77,7 @@ class DebitDialog extends StatelessWidget {
                 children: [
                   TextButton(
                       onPressed: () {
-                        value.insertDebit();
-                        Get.back();
+                        debit == null ? value.insertDebit() : value.updateDebit(debit);
                       },
                       child: Text("Salvar")),
                   TextButton(

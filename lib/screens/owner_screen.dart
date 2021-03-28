@@ -14,7 +14,7 @@ class OwnerScreen extends StatelessWidget {
           return Scaffold(
             backgroundColor: Colors.purple.shade500,
             body: SafeArea(
-              child: Container(
+              child: Obx(()=> Container(
                 child: ListView.builder(
                   itemCount: owners.length,
                   itemBuilder: (context, index){
@@ -22,7 +22,7 @@ class OwnerScreen extends StatelessWidget {
                     return OwnerDetails(owner);
                   },
                 ),
-              ),
+              ),)
             ),
           );
         });

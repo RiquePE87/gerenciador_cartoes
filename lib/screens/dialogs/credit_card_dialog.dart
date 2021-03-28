@@ -9,7 +9,7 @@ class CreditCardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const OutlineInputBorder border =
-        OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15)));
+        OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5)));
 
     return Dialog(
         child: GetBuilder<ModelController>(
@@ -68,7 +68,6 @@ class CreditCardScreen extends StatelessWidget {
                   TextButton(
                       onPressed: () {
                         value.insertCreditCard();
-                        Get.back();
                       },
                       child: Text("Salvar")),
                   TextButton(

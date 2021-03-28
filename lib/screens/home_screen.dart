@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
       title: 'Material App',
       home: Scaffold(
         backgroundColor: Colors.purple.shade500,
-        body: GetBuilder(
+        body: GetBuilder<ModelController>(
           init: ModelController(),
           builder: (value) {
             return SafeArea(
@@ -26,16 +26,16 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 2,
-                    child: Container(
+                    child: Obx(()=> Container(
                       child: value.isLoading
                           ? Center(child: CircularProgressIndicator())
                           : ListView.builder(
-                              itemCount: value.creditCards.length,
-                              itemBuilder: (context, index) {
-                                return CardCreditCard(value.creditCards[index]);
-                              }),
+                          itemCount: value.creditCards.length,
+                          itemBuilder: (context, index) {
+                            return CardCreditCard(value.creditCards[index]);
+                          }),
                     ),
-                  ),
+                    ),),
                   Container(
                     height: 80,
                     padding: const EdgeInsets.only(bottom: 0),
@@ -100,7 +100,7 @@ class HomeScreen extends StatelessWidget {
                                       IconButton(
                                           icon: Icon(Icons.person),
                                           onPressed: () {
-                                            Get.to(()=> OwnerScreen());
+                                            Get.to(() => OwnerScreen());
                                           }),
                                       Text("Devedores",
                                           style: TextStyle(color: Colors.white))

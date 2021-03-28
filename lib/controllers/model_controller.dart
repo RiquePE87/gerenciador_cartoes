@@ -15,47 +15,46 @@ class ModelController extends GetxController {
   var payDay;
   var usedLimit;
   var limitCredit;
-  CreditCard selectedCard;
+  var selectedCard = CreditCard().obs;
+  var list = <CreditCard>[];
   DbRepository dbRepository = DbRepository();
   CreditCard cc = new CreditCard();
   Owner owner = new Owner();
   Debit debit = new Debit();
   var message = "".obs;
- var ownerDebits =  Map<String, List<Debit>>().obs;
+  var ownerDebits = Map<String, List<Debit>>().obs;
 
-  // void getTotalDebit() {
-  //   selectedCard.total = 0.0;
-  //   if (debitsList != null)
-  //     debitsList.forEach((element) {
-  //       selectedCard.total += (element.value / element.quota);
-  //     });
-  //   update();
-  // }
+  void updateAll() {
+    getOwners();
+    getDebits();
+    getCreditCards();
+  }
 
   Future<Map<String, List<Debit>>> getOwnerDebits(Owner owner) async {
     Map<String, List<Debit>> debits = {};
 
-    for (int i=0; i < creditCards.length; i++){
-      List<Debit> list = await dbRepository.getDebitEntries(cardId: creditCards[i].id);
+    for (int i = 0; i < creditCards.length; i++) {
+      List<Debit> list =
+          await dbRepository.getDebitEntries(cardId: creditCards[i].id);
       ownerDebits[creditCards[i].name] = list;
     }
-   ownerDebits.forEach((key, value) {
-     List<Debit> l = [];
-     value.forEach((element) {
-       for (Owner o in element.owners){
-         if (o.id == owner.id){
-           l.add(element);
-         }
-       }
-     });
-     debits[key] = l;
-   });
+    ownerDebits.forEach((key, value) {
+      List<Debit> l = [];
+      value.forEach((element) {
+        for (Owner o in element.owners) {
+          if (o.id == owner.id) {
+            l.add(element);
+          }
+        }
+      });
+      debits[key] = l;
+    });
     return debits;
   }
 
   void showErrorMessage(String error) {
     message.value = error;
-    Future.delayed(Duration(milliseconds: 2000),(){
+    Future.delayed(Duration(milliseconds: 2000), () {
       message.value = "";
     });
   }
@@ -94,21 +93,19 @@ class ModelController extends GetxController {
 
   Future<void> getCreditCards() async {
     isLoading = true;
-    creditCards.value = await dbRepository
-        .getEntries(keyCreditCardTable)
-        .whenComplete(() => isLoading = false);
-    //update();
+    list = await dbRepository.getEntries(keyCreditCardTable).whenComplete(() {
+      isLoading = false;
+    });
+    creditCards.assignAll(list);
   }
 
   Future<void> getDebits() async {
     isLoading = true;
     debitsList.value = await dbRepository
-        .getDebitEntries(cardId: selectedCard.id)
+        .getDebitEntries(cardId: selectedCard.value.id)
         .whenComplete(() {
       isLoading = false;
-      selectedCard.debits = debitsList;
-      //getTotalDebit();
-      //update();
+      selectedCard.value.debits = debitsList;
     });
   }
 
@@ -117,7 +114,6 @@ class ModelController extends GetxController {
       selectedOwners.remove(owner);
     else
       selectedOwners.add(owner);
-    //update();
   }
 
   Future<void> getOwners() async {
@@ -125,17 +121,16 @@ class ModelController extends GetxController {
     ownerList.value = await dbRepository
         .getEntries(keyOwnerTable)
         .whenComplete(() => isLoading = false);
-    for (int i=0; i < ownerList.length; i++){
+    for (int i = 0; i < ownerList.length; i++) {
       ownerList[i].debits = await getOwnerDebits(ownerList[i]);
     }
-    //update();
   }
 
   Future<void> insertOwner() async {
     if (validateOwner()) {
       await dbRepository.insert(owner.toMap(), keyOwnerTable);
       getOwners();
-      update();
+      Get.back();
     }
   }
 
@@ -151,7 +146,7 @@ class ModelController extends GetxController {
   // }
 
   Future<void> insertDebit() async {
-    debit.creditCardId = selectedCard.id;
+    debit.creditCardId = selectedCard.value.id;
     if (validateDebit()) {
       int debitId;
       debitId = await dbRepository.insert(debit.toMap(), keyDebitTable);
@@ -165,9 +160,8 @@ class ModelController extends GetxController {
         await dbRepository.insert(map, keyOwnerDebitTable);
       });
       selectedOwners.clear();
-      getDebits();
-      //getTotalDebit();
-      update();
+      updateAll();
+      Get.back();
     }
   }
 
@@ -179,31 +173,33 @@ class ModelController extends GetxController {
       cc.usedLimit = double.tryParse(usedLimit);
       dbRepository.insert(cc.toMap(), keyCreditCardTable);
       getCreditCards();
-      update();
+      Get.back();
     }
+  }
+
+  Future<void> updateDebit(Debit debit) async{
+    await dbRepository.update(keyDebitTable, debit.toMap(), debit.id);
   }
 
   Future<void> deleteCreditCard(CreditCard card) async {
     await dbRepository.delete(table: keyCreditCardTable, entry: card);
     Get.snackbar("Cartão Excluido!", "Excluido com sucesso!",
         snackPosition: SnackPosition.BOTTOM);
-    getCreditCards();
+    updateAll();
   }
 
   Future<void> deleteDebit(Debit debit) async {
-    await dbRepository
-        .delete(table: keyDebitTable, entry: debit)
-        .whenComplete(() {
-      Get.snackbar("Débito Excluido!", "Excluido com sucesso!",
-          snackPosition: SnackPosition.BOTTOM, isDismissible: true, duration: Duration(seconds: 2));
-      getDebits();
-    });
+    //await dbRepository.deleteDebit(debit);
+    await dbRepository.delete(table: keyDebitTable, entry: debit);
+    Get.snackbar("Débito Excluido!", "Excluido com sucesso!",
+        snackPosition: SnackPosition.BOTTOM,
+        isDismissible: true,
+        duration: Duration(seconds: 2));
+    updateAll();
   }
 
   @override
   void onReady() {
-    getCreditCards();
-    getOwners();
     super.onReady();
   }
 

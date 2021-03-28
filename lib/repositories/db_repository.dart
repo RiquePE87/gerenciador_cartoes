@@ -28,15 +28,24 @@ class DbRepository {
     }
   }
 
+  Future<void> deleteDebit(Debit d) async {
+    final Database db = await _getDatabase();
+    try{
+       await db.rawDelete("DELETE FROM debit where id=?;", [d.id]);
+    }catch (ex){
+      print (ex);
+    }
+  }
+
   Future<void> delete({String table, dynamic entry}) async {
     final Database db = await _getDatabase();
     try {
       var batch = db.batch();
       if (table == keyDebitTable) {
         Debit d = entry;
-        await batch.delete(table, where: '$keyIdDebit = ?', whereArgs: [d.id]);
-        var results = await batch.commit();
-        print(results);
+        await db.transaction((txn) async{
+          txn.rawDelete("DELETE FROM debit WHERE id=?;", [d.id]);
+        });
       } else if (table == keyCreditCardTable) {
         CreditCard c = entry;
         batch.delete(table, where: "id = ?", whereArgs: [c.id]);
@@ -78,6 +87,7 @@ class DbRepository {
   }
 
   Future<List<Debit>> getDebitEntries({int cardId, int ownerId}) async {
+
     List<Map<String, dynamic>> list;
     List<Map<String, dynamic>> selected;
     List<Debit> debitsList = [];
@@ -91,7 +101,7 @@ class DbRepository {
 
       if (ownerId != null){
 
-        String query = SELECT_DEBITS_WHERE_OWNER;
+        String query = SELECT_DEBITS_WHERE_OWNER2;
         await db.transaction((txn) async => list = await txn.rawQuery(query, [cardId,ownerId]));
 
         debitsList = List<Debit>.generate(
@@ -111,7 +121,7 @@ class DbRepository {
 
         for (int i = 0; i < ids.length; i++) {
           await db.transaction((txn) async => selected =
-          await txn.rawQuery("$SELECT_DEBITS_WHERE", [ids[i].toString()]));
+          await txn.rawQuery("$SELECT_DEBITS_WHERE2", [ids[i].toString()]));
 
           for (int i = 0; i < selected.length; i++) {
             if (selected != null)
@@ -126,6 +136,20 @@ class DbRepository {
       return debitsList;
     } catch (e) {
       print(e);
+    }
+  }
+  
+  Future<void> update(String table, Map entry, int id) async{
+    final Database db = await _getDatabase();
+    
+    try{
+      if (table == keyDebitTable){
+        db.transaction((txn) async{
+          await txn.update(table, entry, where: "id = ?", whereArgs: [id]);
+        });
+      }
+    }catch (ex){
+      print(ex);
     }
   }
 

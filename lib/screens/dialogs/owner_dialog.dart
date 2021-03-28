@@ -18,7 +18,7 @@ class OwnerDialog extends StatelessWidget {
                   decoration: InputDecoration(
                       hintText: "Nome",
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15)))),
+                          borderRadius: BorderRadius.all(Radius.circular(5)))),
                 ),
                 Obx(() => Text("${value.message}")),
                 Row(
@@ -27,7 +27,6 @@ class OwnerDialog extends StatelessWidget {
                     TextButton(
                         onPressed: () {
                           value.insertOwner();
-                          Get.back();
                         },
                         child: Text("Salvar")),
                     TextButton(

@@ -4,7 +4,7 @@ import 'package:gerenciador_cartoes/screens/components/debit_details.dart';
 import 'package:get/get.dart';
 
 class DebitListWidget extends StatelessWidget {
-  final List<dynamic> debitList;
+  List<dynamic> debitList;
 
   DebitListWidget(this.debitList);
 
@@ -12,7 +12,7 @@ class DebitListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<ModelController>(builder: (value) {
       return Expanded(
-        child: Container(
+        child: Obx(()=>Container(
           padding: EdgeInsets.all(5),
           color: Colors.transparent,
           child: ListView.builder(
@@ -20,7 +20,7 @@ class DebitListWidget extends StatelessWidget {
                 return !value.isLoading ? DebitDetails(debitList[index]) : Center(child: CircularProgressIndicator());
               },
               itemCount: debitList != null ? debitList.length : 0),
-        ),
+        ),)
       );
     });
   }

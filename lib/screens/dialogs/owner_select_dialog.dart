@@ -4,11 +4,19 @@ import 'package:gerenciador_cartoes/models/owner.dart';
 import 'package:get/get.dart';
 
 class OwnerSelectDialog extends StatelessWidget {
+
+  final List<Owner> owners;
+
+  OwnerSelectDialog(this.owners);
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ModelController>(
       init: ModelController(),
       builder: (value) {
+        if (owners != null){
+          value.selectedOwners.assignAll(owners);
+        }
         return Dialog(
           child: Card(
             child: Column(
@@ -23,7 +31,7 @@ class OwnerSelectDialog extends StatelessWidget {
                         Owner owner = value.ownerList[index];
                         return GestureDetector(
                           onTap: () => value.selectOwners(owner),
-                          child: Container(
+                          child: Obx(()=> Container(
                               margin: const EdgeInsets.all(10),
                               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               decoration: BoxDecoration(
@@ -32,7 +40,7 @@ class OwnerSelectDialog extends StatelessWidget {
                                       : Colors.transparent,
                                   border: Border.all(),
                                   borderRadius: BorderRadius.circular(15)),
-                              child: Text(owner.name)),
+                              child: Text(owner.name)),)
                         );
                       }),
                 ),

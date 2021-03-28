@@ -17,7 +17,7 @@ class CardCreditCard extends StatelessWidget {
         builder: (value) {
           return GestureDetector(
             onTap: () {
-              value.selectedCard = card;
+              value.selectedCard.value = card;
               value.getDebits().whenComplete(() => Get.to(() => CardDetailsScreen(), preventDuplicates: true));
             },
             onLongPress: () {

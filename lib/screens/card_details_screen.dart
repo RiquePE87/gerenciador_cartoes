@@ -10,6 +10,7 @@ class CardDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: GetBuilder<ModelController>(
+      init: ModelController(),
       builder: (value) {
         name = value.cc.name;
         return SafeArea(
@@ -36,14 +37,14 @@ class CardDetailsScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(value.selectedCard.name,
+                            Text(value.selectedCard.value.name,
                                 style: TextStyle(color: Colors.white)),
                             SizedBox(
                               height: 5,
                             ),
-                            Text(
-                                "Total R\$:${value.selectedCard.getTotal.toStringAsFixed(2)}",
-                                style: TextStyle(color: Colors.white))
+                            Obx(()=> Text(
+                                "Total R\$:${value.selectedCard.value.getTotal.toStringAsFixed(2)}",
+                                style: TextStyle(color: Colors.white)))
                           ],
                         ),
                         IconButton(
