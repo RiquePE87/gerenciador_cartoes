@@ -68,7 +68,7 @@ class DebitDialog extends StatelessWidget {
                         Icons.person_add,
                         color: Colors.black87,
                       ),
-                      onPressed: () => Get.dialog(OwnerSelectDialog(debit.owners)))
+                      onPressed: () => Get.dialog(OwnerSelectDialog(owners: debit?.owners)))
                 ],
               ),
               Obx(() => Text("${value.message}")),
