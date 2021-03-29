@@ -21,7 +21,7 @@ class CreditCardScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormField(
-                onChanged: (txt) => value.name = txt,
+                onChanged: (txt) => value.cc.name = txt,
                 decoration: InputDecoration(
                     isDense: true, hintText: "Nome do cartão", border: border),
               ),
@@ -29,7 +29,7 @@ class CreditCardScreen extends StatelessWidget {
                 height: 10,
               ),
               TextFormField(
-                onChanged: (txt) => value.payDay = txt,
+                onChanged: (txt) => value.cc.payDay = int.tryParse(txt),
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     isDense: true,
@@ -40,7 +40,7 @@ class CreditCardScreen extends StatelessWidget {
                 height: 10,
               ),
               TextFormField(
-                onChanged: (txt) => value.limitCredit = txt,
+                onChanged: (txt) => value.cc.limitCredit = double.tryParse(txt),
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     isDense: true,
@@ -51,7 +51,7 @@ class CreditCardScreen extends StatelessWidget {
                 height: 10,
               ),
               TextFormField(
-                onChanged: (txt) => value.usedLimit = txt,
+                onChanged: (txt) => value.cc.usedLimit = double.tryParse(txt),
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     isDense: true,

@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: Obx(()=> Container(
-                      child: value.isLoading
+                      child: value.isLoading.value
                           ? Center(child: CircularProgressIndicator())
                           : ListView.builder(
                           itemCount: value.creditCards.length,

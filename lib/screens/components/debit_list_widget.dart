@@ -17,7 +17,7 @@ class DebitListWidget extends StatelessWidget {
           color: Colors.transparent,
           child: ListView.builder(
               itemBuilder: (context, index) {
-                return !value.isLoading ? DebitDetails(debitList[index]) : Center(child: CircularProgressIndicator());
+                return !value.isLoading.value ? DebitDetails(debitList[index]) : Center(child: CircularProgressIndicator());
               },
               itemCount: debitList != null ? debitList.length : 0),
         ),)

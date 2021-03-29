@@ -147,6 +147,10 @@ class DbRepository {
         db.transaction((txn) async{
           await txn.update(table, entry, where: "id = ?", whereArgs: [id]);
         });
+      }else if (table == keyOwnerTable){
+        db.transaction((txn) async{
+          await txn.update(table, entry, where: "id = ?", whereArgs: [id]);
+        });
       }
     }catch (ex){
       print(ex);

@@ -3,18 +3,15 @@ import 'package:gerenciador_cartoes/models/debit.dart';
 import 'package:gerenciador_cartoes/models/owner.dart';
 import 'package:gerenciador_cartoes/repositories/constants.dart';
 import 'package:gerenciador_cartoes/repositories/db_repository.dart';
+import 'package:gerenciador_cartoes/screens/owner_screen.dart';
 import 'package:get/get.dart';
 
 class ModelController extends GetxController {
-  var isLoading = true;
+  var isLoading = true.obs;
   var creditCards = <CreditCard>[].obs;
   var debitsList = <Debit>[].obs;
   var ownerList = <Owner>[].obs;
   var selectedOwners = <Owner>[].obs;
-  var name;
-  var payDay;
-  var usedLimit;
-  var limitCredit;
   var selectedCard = CreditCard().obs;
   var list = <CreditCard>[];
   DbRepository dbRepository = DbRepository();
@@ -60,10 +57,10 @@ class ModelController extends GetxController {
   }
 
   bool validateCreditCard() {
-    if (name != null &&
-        payDay != null &&
-        usedLimit != null &&
-        limitCredit != null)
+    if (cc.name != null &&
+        cc.payDay != null &&
+        cc.usedLimit != null &&
+        cc.limitCredit != null)
       return true;
     else {
       showErrorMessage("Campo Obrigatório");
@@ -92,21 +89,22 @@ class ModelController extends GetxController {
   }
 
   Future<void> getCreditCards() async {
-    isLoading = true;
+    isLoading.value = true;
     list = await dbRepository.getEntries(keyCreditCardTable).whenComplete(() {
-      isLoading = false;
+      isLoading.value = false;
     });
     creditCards.assignAll(list);
   }
 
   Future<void> getDebits() async {
-    isLoading = true;
-    debitsList.value = await dbRepository
+    isLoading.value = true;
+    List<Debit> items = await dbRepository
         .getDebitEntries(cardId: selectedCard.value.id)
         .whenComplete(() {
-      isLoading = false;
-      selectedCard.value.debits = debitsList;
+      isLoading.value = false;
     });
+    debitsList.assignAll(items);
+    selectedCard.value.debits = debitsList;
   }
 
   void selectOwners(Owner owner) {
@@ -117,10 +115,11 @@ class ModelController extends GetxController {
   }
 
   Future<void> getOwners() async {
-    isLoading = false;
-    ownerList.value = await dbRepository
+    isLoading.value = true;
+    List<Owner> items = await dbRepository
         .getEntries(keyOwnerTable)
-        .whenComplete(() => isLoading = false);
+        .whenComplete(() => isLoading.value = false);
+    ownerList.assignAll(items);
     for (int i = 0; i < ownerList.length; i++) {
       ownerList[i].debits = await getOwnerDebits(ownerList[i]);
     }
@@ -133,17 +132,6 @@ class ModelController extends GetxController {
       Get.back();
     }
   }
-
-  // Future<Map<String, List<Debit>>> getOwnersDebits(int ownerId) async {
-  //   for (int i = 0; i < creditCards.length; i++) {
-  //     List<Debit> list = await dbRepository.getDebitEntries(
-  //         cardId: creditCards[i].id, ownerId: ownerId);
-  //     ownerDebits[creditCards[i].name] = list;
-  //   }
-  //   update();
-  //   return ownerDebits;
-  //
-  // }
 
   Future<void> insertDebit() async {
     debit.creditCardId = selectedCard.value.id;
@@ -167,18 +155,23 @@ class ModelController extends GetxController {
 
   Future<void> insertCreditCard() async {
     if (validateCreditCard() == true) {
-      cc.name = name;
-      cc.payDay = int.tryParse(payDay);
-      cc.limitCredit = double.tryParse(limitCredit);
-      cc.usedLimit = double.tryParse(usedLimit);
       dbRepository.insert(cc.toMap(), keyCreditCardTable);
       getCreditCards();
       Get.back();
     }
   }
 
-  Future<void> updateDebit(Debit debit) async{
+  Future<void> updateDebit(Debit debit) async {
     await dbRepository.update(keyDebitTable, debit.toMap(), debit.id);
+    Get.back();
+    updateAll();
+  }
+
+  Future<void> updateOwner(Owner owner) async {
+    await dbRepository.update(keyOwnerTable, owner.toMap(), owner.id);
+    Get.back(canPop: true);
+    getOwners();
+    Get.to(() => OwnerScreen());
   }
 
   Future<void> deleteCreditCard(CreditCard card) async {

@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
+import 'package:gerenciador_cartoes/models/owner.dart';
 import 'package:get/get.dart';
 
 class OwnerDialog extends StatelessWidget {
+
+  final Owner owner;
+
+  OwnerDialog({this.owner});
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -13,8 +19,9 @@ class OwnerDialog extends StatelessWidget {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(
-                  onChanged: (txt) => value.owner.name = txt,
+                TextFormField(
+                  initialValue: owner != null ? owner.name : "",
+                  onChanged: (txt) => owner != null ? owner.name = txt : value.owner.name = txt,
                   decoration: InputDecoration(
                       hintText: "Nome",
                       border: OutlineInputBorder(
@@ -26,7 +33,9 @@ class OwnerDialog extends StatelessWidget {
                   children: [
                     TextButton(
                         onPressed: () {
+                          if (owner == null)
                           value.insertOwner();
+                          else value.updateOwner(owner);
                         },
                         child: Text("Salvar")),
                     TextButton(

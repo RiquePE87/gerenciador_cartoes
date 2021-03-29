@@ -29,7 +29,7 @@ class DebitDialog extends StatelessWidget {
             children: [
               TextFormField(
                 initialValue: debit != null ? debit.value.toString() : "",
-                onChanged: (txt) => value.debit.value = double.tryParse(txt),
+                onChanged: (txt) => debit != null ? debit.value = double?.tryParse(txt) : value.debit.value = double.tryParse(txt),
                 keyboardType: TextInputType.numberWithOptions(),
                 decoration: InputDecoration(
                     isDense: true,
@@ -42,7 +42,7 @@ class DebitDialog extends StatelessWidget {
               ),
               TextFormField(
                 initialValue: debit != null ? debit.quota.toString() : "",
-                onChanged: (txt) => value.debit.quota = int.tryParse(txt),
+                onChanged: (txt) => debit != null ? debit.quota = int?.parse(txt) : value.debit.quota = int.tryParse(txt),
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     isDense: true,
@@ -54,7 +54,7 @@ class DebitDialog extends StatelessWidget {
               ),
               TextFormField(
                 initialValue: debit != null ? debit.description : "",
-                onChanged: (txt) => value.debit.description = txt,
+                onChanged: (txt) => debit != null ? debit.description = txt : value.debit.description = txt,
                 decoration: InputDecoration(
                     isDense: true, hintText: "Descrição", border: border),
               ),

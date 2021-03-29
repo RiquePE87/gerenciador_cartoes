@@ -19,7 +19,7 @@ class OwnerScreen extends StatelessWidget {
                   itemCount: owners.length,
                   itemBuilder: (context, index){
                     Owner owner = owners[index];
-                    return OwnerDetails(owner);
+                    return value.isLoading.value ? Center(child: CircularProgressIndicator()) : OwnerDetails(owner);
                   },
                 ),
               ),)

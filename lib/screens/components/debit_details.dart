@@ -62,7 +62,15 @@ class DebitDetails extends StatelessWidget {
                     ),
                   ),
                   IconButton(icon: Icon(Icons.delete), onPressed: (){
-                    value.deleteDebit(debit);
+                    Get.defaultDialog(
+                      title: "Atenção!",
+                      middleText: "Você deseja realmente excluir?",
+                      textCancel: "Não",
+                      onCancel: () => Get.back(),
+                      textConfirm: "Sim",
+                      onConfirm: ()=>  value.deleteDebit(debit).whenComplete(() => Get.back())
+                    );
+
                   }),
                   IconButton(icon: Icon(Icons.edit), onPressed: (){
                     Get.dialog(DebitDialog(debit: debit,));
