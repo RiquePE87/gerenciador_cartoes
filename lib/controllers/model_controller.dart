@@ -123,6 +123,7 @@ class ModelController extends GetxController {
     for (int i = 0; i < ownerList.length; i++) {
       ownerList[i].debits = await getOwnerDebits(ownerList[i]);
     }
+    print(ownerList[0].debits);
   }
 
   Future<void> insertOwner() async {
@@ -169,9 +170,8 @@ class ModelController extends GetxController {
 
   Future<void> updateOwner(Owner owner) async {
     await dbRepository.update(keyOwnerTable, owner.toMap(), owner.id);
-    Get.back(canPop: true);
+    Get.back();
     getOwners();
-    Get.to(() => OwnerScreen());
   }
 
   Future<void> deleteCreditCard(CreditCard card) async {
@@ -189,6 +189,14 @@ class ModelController extends GetxController {
         isDismissible: true,
         duration: Duration(seconds: 2));
     updateAll();
+  }
+
+  Future<void> deleteOwner(Owner owner)async{
+    await dbRepository.delete(table: keyOwnerTable, entry: owner);
+    Get.snackbar("Devedor Excluido!", "Excluido com sucesso!",
+        snackPosition: SnackPosition.BOTTOM);
+    updateAll();
+    Get.back();
   }
 
   @override

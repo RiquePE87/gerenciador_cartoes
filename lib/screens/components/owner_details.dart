@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gerenciador_cartoes/controllers/model_controller.dart';
 import 'package:gerenciador_cartoes/models/debit.dart';
 import 'package:gerenciador_cartoes/models/owner.dart';
 import 'package:gerenciador_cartoes/screens/dialogs/owner_dialog.dart';
@@ -21,35 +22,66 @@ class OwnerDetails extends StatelessWidget {
           )
         ],
         title: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      owner.name,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                    ),
-                    IconButton(icon: Icon(Icons.edit,color: Colors.black,), onPressed: ()=> Get.dialog(OwnerDialog(owner: owner,)))
-                  ],
-                ),
-                Text("R\$:${totalDebits.toStringAsFixed(2)}"),
+            child: GetBuilder<ModelController>(
+          init: ModelController(),
+          builder: (value) {
+            return Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        owner.name,
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
 
-              ],
-            ),
-          ),
-        ));
+                      IconButton(
+                          icon: Icon(
+                            Icons.edit,
+                            color: Colors.black,
+                          ),
+                          onPressed: () => Get.dialog(OwnerDialog(
+                                owner: owner,
+                              ))),
+                      IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.black,
+                          ),
+                          onPressed: () {
+                            Get.defaultDialog(
+                                title: "Atenção",
+                                middleText: "Deseja realmente excluir?",
+                                textConfirm: "Sim",
+                                onConfirm: () => value.deleteOwner(owner),
+                                textCancel: "Não",
+                                onCancel: () => Get.back());
+                          })
+                    ],
+                  ),
+                  Text("R\$:${totalDebits.toStringAsFixed(2)}"),
+                ],
+              ),
+            );
+          },
+        )));
   }
 
   List<Widget> createList(Map<String, List<Debit>> map) {
     List<Widget> widgets = [];
-    if (map != null){
+    if (map != null) {
       map.forEach((key, value) {
         value.forEach((element) {
-          double total = (element.value / element.quota) / element.owners.length;
+          double total =
+              (element.value / element.quota) / element.owners.length;
           totalDebits += total;
           widgets.add(Container(
             color: Colors.purple,

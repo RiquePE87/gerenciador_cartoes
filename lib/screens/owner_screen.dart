@@ -14,15 +14,26 @@ class OwnerScreen extends StatelessWidget {
           return Scaffold(
             backgroundColor: Colors.purple.shade500,
             body: SafeArea(
-              child: Obx(()=> Container(
-                child: ListView.builder(
-                  itemCount: owners.length,
-                  itemBuilder: (context, index){
-                    Owner owner = owners[index];
-                    return value.isLoading.value ? Center(child: CircularProgressIndicator()) : OwnerDetails(owner);
-                  },
-                ),
-              ),)
+              child: Obx((){
+                return Column(
+                  children: [
+                    Row(
+                      children: [IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: ()=>Get.back())],
+                    ),
+                    Expanded(
+                      child: Container(
+                        child: ListView.builder(
+                          itemCount: owners.length,
+                          itemBuilder: (context, index){
+                            Owner owner = owners[index];
+                            return value.isLoading.value ? Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Colors.white),)) : OwnerDetails(owner);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              })
             ),
           );
         });

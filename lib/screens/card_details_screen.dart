@@ -38,7 +38,7 @@ class CardDetailsScreen extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(value.selectedCard.value.name,
-                                style: TextStyle(color: Colors.white)),
+                                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w400)),
                             SizedBox(
                               height: 5,
                             ),

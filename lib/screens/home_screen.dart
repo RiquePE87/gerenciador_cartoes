@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
 import 'package:gerenciador_cartoes/screens/owner_screen.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 
 import 'components/card_credit_card.dart';
 import 'dialogs/owner_dialog.dart';
@@ -28,7 +29,7 @@ class HomeScreen extends StatelessWidget {
                     flex: 2,
                     child: Obx(()=> Container(
                       child: value.isLoading.value
-                          ? Center(child: CircularProgressIndicator())
+                          ? Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Colors.white),))
                           : ListView.builder(
                           itemCount: value.creditCards.length,
                           itemBuilder: (context, index) {
@@ -37,8 +38,8 @@ class HomeScreen extends StatelessWidget {
                     ),
                     ),),
                   Container(
-                    height: 80,
-                    padding: const EdgeInsets.only(bottom: 0),
+                    height: 90,
+                    margin: const EdgeInsets.only(bottom: 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
@@ -47,84 +48,10 @@ class HomeScreen extends StatelessWidget {
                           flex: 1,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
                             children: [
-                              SizedBox(
-                                child: Container(
-                                  padding: EdgeInsets.only(left: 5, right: 5),
-                                  color: Colors.purple.shade600,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      IconButton(
-                                          icon: Icon(Icons.person_add),
-                                          onPressed: () {
-                                            Get.dialog(OwnerDialog());
-                                          }),
-                                      Text(
-                                        "Adicionar Devedor",
-                                        style: TextStyle(color: Colors.white),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                child: Container(
-                                  padding: EdgeInsets.only(left: 5, right: 5),
-                                  color: Colors.purple.shade600,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      IconButton(
-                                          icon: Icon(Icons.credit_card),
-                                          onPressed: () {
-                                            Get.dialog(CreditCardScreen());
-                                          }),
-                                      Text("Adicionar Cartão",
-                                          style: TextStyle(color: Colors.white))
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                child: Container(
-                                  padding: EdgeInsets.only(left: 5, right: 5),
-                                  color: Colors.purple.shade600,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      IconButton(
-                                          icon: Icon(Icons.person),
-                                          onPressed: () {
-                                            Get.to(() => OwnerScreen());
-                                          }),
-                                      Text("Devedores",
-                                          style: TextStyle(color: Colors.white))
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                child: Container(
-                                  padding: EdgeInsets.only(left: 5, right: 5),
-                                  color: Colors.purple.shade600,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      IconButton(
-                                          icon: Icon(Icons.person_add),
-                                          onPressed: () {}),
-                                      Text("Adicionar Devedor",
-                                          style: TextStyle(color: Colors.white))
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              createMenuItem("Adicionar Devedor", Icons.person_add, ()=> Get.dialog(OwnerDialog())),
+                              createMenuItem("Adicionar Cartão", Icons.credit_card, ()=> Get.dialog(CreditCardScreen())),
+                              createMenuItem("Devedores", Icons.person, ()=> Get.dialog(OwnerScreen())),
                             ],
                           ),
                         )
@@ -139,4 +66,28 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+  Widget createMenuItem(String description, IconData icon, Callback onPressed){
+    return GestureDetector(
+      onTap: onPressed,
+      child: SizedBox(
+        width: 100,
+        child: Container(
+          color: Colors.purple.shade600,
+          margin: const EdgeInsets.only(left: 8, right: 8),
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(icon, color: Colors.white,),
+              Text(description, style: TextStyle(color: Colors.white),)
+            ],
+
+          ),
+        ),
+      ),
+    );
+  }
 }
+

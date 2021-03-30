@@ -51,6 +51,12 @@ class DbRepository {
         batch.delete(table, where: "id = ?", whereArgs: [c.id]);
         var results = await batch.commit();
         print(results);
+      }else if (table == keyOwnerTable){
+        Owner owner = entry;
+        batch.delete(keyOwnerDebitTable, where: "owner_id = ?", whereArgs: [owner.id]);
+        batch.delete(table, where: "id = ?", whereArgs: [owner.id]);
+        var results = await batch.commit();
+        print(results);
       }
     } catch (ex) {
       print(ex);
