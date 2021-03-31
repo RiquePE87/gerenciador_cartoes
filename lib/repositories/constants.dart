@@ -6,6 +6,7 @@ const String keyOwnerDebitTable = "owner_debit";
 const String keyIdCreditCard = "id";
 const String keyNameCreditCard = "name";
 const String keyPayDayCreditCard = "payday";
+const String keyBestDayCreditCard = "bestday";
 const String keyUsedLimitCreditCard = "usedlimit";
 const String keyLimitCreditCard = "limitcredit";
 //const String keyDebitListCreditCard = "debitList";
@@ -14,6 +15,8 @@ const String keyIdDebit = "id";
 const String keyDescriptionDebit = "description";
 const String keyValueDebit = "value";
 const String keyQuotaDebit = "quota";
+const String keyPaiedQuotas = "paiedquotas";
+const String keyCreatedAt = "createdAt";
 const String keyCreditCardIdDebit = "creditCardID";
 //
 
@@ -31,6 +34,7 @@ const String CREATE_CREDIT_CARD_TABLE = "CREATE TABLE $keyCreditCardTable"
     "($keyIdCreditCard INTEGER PRIMARY KEY AUTOINCREMENT,"
     " $keyNameCreditCard TEXT,"
     " $keyPayDayCreditCard INTEGER,"
+    " $keyBestDayCreditCard INTEGER,"
     " $keyUsedLimitCreditCard REAL,"
     " $keyLimitCreditCard REAL)";
 
@@ -39,6 +43,8 @@ const String CREATE_DEBIT_TABLE = "CREATE TABLE $keyDebitTable"
     "$keyDescriptionDebit TEXT,"
     "$keyValueDebit REAL,"
     "$keyQuotaDebit INTEGER,"
+    "$keyPaiedQuotas INTEGER,"
+    "$keyCreatedAt String,"
     "$keyCreditCardIdDebit INTEGER NOT NULL,"
     "FOREIGN KEY ($keyCreditCardIdDebit) REFERENCES $keyCreditCardTable($keyIdCreditCard) ON DELETE CASCADE)";
 

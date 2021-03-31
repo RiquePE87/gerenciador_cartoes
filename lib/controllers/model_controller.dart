@@ -3,7 +3,6 @@ import 'package:gerenciador_cartoes/models/debit.dart';
 import 'package:gerenciador_cartoes/models/owner.dart';
 import 'package:gerenciador_cartoes/repositories/constants.dart';
 import 'package:gerenciador_cartoes/repositories/db_repository.dart';
-import 'package:gerenciador_cartoes/screens/owner_screen.dart';
 import 'package:get/get.dart';
 
 class ModelController extends GetxController {
@@ -59,6 +58,7 @@ class ModelController extends GetxController {
   bool validateCreditCard() {
     if (cc.name != null &&
         cc.payDay != null &&
+        cc.bestDay != null &&
         cc.usedLimit != null &&
         cc.limitCredit != null)
       return true;
@@ -80,7 +80,8 @@ class ModelController extends GetxController {
   bool validateDebit() {
     if (debit.description != null &&
         debit.value != null &&
-        debit.quota != null) {
+        debit.quota != null &&
+        debit.paiedQuotas != null) {
       return true;
     } else {
       showErrorMessage("Campo Obrigatório");
@@ -93,7 +94,7 @@ class ModelController extends GetxController {
     list = await dbRepository.getEntries(keyCreditCardTable).whenComplete(() {
       isLoading.value = false;
     });
-    creditCards.assignAll(list);
+    if (list.length != 0) creditCards.assignAll(list);
   }
 
   Future<void> getDebits() async {
@@ -123,7 +124,7 @@ class ModelController extends GetxController {
     for (int i = 0; i < ownerList.length; i++) {
       ownerList[i].debits = await getOwnerDebits(ownerList[i]);
     }
-    print(ownerList[0].debits);
+    //print(ownerList[0].debits);
   }
 
   Future<void> insertOwner() async {
@@ -136,6 +137,7 @@ class ModelController extends GetxController {
 
   Future<void> insertDebit() async {
     debit.creditCardId = selectedCard.value.id;
+    debit.createdAt = DateTime.now().toLocal();
     if (validateDebit()) {
       int debitId;
       debitId = await dbRepository.insert(debit.toMap(), keyDebitTable);
@@ -191,7 +193,7 @@ class ModelController extends GetxController {
     updateAll();
   }
 
-  Future<void> deleteOwner(Owner owner)async{
+  Future<void> deleteOwner(Owner owner) async {
     await dbRepository.delete(table: keyOwnerTable, entry: owner);
     Get.snackbar("Devedor Excluido!", "Excluido com sucesso!",
         snackPosition: SnackPosition.BOTTOM);

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'owner.dart';
 
 class Debit{
@@ -5,7 +7,9 @@ class Debit{
   String description;
   double value;
   int quota;
+  int paiedQuotas;
   int creditCardId;
+  DateTime createdAt;
   List<Owner> owners;
 
   Debit(
@@ -13,7 +17,9 @@ class Debit{
       this.description,
       this.value,
       this.quota,
+        this.paiedQuotas,
       this.creditCardId,
+        this.createdAt,
       this.owners});
 
   Map<String, dynamic> toMap(){
@@ -23,7 +29,9 @@ class Debit{
      "description": description,
      "value" : value,
      "quota" : quota,
-     "creditCardId" : creditCardId
+     "paiedQuotas" : paiedQuotas,
+     "creditCardId" : creditCardId,
+     "createdAt": createdAt.toIso8601String()
    };
   }
   Debit fromMap(Map map){
@@ -33,7 +41,9 @@ class Debit{
       description: map["description"],
       value: map["value"],
       quota: map["quota"],
+      paiedQuotas: map["paiedquotas"],
       creditCardId: map["creditCardID"],
+      createdAt: DateTime.parse(map["createdAt"]),
       owners: []
     );
   }
