@@ -16,7 +16,7 @@ class ModelController extends GetxController {
   DbRepository dbRepository = DbRepository();
   CreditCard cc = new CreditCard();
   Owner owner = new Owner();
-  Debit debit = new Debit();
+  var debit = new Debit().obs;
   var message = "".obs;
   var ownerDebits = Map<String, List<Debit>>().obs;
 
@@ -78,10 +78,10 @@ class ModelController extends GetxController {
   }
 
   bool validateDebit() {
-    if (debit.description != null &&
-        debit.value != null &&
-        debit.quota != null &&
-        debit.paiedQuotas != null) {
+    if (debit.value.description != null &&
+        debit.value.value != null &&
+        debit.value.quota != null &&
+        debit.value.purchaseDate != null) {
       return true;
     } else {
       showErrorMessage("Campo Obrigatório");
@@ -136,17 +136,16 @@ class ModelController extends GetxController {
   }
 
   Future<void> insertDebit() async {
-    debit.creditCardId = selectedCard.value.id;
-    debit.createdAt = DateTime.now().toLocal();
+    debit.value.creditCardId = selectedCard.value.id;
     if (validateDebit()) {
       int debitId;
-      debitId = await dbRepository.insert(debit.toMap(), keyDebitTable);
+      debitId = await dbRepository.insert(debit.value.toMap(), keyDebitTable);
       selectedOwners.forEach((e) async {
         Map<String, dynamic> map = {};
         map.addAll({
           "$keyOwnerIDOwnerDebit": e.id,
           "$keyDebitIDOwnerDebit": debitId,
-          "$keyCreditCardIDOwnerDebit": debit.creditCardId
+          "$keyCreditCardIDOwnerDebit": debit.value.creditCardId
         });
         await dbRepository.insert(map, keyOwnerDebitTable);
       });

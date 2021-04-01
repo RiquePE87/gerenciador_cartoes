@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'owner.dart';
 
-class Debit{
+class Debit {
   int id;
   String description;
   double value;
   int quota;
-  int paiedQuotas;
   int creditCardId;
-  DateTime createdAt;
+  DateTime purchaseDate;
   List<Owner> owners;
 
   Debit(
@@ -17,34 +16,29 @@ class Debit{
       this.description,
       this.value,
       this.quota,
-        this.paiedQuotas,
       this.creditCardId,
-        this.createdAt,
+      this.purchaseDate,
       this.owners});
 
-  Map<String, dynamic> toMap(){
-
-   return {
-     //"id" : id,
-     "description": description,
-     "value" : value,
-     "quota" : quota,
-     "paiedQuotas" : paiedQuotas,
-     "creditCardId" : creditCardId,
-     "createdAt": createdAt.toIso8601String()
-   };
+  Map<String, dynamic> toMap() {
+    return {
+      //"id" : id,
+      "description": description,
+      "value": value,
+      "quota": quota,
+      "creditCardId": creditCardId,
+      "purchasedate": purchaseDate.toIso8601String()
+    };
   }
-  Debit fromMap(Map map){
 
+  Debit fromMap(Map map) {
     return Debit(
-      id: map["id"],
-      description: map["description"],
-      value: map["value"],
-      quota: map["quota"],
-      paiedQuotas: map["paiedquotas"],
-      creditCardId: map["creditCardID"],
-      createdAt: DateTime.parse(map["createdAt"]),
-      owners: []
-    );
+        id: map["id"],
+        description: map["description"],
+        value: map["value"],
+        quota: map["quota"],
+        creditCardId: map["creditCardID"],
+        purchaseDate: DateTime.parse(map["purchasedate"]),
+        owners: []);
   }
 }

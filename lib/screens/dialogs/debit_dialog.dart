@@ -35,7 +35,7 @@ class DebitDialog extends StatelessWidget {
                   initialValue: debit != null ? debit.value.toString() : "",
                   // ignore: null_aware_before_operator
                   onChanged: (txt) => debit != null ? debit.value = double?.tryParse((txt.replaceAll(RegExp("[^0-9]"), ""))) / 100
-                      : value.debit.value = double.tryParse(txt.replaceAll(RegExp("[^0-9]"), "")) / 100,
+                      : value.debit.value.value = double.tryParse(txt.replaceAll(RegExp("[^0-9]"), "")) / 100,
                   keyboardType: TextInputType.numberWithOptions(),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -52,7 +52,7 @@ class DebitDialog extends StatelessWidget {
                 ),
                 TextFormField(
                   initialValue: debit != null ? debit.quota.toString() : "",
-                  onChanged: (txt) => debit != null ? debit.quota = int?.parse(txt) : value.debit.quota = int.tryParse(txt),
+                  onChanged: (txt) => debit != null ? debit.quota = int?.parse(txt) : value.debit.value.quota = int.tryParse(txt),
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                       isDense: true,
@@ -65,33 +65,24 @@ class DebitDialog extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Data da compra"),
-                    IconButton(icon: Icon(Icons.calendar_today), color: Colors.black, onPressed: (){
-                      showDatePicker(
+                    Obx(()=> Text(value.debit.value.purchaseDate == null ? "Data da compra" :
+                    "${formatDate(value.debit.value.purchaseDate)}"),),
+                    IconButton(icon: Icon(Icons.calendar_today), color: Colors.black, onPressed: () async{
+                      value.debit.value.purchaseDate = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime(2020),
                         lastDate: DateTime(2100),
-
                       );
                     })
                   ],
                 ),
-                // TextFormField(
-                //   initialValue: debit != null ? debit.paiedQuotas.toString() : "",
-                //   onChanged: (txt) => debit != null ? debit.paiedQuotas = int?.parse(txt) : value.debit.paiedQuotas = int.tryParse(txt),
-                //   keyboardType: TextInputType.number,
-                //   decoration: InputDecoration(
-                //       isDense: true,
-                //       hintText: "Parcelas Pagas",
-                //       border: border),
-                // ),
                 SizedBox(
                   height: 10,
                 ),
                 TextFormField(
                   initialValue: debit != null ? debit.description : "",
-                  onChanged: (txt) => debit != null ? debit.description = txt : value.debit.description = txt,
+                  onChanged: (txt) => debit != null ? debit.description = txt : value.debit.value.description = txt,
                   decoration: InputDecoration(
                       isDense: true, hintText: "Descrição", border: border),
                 ),
@@ -120,6 +111,7 @@ class DebitDialog extends StatelessWidget {
                     TextButton(
                         onPressed: () {
                           Get.back();
+                          value.debit.value = new Debit();
                         },
                         child: Text("Cancelar")),
                   ],
@@ -130,5 +122,9 @@ class DebitDialog extends StatelessWidget {
         );
       },
     ));
+  }
+  
+  String formatDate(DateTime date){
+    return "${date.day}/${date.month}/${date.year}";
   }
 }

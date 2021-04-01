@@ -15,8 +15,7 @@ const String keyIdDebit = "id";
 const String keyDescriptionDebit = "description";
 const String keyValueDebit = "value";
 const String keyQuotaDebit = "quota";
-const String keyPaiedQuotas = "paiedquotas";
-const String keyCreatedAt = "createdAt";
+const String keyPurchaseDate = "purchasedate";
 const String keyCreditCardIdDebit = "creditCardID";
 //
 
@@ -43,8 +42,7 @@ const String CREATE_DEBIT_TABLE = "CREATE TABLE $keyDebitTable"
     "$keyDescriptionDebit TEXT,"
     "$keyValueDebit REAL,"
     "$keyQuotaDebit INTEGER,"
-    "$keyPaiedQuotas INTEGER,"
-    "$keyCreatedAt String,"
+    "$keyPurchaseDate String,"
     "$keyCreditCardIdDebit INTEGER NOT NULL,"
     "FOREIGN KEY ($keyCreditCardIdDebit) REFERENCES $keyCreditCardTable($keyIdCreditCard) ON DELETE CASCADE)";
 
