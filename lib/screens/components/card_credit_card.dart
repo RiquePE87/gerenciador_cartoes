@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
-import 'package:gerenciador_cartoes/models/credit_card.dart';
+import 'package:gerenciador_cartoes/data/models/credit_card.dart';
 import 'package:gerenciador_cartoes/screens/card_details_screen.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CardCreditCard extends StatelessWidget {
   final CreditCard card;
@@ -45,10 +46,11 @@ class CardCreditCard extends StatelessWidget {
                   children: [
                     Text(
                       card.name,
-                      style: TextStyle(
+                      style: GoogleFonts.adamina(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
-                          color: Colors.white),
+                          color: Colors.white
+                      )
                     ),
                     SizedBox(
                       height: 20,

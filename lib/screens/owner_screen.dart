@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
-import 'package:gerenciador_cartoes/models/owner.dart';
+import 'package:gerenciador_cartoes/data/models/owner.dart';
 import 'package:gerenciador_cartoes/screens/components/owner_details.dart';
 import 'package:get/get.dart';
 

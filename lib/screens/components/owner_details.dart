@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
-import 'package:gerenciador_cartoes/models/debit.dart';
-import 'package:gerenciador_cartoes/models/owner.dart';
+import 'package:gerenciador_cartoes/data/models/debit.dart';
+import 'package:gerenciador_cartoes/data/models/owner.dart';
 import 'package:gerenciador_cartoes/screens/dialogs/owner_dialog.dart';
 import 'package:get/get.dart';
 

@@ -1,11 +1,17 @@
-import 'package:gerenciador_cartoes/models/credit_card.dart';
-import 'package:gerenciador_cartoes/models/debit.dart';
-import 'package:gerenciador_cartoes/models/owner.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:gerenciador_cartoes/data/models/credit_card.dart';
+import 'package:gerenciador_cartoes/data/models/debit.dart';
+import 'package:gerenciador_cartoes/data/models/owner.dart';
 import 'package:gerenciador_cartoes/repositories/constants.dart';
 import 'package:gerenciador_cartoes/repositories/db_repository.dart';
 import 'package:get/get.dart';
 
 class ModelController extends GetxController {
+
+  final DbRepository dbRepository;
+  ModelController({@required this.dbRepository});
+
+
   var isLoading = true.obs;
   var creditCards = <CreditCard>[].obs;
   var debitsList = <Debit>[].obs;
@@ -13,7 +19,7 @@ class ModelController extends GetxController {
   var selectedOwners = <Owner>[].obs;
   var selectedCard = CreditCard().obs;
   var list = <CreditCard>[];
-  DbRepository dbRepository = DbRepository();
+
   CreditCard cc = new CreditCard();
   Owner owner = new Owner();
   var debit = new Debit().obs;
@@ -173,6 +179,7 @@ class ModelController extends GetxController {
     await dbRepository.update(keyOwnerTable, owner.toMap(), owner.id);
     Get.back();
     getOwners();
+    ownerList.refresh();
   }
 
   Future<void> deleteCreditCard(CreditCard card) async {
@@ -207,8 +214,8 @@ class ModelController extends GetxController {
 
   @override
   void onInit() async {
+    super.onInit();
     getCreditCards();
     getOwners();
-    super.onInit();
   }
 }

@@ -1,6 +1,6 @@
-import 'package:gerenciador_cartoes/models/credit_card.dart';
-import 'package:gerenciador_cartoes/models/debit.dart';
-import 'package:gerenciador_cartoes/models/owner.dart';
+import 'package:gerenciador_cartoes/data/models/credit_card.dart';
+import 'package:gerenciador_cartoes/data/models/debit.dart';
+import 'package:gerenciador_cartoes/data/models/owner.dart';
 import 'package:gerenciador_cartoes/repositories/constants.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -72,18 +72,18 @@ class DbRepository {
         case keyCreditCardTable:
           list = await db.query(table);
           return List<CreditCard>.generate(
-              list.length, (index) => CreditCard().fromMap(list[index]));
+              list.length, (index) => CreditCard.fromMap(list[index]));
           break;
         case keyOwnerTable:
           list = await db.query(table);
           return List<Owner>.generate(
-              list.length, (index) => Owner().fromMap(list[index]));
+              list.length, (index) => Owner.fromMap(list[index]));
           break;
         case keyDebitTable:
           list = await db.query(table,
               where: "$keyCreditCardIdDebit = ?", whereArgs: [whereArgs]);
           return List<Debit>.generate(
-              list.length, (index) => Debit().fromMap(list[index]));
+              list.length, (index) => Debit.fromMap(list[index]));
           break;
       }
     } catch (ex) {
@@ -111,7 +111,7 @@ class DbRepository {
         await db.transaction((txn) async => list = await txn.rawQuery(query, [cardId,ownerId]));
 
         debitsList = List<Debit>.generate(
-            list.length, (index) => Debit().fromMap(list[index]));
+            list.length, (index) => Debit.fromMap(list[index]));
 
         print(list);
       }else{
@@ -133,7 +133,7 @@ class DbRepository {
             if (selected != null)
               owners.add(_getOwner(ownerList, selected[i]["owner_id"]));
           }
-          Debit d = Debit().fromMap(selected[0]);
+          Debit d = Debit.fromMap(selected[0]);
           d.owners.addAll(owners);
           debitsList.add(d);
           owners.clear();
@@ -154,6 +154,10 @@ class DbRepository {
           await txn.update(table, entry, where: "id = ?", whereArgs: [id]);
         });
       }else if (table == keyOwnerTable){
+        db.transaction((txn) async{
+          await txn.update(table, entry, where: "id = ?", whereArgs: [id]);
+        });
+      }else if (table == keyCreditCardTable){
         db.transaction((txn) async{
           await txn.update(table, entry, where: "id = ?", whereArgs: [id]);
         });

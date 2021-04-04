@@ -9,7 +9,6 @@ const String keyPayDayCreditCard = "payday";
 const String keyBestDayCreditCard = "bestday";
 const String keyUsedLimitCreditCard = "usedlimit";
 const String keyLimitCreditCard = "limitcredit";
-//const String keyDebitListCreditCard = "debitList";
 
 const String keyIdDebit = "id";
 const String keyDescriptionDebit = "description";
@@ -31,24 +30,24 @@ const String DATABASE = "database.db";
 
 const String CREATE_CREDIT_CARD_TABLE = "CREATE TABLE $keyCreditCardTable"
     "($keyIdCreditCard INTEGER PRIMARY KEY AUTOINCREMENT,"
-    " $keyNameCreditCard TEXT,"
-    " $keyPayDayCreditCard INTEGER,"
-    " $keyBestDayCreditCard INTEGER,"
-    " $keyUsedLimitCreditCard REAL,"
-    " $keyLimitCreditCard REAL)";
+    " $keyNameCreditCard TEXT NOT NULL,"
+    " $keyPayDayCreditCard INTEGER NOT NULL,"
+    " $keyBestDayCreditCard INTEGER NOT NULL,"
+    " $keyUsedLimitCreditCard REAL NOT NULL,"
+    " $keyLimitCreditCard REAL NOT NULL)";
 
 const String CREATE_DEBIT_TABLE = "CREATE TABLE $keyDebitTable"
     "($keyIdDebit INTEGER PRIMARY KEY AUTOINCREMENT,"
-    "$keyDescriptionDebit TEXT,"
-    "$keyValueDebit REAL,"
-    "$keyQuotaDebit INTEGER,"
-    "$keyPurchaseDate String,"
+    "$keyDescriptionDebit TEXT NOT NULL,"
+    "$keyValueDebit REAL NOT NULL,"
+    "$keyQuotaDebit INTEGER NOT NULL,"
+    "$keyPurchaseDate STRING NOT NULL,"
     "$keyCreditCardIdDebit INTEGER NOT NULL,"
     "FOREIGN KEY ($keyCreditCardIdDebit) REFERENCES $keyCreditCardTable($keyIdCreditCard) ON DELETE CASCADE)";
 
 const String CREATE_OWNER_TABLE = "CREATE TABLE $keyOwnerTable ("
     "$keyIdOwner INTEGER PRIMARY KEY AUTOINCREMENT,"
-    "$keyNameOwner TEXT)";
+    "$keyNameOwner TEXT NOT NULL)";
 
 const String CREATE_OWNER_DEBIT_TABLE = "CREATE TABLE $keyOwnerDebitTable ("
     "$keyIDdOwnerDebit INTEGER PRIMARY KEY AUTOINCREMENT,"
