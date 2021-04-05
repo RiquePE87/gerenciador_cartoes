@@ -20,6 +20,7 @@ class ModelController extends GetxController {
   var selectedCard = CreditCard().obs;
   var list = <CreditCard>[];
 
+
   CreditCard cc = new CreditCard();
   Owner owner = new Owner();
   var debit = new Debit().obs;
@@ -119,6 +120,15 @@ class ModelController extends GetxController {
       selectedOwners.remove(owner);
     else
       selectedOwners.add(owner);
+  }
+
+  bool containsOwner(Owner owner){
+    if (selectedOwners.contains(owner)){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 
   Future<void> getOwners() async {

@@ -11,11 +11,6 @@ class OwnerSelectDialog extends GetView<ModelController> {
 
   @override
   Widget build(BuildContext context) {
-    if (owners != null) {
-      owners.forEach((element) {
-        controller.selectedOwners.add(element);
-      });
-    }
 
     return Dialog(
       child: Card(
@@ -29,12 +24,19 @@ class OwnerSelectDialog extends GetView<ModelController> {
                     scrollDirection: Axis.vertical,
                     itemCount: controller.ownerList.length,
                     itemBuilder: (context, index) {
-                      Owner owner = controller.ownerList[index];
-                      return Obx(() => GestureDetector(
-                          onTap: () {
-                            controller.selectOwners(owner);
-                          },
-                          child: setButtonState(controller.selectedOwners, owner)));
+                       final Owner owner = controller.ownerList[index];
+                      return GetX<ModelController>(
+                        initState: (state){
+                          if (owners != null) {
+                            owners.forEach((element) {
+                              controller.selectOwners(element);
+                            });
+                          }
+                        },
+                          builder: (controller){
+                        return controller.selectedOwners.length > 0 ? setButtonState(owner) :
+                        Center(child: CircularProgressIndicator(),);
+                      });
                     })),
             Row(
               children: [
@@ -52,33 +54,21 @@ class OwnerSelectDialog extends GetView<ModelController> {
     );
   }
 
-  Widget setButtonState(List<Owner> owners, Owner owner) {
-    if (owners.contains(owner)) {
-      return Container(
-        margin: const EdgeInsets.all(10),
-        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-        decoration: BoxDecoration(
-          color: Colors.purple,
-          border: Border.all(),
-        ),
-        child: Text(
-          owner.name,
-          style: TextStyle(color: Colors.white),
-        ),
-      );
+  Widget setButtonState(Owner owner) {
+    if (controller.selectedOwners.contains(owner)) {
+      return ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.purple)
+          ),
+          onPressed: () => controller.selectOwners(owner),
+          child: Text("${owner.name}"));
     } else {
-      return Container(
-        margin: const EdgeInsets.all(10),
-        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          border: Border.all(),
-        ),
-        child: Text(
-          owner.name,
-          style: TextStyle(color: Colors.black),
-        ),
-      );
+      return ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white)
+          ),
+          onPressed: () => controller.selectOwners(owner),
+          child: Text("${owner.name}", style: TextStyle(color: Colors.black),));
     }
   }
 }
