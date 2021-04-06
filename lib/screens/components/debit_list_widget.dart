@@ -4,7 +4,7 @@ import 'package:gerenciador_cartoes/screens/components/debit_details.dart';
 import 'package:get/get.dart';
 
 class DebitListWidget extends StatelessWidget {
-  List<dynamic> debitList;
+  final List<dynamic> debitList;
 
   DebitListWidget(this.debitList);
 

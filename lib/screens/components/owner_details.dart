@@ -5,7 +5,7 @@ import 'package:gerenciador_cartoes/data/models/owner.dart';
 import 'package:gerenciador_cartoes/screens/dialogs/owner_dialog.dart';
 import 'package:get/get.dart';
 
-class OwnerDetails extends StatelessWidget {
+class OwnerDetails extends GetView<ModelController> {
   final Owner owner;
   double totalDebits = 0.0;
 
@@ -22,56 +22,49 @@ class OwnerDetails extends StatelessWidget {
           )
         ],
         title: Card(
-            child: GetBuilder<ModelController>(
-          init: ModelController(),
-          builder: (value) {
-            return Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        owner.name,
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600),
-                      ),
-                    ],
+                  Text(
+                    owner.name,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-
-                      IconButton(
-                          icon: Icon(
-                            Icons.edit,
-                            color: Colors.black,
-                          ),
-                          onPressed: () => Get.dialog(OwnerDialog(
-                                owner: owner,
-                              ))),
-                      IconButton(
-                          icon: Icon(
-                            Icons.delete,
-                            color: Colors.black,
-                          ),
-                          onPressed: () {
-                            Get.defaultDialog(
-                                title: "Atenção",
-                                middleText: "Deseja realmente excluir?",
-                                textConfirm: "Sim",
-                                onConfirm: () => value.deleteOwner(owner),
-                                textCancel: "Não",
-                                onCancel: () => Get.back());
-                          })
-                    ],
-                  ),
-                  Text("R\$:${totalDebits.toStringAsFixed(2)}"),
                 ],
               ),
-            );
-          },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      icon: Icon(
+                        Icons.edit,
+                        color: Colors.black,
+                      ),
+                      onPressed: () => Get.dialog(OwnerDialog(
+                            owner: owner,
+                          ))),
+                  IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {
+                        Get.defaultDialog(
+                            title: "Atenção",
+                            middleText: "Deseja realmente excluir?",
+                            textConfirm: "Sim",
+                            onConfirm: () => controller.deleteOwner(owner),
+                            textCancel: "Não",
+                            onCancel: () => Get.back());
+                      })
+                ],
+              ),
+              Text("R\$:${totalDebits.toStringAsFixed(2)}"),
+            ],
+          ),
         )));
   }
 

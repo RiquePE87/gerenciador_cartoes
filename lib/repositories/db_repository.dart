@@ -20,12 +20,14 @@ class DbRepository {
   }
 
   Future<int> insert(Map entry, String table) async {
+    int id;
     try {
       final Database db = await _getDatabase();
-      return await db.insert(table, entry);
+      id = await db.insert(table, entry);
     } catch (ex) {
       print(ex);
     }
+    return id;
   }
 
   Future<void> deleteDebit(Debit d) async {

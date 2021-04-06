@@ -7,8 +7,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:gerenciador_cartoes/main.dart';
 import 'package:gerenciador_cartoes/screens/home_screen.dart';
 
 void main() {

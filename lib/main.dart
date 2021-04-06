@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/bindings/model_binding.dart';
+import 'package:gerenciador_cartoes/routes/app_pages.dart';
 import 'package:gerenciador_cartoes/screens/home_screen.dart';
 import 'package:get/get.dart';
 
 void main() => runApp(GetMaterialApp(
   debugShowCheckedModeBanner: false,
+  initialRoute: Routes.INITIAL,
+  getPages: AppPages.routes,
   initialBinding: ModelBinding(), // dependencias iniciais
   theme: ThemeData(
       backgroundColor: Colors.purple.shade500,

@@ -5,13 +5,10 @@ import 'package:get/get.dart';
 
 class OwnerSelectDialog extends GetView<ModelController> {
   final List<Owner> owners;
-  final ModelController controller = Get.find<ModelController>();
-
   OwnerSelectDialog({this.owners});
 
   @override
   Widget build(BuildContext context) {
-
     return Dialog(
       child: Card(
         child: Column(
@@ -20,24 +17,24 @@ class OwnerSelectDialog extends GetView<ModelController> {
           children: [
             Expanded(
                 flex: 1,
-                child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: controller.ownerList.length,
-                    itemBuilder: (context, index) {
-                       final Owner owner = controller.ownerList[index];
-                      return GetX<ModelController>(
-                        initState: (state){
-                          if (owners != null) {
-                            owners.forEach((element) {
-                              controller.selectOwners(element);
-                            });
-                          }
-                        },
-                          builder: (controller){
-                        return controller.selectedOwners.length > 0 ? setButtonState(owner) :
-                        Center(child: CircularProgressIndicator(),);
+                child: GetX<ModelController>(
+                  initState: (state) {
+                    if (owners != null) {
+                      owners.forEach((element) {
+                        controller.selectedOwners.add(element);
                       });
-                    })),
+                    }
+                  },
+                  builder: (_) {
+                    return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: _.ownerList.length,
+                        itemBuilder: (context, index) {
+                          final Owner owner = _.ownerList[index];
+                          return Obx(() => setButtonState(owner));
+                        });
+                  },
+                )),
             Row(
               children: [
                 TextButton(
@@ -58,17 +55,18 @@ class OwnerSelectDialog extends GetView<ModelController> {
     if (controller.selectedOwners.contains(owner)) {
       return ElevatedButton(
           style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.purple)
-          ),
+              backgroundColor: MaterialStateProperty.all(Colors.purple)),
           onPressed: () => controller.selectOwners(owner),
           child: Text("${owner.name}"));
     } else {
       return ElevatedButton(
           style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.white)
-          ),
+              backgroundColor: MaterialStateProperty.all(Colors.white)),
           onPressed: () => controller.selectOwners(owner),
-          child: Text("${owner.name}", style: TextStyle(color: Colors.black),));
+          child: Text(
+            "${owner.name}",
+            style: TextStyle(color: Colors.black),
+          ));
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
+import 'package:gerenciador_cartoes/routes/app_pages.dart';
 import 'package:gerenciador_cartoes/screens/owner_screen.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
@@ -43,7 +44,7 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             createMenuItem("Adicionar Devedor", Icons.person_add, ()=> Get.dialog(OwnerDialog())),
                             createMenuItem("Adicionar Cartão", Icons.credit_card, ()=> Get.dialog(CreditCardScreen())),
-                            createMenuItem("Devedores", Icons.person, ()=> Get.dialog(OwnerScreen())),
+                            createMenuItem("Devedores", Icons.person, ()=> Get.toNamed(Routes.OWNER_SCREEN)),
                           ],
                         ),
                       )

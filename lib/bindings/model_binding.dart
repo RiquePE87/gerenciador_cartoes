@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 class ModelBinding implements Bindings{
   @override
   void dependencies() {
+   //Get.put(DbRepository(),builder: ()=> ModelController(dbRepository: DbRepository()), permanent: true);
     Get.lazyPut<ModelController>(() => ModelController(dbRepository: DbRepository()));
-    // TODO: implement dependencies
   }
 
 }
