@@ -9,6 +9,11 @@ class OwnerSelectDialog extends GetView<ModelController> {
 
   @override
   Widget build(BuildContext context) {
+    if (owners != null) {
+      owners.forEach((element) {
+        controller.selectedOwners.add(element);
+      });
+    }
     return Dialog(
       child: Card(
         child: Column(
@@ -18,19 +23,12 @@ class OwnerSelectDialog extends GetView<ModelController> {
             Expanded(
                 flex: 1,
                 child: GetX<ModelController>(
-                  initState: (state) {
-                    if (owners != null) {
-                      owners.forEach((element) {
-                        controller.selectedOwners.add(element);
-                      });
-                    }
-                  },
                   builder: (_) {
                     return ListView.builder(
                         scrollDirection: Axis.vertical,
-                        itemCount: _.ownerList.length,
+                        itemCount: controller.ownerList.length,
                         itemBuilder: (context, index) {
-                          final Owner owner = _.ownerList[index];
+                          final Owner owner = controller.ownerList[index];
                           return Obx(() => setButtonState(owner));
                         });
                   },
@@ -52,6 +50,7 @@ class OwnerSelectDialog extends GetView<ModelController> {
   }
 
   Widget setButtonState(Owner owner) {
+
     if (controller.selectedOwners.contains(owner)) {
       return ElevatedButton(
           style: ButtonStyle(
