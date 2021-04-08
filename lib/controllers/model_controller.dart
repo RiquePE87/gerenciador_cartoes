@@ -19,17 +19,10 @@ class ModelController extends GetxController {
   var selectedOwners = <Owner>[].obs;
   var selectedCard = CreditCard().obs;
   var list = <CreditCard>[];
-
-  List<Owner> getSelectedOwners(){
-    return selectedOwners;
-  }
-
-
   CreditCard cc = new CreditCard();
   Owner owner = new Owner();
   var debit = new Debit().obs;
   var message = "".obs;
-  var ownerDebits = Map<String, List<Debit>>().obs;
 
   void updateAll() {
     getOwners();
@@ -38,13 +31,17 @@ class ModelController extends GetxController {
   }
 
   Future<Map<String, List<Debit>>> getOwnerDebits(Owner owner) async {
+
     Map<String, List<Debit>> debits = {};
+    Map<String, List<Debit>> ownerDebits = {};
+
 
     for (int i = 0; i < creditCards.length; i++) {
       List<Debit> list =
           await dbRepository.getDebitEntries(cardId: creditCards[i].id);
       ownerDebits[creditCards[i].name] = list;
     }
+
     ownerDebits.forEach((key, value) {
       List<Debit> l = [];
       value.forEach((element) {

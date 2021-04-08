@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
 import 'package:gerenciador_cartoes/data/models/debit.dart';
-import 'package:gerenciador_cartoes/screens/dialogs/owner_select_dialog.dart';
+import 'package:gerenciador_cartoes/data/models/owner.dart';
 import 'package:get/get.dart';
 
 class DebitDialog extends GetView<ModelController> {
-
   final Debit debit;
   final ModelController controller = Get.find<ModelController>();
 
@@ -17,6 +16,15 @@ class DebitDialog extends GetView<ModelController> {
   Widget build(BuildContext context) {
     const OutlineInputBorder border =
         OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5)));
+
+    controller.selectedOwners.clear();
+
+    if (debit != null) if (debit.owners != null) {
+      debit.owners.forEach((element) {
+        controller.selectOwners(element);
+      });
+      //controller.selectedOwners.assignAll(debit.owners);
+    }
 
     return Dialog(
         child: Card(
@@ -62,25 +70,25 @@ class DebitDialog extends GetView<ModelController> {
             SizedBox(
               height: 10,
             ),
-            Obx(()=> Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                setDateText(controller.debit.value.purchaseDate),
-                IconButton(
-                    icon: Icon(Icons.calendar_today),
-                    color: Colors.black,
-                    onPressed: () async {
-                      controller.debit.value.purchaseDate =
-                      await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2020),
-                        lastDate: DateTime(2100),
-                      );
-                      controller.debit.refresh();
-                    })
-              ],
-            )),
+            Obx(() => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    setDateText(controller.debit.value.purchaseDate),
+                    IconButton(
+                        icon: Icon(Icons.calendar_today),
+                        color: Colors.black,
+                        onPressed: () async {
+                          controller.debit.value.purchaseDate =
+                              await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2020),
+                            lastDate: DateTime(2100),
+                          );
+                          controller.debit.refresh();
+                        })
+                  ],
+                )),
             SizedBox(
               height: 10,
             ),
@@ -95,17 +103,35 @@ class DebitDialog extends GetView<ModelController> {
             SizedBox(
               height: 10,
             ),
-            Row(
-              children: [
-                IconButton(
-                    icon: Icon(
-                      Icons.person_add,
-                      color: Colors.black87,
-                    ),
-                    onPressed: () =>
-                        Get.dialog(OwnerSelectDialog(owners: debit?.owners)))
-              ],
+            Flexible(
+              fit: FlexFit.loose,
+              child: Container(
+                height: 50,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: controller.ownerList.length,
+                    itemBuilder: (context, index) {
+                      final Owner owner = controller.ownerList[index];
+                      return Obx(() => debit.owners != null
+                          ? setButtonState(owner)
+                          : Center(
+                              child: CircularProgressIndicator(),
+                            ));
+                    }),
+              ),
             ),
+            // Row(
+            //   children: [
+            //     IconButton(
+            //         icon: Icon(
+            //           Icons.person_add,
+            //           color: Colors.black87,
+            //         ),
+            //         onPressed: () =>
+            //             Get.dialog(OwnerSelectDialog(owners: debit?.owners)))
+            //   ],
+            // ),
             Obx(() => Text("${controller.message}")),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -135,13 +161,38 @@ class DebitDialog extends GetView<ModelController> {
     return "${date.day}/${date.month}/${date.year}";
   }
 
-  Widget setDateText(DateTime date){
-    if (debit != null){
+  Widget setDateText(DateTime date) {
+    if (debit != null) {
       return Text(formatDate(debit.purchaseDate));
-    }else if (controller.debit.value.purchaseDate == null){
+    } else if (controller.debit.value.purchaseDate == null) {
       return Text("Data de Compra");
-    }else{
+    } else {
       return Text("${formatDate(date)}");
+    }
+  }
+
+  Widget setButtonState(Owner owner) {
+    if (controller.selectedOwners.contains(owner)) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 5, right: 5),
+        child: ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.purple)),
+            onPressed: () => controller.selectOwners(owner),
+            child: Text("${owner.name}")),
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.only(left: 5, right: 5),
+        child: ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white)),
+            onPressed: () => controller.selectOwners(owner),
+            child: Text(
+              "${owner.name}",
+              style: TextStyle(color: Colors.black),
+            )),
+      );
     }
   }
 }
