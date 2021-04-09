@@ -7,22 +7,20 @@ import 'package:gerenciador_cartoes/repositories/db_repository.dart';
 import 'package:get/get.dart';
 
 class ModelController extends GetxController {
-
   final DbRepository dbRepository;
   ModelController({@required this.dbRepository});
 
+  final isLoading = true.obs;
+  final creditCards = <CreditCard>[].obs;
+  final debitsList = <Debit>[].obs;
+  final ownerList = <Owner>[].obs;
+  final selectedOwners = <Owner>[].obs;
+  final selectedCard = CreditCard().obs;
 
-  var isLoading = true.obs;
-  var creditCards = <CreditCard>[].obs;
-  var debitsList = <Debit>[].obs;
-  var ownerList = <Owner>[].obs;
-  var selectedOwners = <Owner>[].obs;
-  var selectedCard = CreditCard().obs;
-  var list = <CreditCard>[];
   CreditCard cc = new CreditCard();
   Owner owner = new Owner();
-  var debit = new Debit().obs;
-  var message = "".obs;
+  final debit = new Debit().obs;
+  final message = "".obs;
 
   void updateAll() {
     getOwners();
@@ -31,10 +29,8 @@ class ModelController extends GetxController {
   }
 
   Future<Map<String, List<Debit>>> getOwnerDebits(Owner owner) async {
-
     Map<String, List<Debit>> debits = {};
     Map<String, List<Debit>> ownerDebits = {};
-
 
     for (int i = 0; i < creditCards.length; i++) {
       List<Debit> list =
@@ -98,6 +94,7 @@ class ModelController extends GetxController {
   }
 
   Future<void> getCreditCards() async {
+    var list = <CreditCard>[];
     isLoading.value = true;
     list = await dbRepository.getEntries(keyCreditCardTable).whenComplete(() {
       isLoading.value = false;
@@ -179,9 +176,8 @@ class ModelController extends GetxController {
 
   Future<void> updateOwner(Owner owner) async {
     await dbRepository.update(keyOwnerTable, owner.toMap(), owner.id);
-    Get.back();
     getOwners();
-    ownerList.refresh();
+    Get.back();
   }
 
   Future<void> deleteCreditCard(CreditCard card) async {
