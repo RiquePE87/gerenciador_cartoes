@@ -28,6 +28,25 @@ class ModelController extends GetxController {
     getCreditCards();
   }
 
+  Future<Map<String, double>> getTotalDebits(Owner owner) async{
+    Map<String, double> list = {};
+    List<Debit> debits = [];
+
+    for(int i = 0; i > creditCards.length; i++){
+      double total = 0.0;
+      debits = await dbRepository.getDebitEntries(cardId: creditCards[i].id, ownerId: owner.id);
+
+      for (int j = 0; j < debits.length; j++){
+        total += (debits[j].value / debits[j].quota) / debits[j].owners.length;
+      }
+      list[creditCards[i].name] = total;
+      debits.clear();
+      total = 0;
+    }
+
+    return list;
+  }
+
   Future<Map<String, List<Debit>>> getOwnerDebits(Owner owner) async {
     Map<String, List<Debit>> debits = {};
     Map<String, List<Debit>> ownerDebits = {};
@@ -128,6 +147,7 @@ class ModelController extends GetxController {
     ownerList.assignAll(items);
     for (int i = 0; i < ownerList.length; i++) {
       ownerList[i].debits = await getOwnerDebits(ownerList[i]);
+      ownerList[i].totalDebits = await getTotalDebits(ownerList[i]);
     }
     //print(ownerList[0].debits);
   }

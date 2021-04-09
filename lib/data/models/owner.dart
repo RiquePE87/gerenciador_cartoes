@@ -6,8 +6,9 @@ class Owner {
   int id;
   String name;
   Map<String,List<Debit>> debits;
+  Map<String, double> totalDebits;
 
-  Owner({this.id, this.name, this.debits});
+  Owner({this.id, this.name, this.debits, this.totalDebits});
 
   Map<String, dynamic> toMap(){
     Map<String, dynamic> owner = {
@@ -19,5 +20,6 @@ class Owner {
       this.id = map["id"];
       this.name = map["name"];
       this.debits = {};
+      this.totalDebits = {};
   }
 }
