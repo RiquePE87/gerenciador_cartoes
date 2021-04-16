@@ -113,7 +113,7 @@ class DebitDialog extends GetView<ModelController> {
                     itemCount: controller.ownerList.length,
                     itemBuilder: (context, index) {
                       final Owner owner = controller.ownerList[index];
-                      return Obx(() => debit.owners != null
+                      return Obx(() => controller.selectedOwners != null
                           ? setButtonState(owner)
                           : Center(
                               child: CircularProgressIndicator(),
@@ -121,17 +121,6 @@ class DebitDialog extends GetView<ModelController> {
                     }),
               ),
             ),
-            // Row(
-            //   children: [
-            //     IconButton(
-            //         icon: Icon(
-            //           Icons.person_add,
-            //           color: Colors.black87,
-            //         ),
-            //         onPressed: () =>
-            //             Get.dialog(OwnerSelectDialog(owners: debit?.owners)))
-            //   ],
-            // ),
             Obx(() => Text("${controller.message}")),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
