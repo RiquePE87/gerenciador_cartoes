@@ -28,22 +28,25 @@ class ModelController extends GetxController {
     getCreditCards();
   }
 
-  Future<Map<String, double>> getTotalDebits(Owner owner) async{
+  Future<Map<String, double>> getTotalDebits(Owner owner) async {
     Map<String, double> list = {};
     List<Debit> debits = [];
 
-    for(int i = 0; i > creditCards.length; i++){
+    for (int i = 0; i < creditCards.length; i++) {
       double total = 0.0;
-      debits = await dbRepository.getDebitEntries(cardId: creditCards[i].id, ownerId: owner.id);
+      var values = owner.debits.keys.toList();
+      debits = owner.debits[values[i]];
 
-      for (int j = 0; j < debits.length; j++){
-        total += (debits[j].value / debits[j].quota) / debits[j].owners.length;
+      for (int j = 0; j < debits.length; j++) {
+        var result =
+            (debits[j].value / debits[j].quota) / debits[j].owners.length;
+        total += result;
       }
       list[creditCards[i].name] = total;
       debits.clear();
       total = 0;
     }
-
+    print(list);
     return list;
   }
 
@@ -141,15 +144,18 @@ class ModelController extends GetxController {
 
   Future<void> getOwners() async {
     isLoading.value = true;
-    List<Owner> items = await dbRepository
-        .getEntries(keyOwnerTable)
-        .whenComplete(() => isLoading.value = false);
+    List<Owner> items = await dbRepository.getEntries(keyOwnerTable);
     ownerList.assignAll(items);
     for (int i = 0; i < ownerList.length; i++) {
       ownerList[i].debits = await getOwnerDebits(ownerList[i]);
-      ownerList[i].totalDebits = await getTotalDebits(ownerList[i]);
+     // ownerList[i].totalDebits = await getTotalDebits(ownerList[i]);
     }
-    //print(ownerList[0].debits);
+    for (int i = 0; i < ownerList.length; i++) {
+      //ownerList[i].debits = await getOwnerDebits(ownerList[i]);
+      //ownerList[i].totalDebits = await getTotalDebits(ownerList[i]);
+    }
+    print(ownerList[0].debits);
+    isLoading.value = false;
   }
 
   Future<void> insertOwner() async {

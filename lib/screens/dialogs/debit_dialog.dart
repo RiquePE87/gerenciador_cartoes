@@ -23,6 +23,7 @@ class DebitDialog extends GetView<ModelController> {
       debit.owners.forEach((element) {
         controller.selectOwners(element);
       });
+
       //controller.selectedOwners.assignAll(debit.owners);
     }
 

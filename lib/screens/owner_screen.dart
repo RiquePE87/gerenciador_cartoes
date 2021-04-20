@@ -25,12 +25,15 @@ class OwnerScreen extends GetView<ModelController> {
                   itemCount: controller.ownerList.length,
                   itemBuilder: (context, index) {
                     Owner owner = controller.ownerList[index];
-                    return controller.isLoading.value
-                        ? Center(
-                            child: CircularProgressIndicator(
+                    return Obx(()=> controller.isLoading.value
+                        ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                          child: CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation(Colors.white),
-                          ))
-                        : OwnerDetails(owner);
+                          )),
+                    )
+                        : OwnerDetails(owner));
                   },
                 ),
               ),
