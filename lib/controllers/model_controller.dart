@@ -32,20 +32,24 @@ class ModelController extends GetxController {
     Map<String, double> list = {};
     List<Debit> debits = [];
 
-    for (int i = 0; i < creditCards.length; i++) {
-      double total = 0.0;
-      var values = owner.debits.keys.toList();
-      debits = owner.debits[values[i]];
+    if (owner.debits.length > 0){
+      for (int i = 0; i < creditCards.length; i++) {
+        double total = 0.0;
+        var values = owner.debits.keys.toList();
+        debits = owner.debits[values[i]];
 
-      for (int j = 0; j < debits.length; j++) {
-        var result =
-            (debits[j].value / debits[j].quota) / debits[j].owners.length;
-        total += result;
+        for (int j = 0; j < debits.length; j++) {
+          var result =
+              (debits[j].value / debits[j].quota) / debits[j].owners.length;
+          total += result;
+        }
+        list[creditCards[i].name] = total;
+        debits.clear();
+        total = 0;
       }
-      list[creditCards[i].name] = total;
-      debits.clear();
-      total = 0;
     }
+
+
     print(list);
     return list;
   }
@@ -147,13 +151,14 @@ class ModelController extends GetxController {
     List<Owner> items = await dbRepository.getEntries(keyOwnerTable);
     ownerList.assignAll(items);
     for (int i = 0; i < ownerList.length; i++) {
-      ownerList[i].debits = await getOwnerDebits(ownerList[i]);
+      ownerList[i].debits = await getOwnerDebits(ownerList[i]).whenComplete(()
+       => getTotalDebits(ownerList[i]).then((value) => ownerList[i].totalDebits = value));
      // ownerList[i].totalDebits = await getTotalDebits(ownerList[i]);
     }
-    for (int i = 0; i < ownerList.length; i++) {
-      //ownerList[i].debits = await getOwnerDebits(ownerList[i]);
-      //ownerList[i].totalDebits = await getTotalDebits(ownerList[i]);
-    }
+    // for (int i = 0; i < ownerList.length; i++) {
+    //   //ownerList[i].debits = await getOwnerDebits(ownerList[i]);
+    //   ownerList[i].totalDebits = await getTotalDebits(ownerList[i]);
+    // }
     print(ownerList[0].debits);
     isLoading.value = false;
   }
