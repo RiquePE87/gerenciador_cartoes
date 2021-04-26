@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:gerenciador_cartoes/data/models/credit_card.dart';
 import 'package:gerenciador_cartoes/data/models/debit.dart';
 import 'package:gerenciador_cartoes/data/models/owner.dart';
@@ -10,17 +10,29 @@ class ModelController extends GetxController {
   final DbRepository dbRepository;
   ModelController({@required this.dbRepository});
 
-  final isLoading = true.obs;
-  final creditCards = <CreditCard>[].obs;
-  final debitsList = <Debit>[].obs;
-  final ownerList = <Owner>[].obs;
-  final selectedOwners = <Owner>[].obs;
-  final selectedCard = CreditCard().obs;
-
+  RxBool isLoading = true.obs;
+  RxList<String> names = <String>[].obs;
+  RxList<CreditCard> creditCards = <CreditCard>[].obs;
+  RxList<Debit> debitsList = <Debit>[].obs;
+  RxList<Owner> ownerList = <Owner>[].obs;
+  RxList<Owner> selectedOwners = <Owner>[].obs;
+  Rx<CreditCard> selectedCard = CreditCard().obs;
   CreditCard cc = new CreditCard();
   Owner owner = new Owner();
-  final debit = new Debit().obs;
-  final message = "".obs;
+  Rx<Debit> debit = new Debit().obs;
+  RxString message = "".obs;
+
+  _init() {
+    ever(selectedOwners, (_) {
+      names.clear();
+      selectedOwners.forEach((element) {
+        if (names.contains(element.name))
+          names.remove(element.name);
+        else
+          names.add(element.name);
+      });
+    });
+  }
 
   void updateAll() {
     getOwners();
@@ -32,7 +44,7 @@ class ModelController extends GetxController {
     Map<String, double> list = {};
     List<Debit> debits = [];
 
-    if (owner.debits.length > 0){
+    if (owner.debits.length > 0) {
       for (int i = 0; i < creditCards.length; i++) {
         double total = 0.0;
         var values = owner.debits.keys.toList();
@@ -49,7 +61,7 @@ class ModelController extends GetxController {
       }
     }
 
-
+    print("Completado total");
     print(list);
     return list;
   }
@@ -75,6 +87,7 @@ class ModelController extends GetxController {
       });
       debits[key] = l;
     });
+    print("Completado debitos");
     return debits;
   }
 
@@ -150,16 +163,18 @@ class ModelController extends GetxController {
     isLoading.value = true;
     List<Owner> items = await dbRepository.getEntries(keyOwnerTable);
     ownerList.assignAll(items);
+
     for (int i = 0; i < ownerList.length; i++) {
-      ownerList[i].debits = await getOwnerDebits(ownerList[i]).whenComplete(()
-       => getTotalDebits(ownerList[i]).then((value) => ownerList[i].totalDebits = value));
-     // ownerList[i].totalDebits = await getTotalDebits(ownerList[i]);
+      await getOwnerDebits(ownerList[i])
+          .then((value) => ownerList[i].debits.addAll(value));
     }
-    // for (int i = 0; i < ownerList.length; i++) {
-    //   //ownerList[i].debits = await getOwnerDebits(ownerList[i]);
-    //   ownerList[i].totalDebits = await getTotalDebits(ownerList[i]);
-    // }
-    print(ownerList[0].debits);
+
+    for (int i = 0; i < ownerList.length; i++) {
+      await getTotalDebits(ownerList[i])
+          .then((value) => ownerList[i].totalDebits.addAll(value))
+          .whenComplete(() async => await getOwnerDebits(ownerList[i])
+              .then((value) => ownerList[i].debits.addAll(value)));
+    }
     isLoading.value = false;
   }
 
@@ -200,6 +215,24 @@ class ModelController extends GetxController {
   }
 
   Future<void> updateDebit(Debit debit) async {
+    selectedOwners.forEach((element) async {
+      if (!debit.owners.contains(element)) {
+        Map<String, dynamic> map = {};
+        map.addAll({
+          "$keyOwnerIDOwnerDebit": element.id,
+          "$keyDebitIDOwnerDebit": debit.id,
+          "$keyCreditCardIDOwnerDebit": debit.creditCardId
+        });
+        await dbRepository.insert(map, keyOwnerDebitTable);
+      }
+    });
+
+    debit.owners.forEach((element) async {
+      if (!selectedOwners.contains(element)) {
+        await dbRepository.delete(table: keyOwnerDebitTable, entry: element);
+      }
+    });
+
     await dbRepository.update(keyDebitTable, debit.toMap(), debit.id);
     Get.back();
     updateAll();
@@ -238,13 +271,14 @@ class ModelController extends GetxController {
 
   @override
   void onReady() {
+    _init();
+    getCreditCards();
+    getOwners();
     super.onReady();
   }
 
   @override
   void onInit() async {
     super.onInit();
-    getCreditCards();
-    getOwners();
   }
 }

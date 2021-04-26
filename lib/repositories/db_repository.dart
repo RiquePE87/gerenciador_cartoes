@@ -32,10 +32,10 @@ class DbRepository {
 
   Future<void> deleteDebit(Debit d) async {
     final Database db = await _getDatabase();
-    try{
-       await db.rawDelete("DELETE FROM debit where id=?;", [d.id]);
-    }catch (ex){
-      print (ex);
+    try {
+      await db.rawDelete("DELETE FROM debit where id=?;", [d.id]);
+    } catch (ex) {
+      print(ex);
     }
   }
 
@@ -45,7 +45,7 @@ class DbRepository {
       var batch = db.batch();
       if (table == keyDebitTable) {
         Debit d = entry;
-        await db.transaction((txn) async{
+        await db.transaction((txn) async {
           txn.rawDelete("DELETE FROM debit WHERE id=?;", [d.id]);
         });
       } else if (table == keyCreditCardTable) {
@@ -53,9 +53,17 @@ class DbRepository {
         batch.delete(table, where: "id = ?", whereArgs: [c.id]);
         var results = await batch.commit();
         print(results);
-      }else if (table == keyOwnerTable){
+      } else if (table == keyOwnerTable) {
         Owner owner = entry;
-        batch.delete(keyOwnerDebitTable, where: "owner_id = ?", whereArgs: [owner.id]);
+        batch.delete(keyOwnerDebitTable,
+            where: "owner_id = ?", whereArgs: [owner.id]);
+        batch.delete(table, where: "id = ?", whereArgs: [owner.id]);
+        var results = await batch.commit();
+        print(results);
+      } else if (table == keyOwnerDebitTable) {
+        Owner owner = entry;
+        batch.delete(keyOwnerDebitTable,
+            where: "owner_id = ?", whereArgs: [owner.id]);
         batch.delete(table, where: "id = ?", whereArgs: [owner.id]);
         var results = await batch.commit();
         print(results);
@@ -95,7 +103,6 @@ class DbRepository {
   }
 
   Future<List<Debit>> getDebitEntries({int cardId, int ownerId}) async {
-
     List<Map<String, dynamic>> list;
     List<Map<String, dynamic>> selected;
     List<Debit> debitsList = [];
@@ -107,16 +114,16 @@ class DbRepository {
     try {
       Database db = await _getDatabase();
 
-      if (ownerId != null){
-
+      if (ownerId != null) {
         String query = SELECT_DEBITS_WHERE_OWNER2;
-        await db.transaction((txn) async => list = await txn.rawQuery(query, [cardId,ownerId]));
+        await db.transaction(
+            (txn) async => list = await txn.rawQuery(query, [cardId, ownerId]));
 
         debitsList = List<Debit>.generate(
             list.length, (index) => Debit.fromMap(list[index]));
 
         print(list);
-      }else{
+      } else {
         String query = "$SELECT_DEBITS ${cardId.toString()}";
 
         list = await db.rawQuery(query);
@@ -129,7 +136,7 @@ class DbRepository {
 
         for (int i = 0; i < ids.length; i++) {
           await db.transaction((txn) async => selected =
-          await txn.rawQuery("$SELECT_DEBITS_WHERE2", [ids[i].toString()]));
+              await txn.rawQuery("$SELECT_DEBITS_WHERE2", [ids[i].toString()]));
 
           for (int i = 0; i < selected.length; i++) {
             if (selected != null)
@@ -146,25 +153,25 @@ class DbRepository {
       print(e);
     }
   }
-  
-  Future<void> update(String table, Map entry, int id) async{
+
+  Future<void> update(String table, Map entry, int id) async {
     final Database db = await _getDatabase();
-    
-    try{
-      if (table == keyDebitTable){
-        db.transaction((txn) async{
+
+    try {
+      if (table == keyDebitTable) {
+        db.transaction((txn) async {
           await txn.update(table, entry, where: "id = ?", whereArgs: [id]);
         });
-      }else if (table == keyOwnerTable){
-        db.transaction((txn) async{
+      } else if (table == keyOwnerTable) {
+        db.transaction((txn) async {
           await txn.update(table, entry, where: "id = ?", whereArgs: [id]);
         });
-      }else if (table == keyCreditCardTable){
-        db.transaction((txn) async{
+      } else if (table == keyCreditCardTable) {
+        db.transaction((txn) async {
           await txn.update(table, entry, where: "id = ?", whereArgs: [id]);
         });
       }
-    }catch (ex){
+    } catch (ex) {
       print(ex);
     }
   }

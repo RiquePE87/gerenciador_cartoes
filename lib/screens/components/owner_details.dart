@@ -62,7 +62,7 @@ class OwnerDetails extends GetView<ModelController> {
                       })
                 ],
               ),
-              // Text("R\$:${owner.totalDebits["ghjhhhb"].toStringAsFixed(2)}"),
+               owner.totalDebits.length != 0 ? Text("R\$:${owner.totalDebits["ghjhhhb"].toStringAsFixed(2)}") : Container(),
             ],
           ),
         )));

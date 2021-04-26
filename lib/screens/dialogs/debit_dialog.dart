@@ -8,24 +8,24 @@ import 'package:get/get.dart';
 
 class DebitDialog extends GetView<ModelController> {
   final Debit debit;
-  final ModelController controller = Get.find<ModelController>();
+  List<String> names = [];
+  //final ModelController controller = Get.find<ModelController>();
 
   DebitDialog({this.debit});
 
   @override
   Widget build(BuildContext context) {
-    const OutlineInputBorder border =
-        OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5)));
-
     controller.selectedOwners.clear();
 
     if (debit != null) if (debit.owners != null) {
       debit.owners.forEach((element) {
         controller.selectOwners(element);
       });
-
       //controller.selectedOwners.assignAll(debit.owners);
     }
+
+    const OutlineInputBorder border =
+        OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5)));
 
     return Dialog(
         child: Card(
@@ -114,11 +114,7 @@ class DebitDialog extends GetView<ModelController> {
                     itemCount: controller.ownerList.length,
                     itemBuilder: (context, index) {
                       final Owner owner = controller.ownerList[index];
-                      return Obx(() => controller.selectedOwners != null
-                          ? setButtonState(owner)
-                          : Center(
-                              child: CircularProgressIndicator(),
-                            ));
+                      return Obx(() => setButtonState(owner));
                     }),
               ),
             ),
@@ -162,8 +158,10 @@ class DebitDialog extends GetView<ModelController> {
   }
 
   Widget setButtonState(Owner owner) {
-    if (controller.selectedOwners.contains(owner)) {
-      return Padding(
+    Widget button;
+
+    if (controller.names.contains(owner.name)) {
+      button = Padding(
         padding: const EdgeInsets.only(left: 5, right: 5),
         child: ElevatedButton(
             style: ButtonStyle(
@@ -172,7 +170,7 @@ class DebitDialog extends GetView<ModelController> {
             child: Text("${owner.name}")),
       );
     } else {
-      return Padding(
+      button = Padding(
         padding: const EdgeInsets.only(left: 5, right: 5),
         child: ElevatedButton(
             style: ButtonStyle(
@@ -184,5 +182,6 @@ class DebitDialog extends GetView<ModelController> {
             )),
       );
     }
+    return button;
   }
 }
