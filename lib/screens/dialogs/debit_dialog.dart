@@ -19,9 +19,8 @@ class DebitDialog extends GetView<ModelController> {
 
     if (debit != null) if (debit.owners != null) {
       debit.owners.forEach((element) {
-        controller.selectOwners(element);
+        controller.selectedOwners.add(element.id);
       });
-      //controller.selectedOwners.assignAll(debit.owners);
     }
 
     const OutlineInputBorder border =

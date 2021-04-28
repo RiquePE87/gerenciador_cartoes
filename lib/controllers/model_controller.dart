@@ -15,7 +15,7 @@ class ModelController extends GetxController {
   RxList<CreditCard> creditCards = <CreditCard>[].obs;
   RxList<Debit> debitsList = <Debit>[].obs;
   RxList<Owner> ownerList = <Owner>[].obs;
-  RxList<Owner> selectedOwners = <Owner>[].obs;
+  RxList<int> selectedOwners = <int>[].obs;
   Rx<CreditCard> selectedCard = CreditCard().obs;
   CreditCard cc = new CreditCard();
   Owner owner = new Owner();
@@ -25,7 +25,8 @@ class ModelController extends GetxController {
   _init() {
     ever(selectedOwners, (_) {
       names.clear();
-      selectedOwners.forEach((element) {
+      selectedOwners.forEach((e) {
+        Owner element = ownerList.firstWhere((element) => element.id == e);
         if (names.contains(element.name))
           names.remove(element.name);
         else
@@ -153,10 +154,10 @@ class ModelController extends GetxController {
   }
 
   void selectOwners(Owner owner) {
-    if (selectedOwners.contains(owner))
-      selectedOwners.remove(owner);
+    if (selectedOwners.contains(owner.id))
+      selectedOwners.remove(owner.id);
     else
-      selectedOwners.add(owner);
+      selectedOwners.add(owner.id);
   }
 
   Future<void> getOwners() async {
@@ -194,7 +195,7 @@ class ModelController extends GetxController {
       selectedOwners.forEach((e) async {
         Map<String, dynamic> map = {};
         map.addAll({
-          "$keyOwnerIDOwnerDebit": e.id,
+          "$keyOwnerIDOwnerDebit": e,
           "$keyDebitIDOwnerDebit": debitId,
           "$keyCreditCardIDOwnerDebit": debit.value.creditCardId
         });
@@ -215,11 +216,12 @@ class ModelController extends GetxController {
   }
 
   Future<void> updateDebit(Debit debit) async {
-    selectedOwners.forEach((element) async {
-      if (!debit.owners.contains(element)) {
+    selectedOwners.forEach((id) async {
+      Owner owner = ownerList.firstWhere((o) => o.id == id);
+      if (!debit.owners.contains(owner)) {
         Map<String, dynamic> map = {};
         map.addAll({
-          "$keyOwnerIDOwnerDebit": element.id,
+          "$keyOwnerIDOwnerDebit": id,
           "$keyDebitIDOwnerDebit": debit.id,
           "$keyCreditCardIDOwnerDebit": debit.creditCardId
         });
@@ -228,8 +230,9 @@ class ModelController extends GetxController {
     });
 
     debit.owners.forEach((element) async {
-      if (!selectedOwners.contains(element)) {
-        await dbRepository.delete(table: keyOwnerDebitTable, entry: element);
+      if (!selectedOwners.contains(element.id)) {
+        await dbRepository.delete(
+            table: keyOwnerDebitTable, entry: element, iD: debit.id);
       }
     });
 

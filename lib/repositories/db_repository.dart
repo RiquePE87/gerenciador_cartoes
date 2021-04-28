@@ -39,7 +39,7 @@ class DbRepository {
     }
   }
 
-  Future<void> delete({String table, dynamic entry}) async {
+  Future<void> delete({String table, dynamic entry, int iD}) async {
     final Database db = await _getDatabase();
     try {
       var batch = db.batch();
@@ -61,10 +61,9 @@ class DbRepository {
         var results = await batch.commit();
         print(results);
       } else if (table == keyOwnerDebitTable) {
-        Owner owner = entry;
-        batch.delete(keyOwnerDebitTable,
-            where: "owner_id = ?", whereArgs: [owner.id]);
-        batch.delete(table, where: "id = ?", whereArgs: [owner.id]);
+        String query =
+            "DELETE FROM $keyOwnerDebitTable WHERE $keyDebitIDOwnerDebit = ? AND $keyOwnerIDOwnerDebit = ?";
+        batch.rawDelete(query, [iD, entry.id]);
         var results = await batch.commit();
         print(results);
       }
