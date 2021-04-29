@@ -11,7 +11,7 @@ class OwnerSelectDialog extends GetView<ModelController> {
   Widget build(BuildContext context) {
     if (owners != null) {
       owners.forEach((element) {
-        controller.selectedOwners.add(element);
+        controller.selectedOwners.add(element.id);
       });
     }
     return Dialog(
@@ -50,7 +50,6 @@ class OwnerSelectDialog extends GetView<ModelController> {
   }
 
   Widget setButtonState(Owner owner) {
-
     if (controller.selectedOwners.contains(owner)) {
       return ElevatedButton(
           style: ButtonStyle(

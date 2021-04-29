@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 
 class OwnerDetails extends GetView<ModelController> {
   final Owner owner;
-  double totalDebits = 0.0;
 
   OwnerDetails(this.owner);
 
@@ -62,10 +61,24 @@ class OwnerDetails extends GetView<ModelController> {
                       })
                 ],
               ),
-               owner.totalDebits.length != 0 ? Text("R\$:${owner.totalDebits["ghjhhhb"].toStringAsFixed(2)}") : Container(),
+              createTotalText(owner)
             ],
           ),
         )));
+  }
+
+  Widget createTotalText(Owner owner) {
+    Widget text;
+    Map<String, double> debits = owner.totalDebits;
+    double total = 0;
+
+    debits.values.forEach((element) {
+      total += element;
+    });
+
+    return owner.totalDebits.length != 0
+        ? Text("R\$:${total.toStringAsFixed(2)}")
+        : Container();
   }
 
   List<Widget> createList(Map<String, List<Debit>> map) {
@@ -75,7 +88,6 @@ class OwnerDetails extends GetView<ModelController> {
         value.forEach((element) {
           double total =
               (element.value / element.quota) / element.owners.length;
-          totalDebits += total;
           widgets.add(Container(
             color: Colors.purple,
             child: Row(
