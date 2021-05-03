@@ -13,11 +13,15 @@ class OwnerDetails extends GetView<ModelController> {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
+        trailing: Icon(
+          Icons.arrow_drop_down_circle_rounded,
+          color: Colors.white,
+        ),
         childrenPadding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
         children: [
           ListView(
             shrinkWrap: true,
-            children: createList(owner.debits),
+            children: createList2(owner.debits),
           )
         ],
         title: Card(
@@ -81,41 +85,49 @@ class OwnerDetails extends GetView<ModelController> {
         : Container();
   }
 
-  List<Widget> createList(Map<String, List<Debit>> map) {
+  List<Widget> createList2(Map<String, List<Debit>> map) {
     List<Widget> widgets = [];
-    if (map != null) {
-      map.forEach((key, value) {
-        value.forEach((element) {
-          double total =
-              (element.value / element.quota) / element.owners.length;
-          widgets.add(Container(
-            color: Colors.purple,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(key,
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white)),
-                Text(element.description,
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white)),
-                Text(total.toStringAsFixed(2),
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white))
-              ],
-            ),
-          ));
-        });
-      });
-    }
 
+    map.keys.forEach((card) {
+      double tot = 0;
+      List<Debit> debits = map[card];
+      debits.forEach((element) {
+        double total = (element.value / element.quota) / element.owners.length;
+        tot += total;
+        widgets.add(Container(
+          color: Colors.purple,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(element.description,
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white)),
+              Text("R\$: ${total.toStringAsFixed(2)}",
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white))
+            ],
+          ),
+        ));
+      });
+      widgets.add(Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text("Total $card R\$: ${tot.toStringAsFixed(2)}",
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white))
+          ],
+        ),
+      ));
+    });
     return widgets;
   }
 }

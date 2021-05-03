@@ -123,6 +123,7 @@ class ModelController extends GetxController {
 
   bool validateDebit() {
     if (debit.value.description != null &&
+        selectedOwners.length != 0 &&
         debit.value.value != null &&
         debit.value.quota != null &&
         debit.value.purchaseDate != null) {
@@ -255,7 +256,6 @@ class ModelController extends GetxController {
   }
 
   Future<void> deleteDebit(Debit debit) async {
-    //await dbRepository.deleteDebit(debit);
     await dbRepository.delete(table: keyDebitTable, entry: debit);
     Get.snackbar("Débito Excluido!", "Excluido com sucesso!",
         snackPosition: SnackPosition.BOTTOM,
