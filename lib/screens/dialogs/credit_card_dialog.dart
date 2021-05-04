@@ -2,11 +2,15 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
+import 'package:gerenciador_cartoes/data/models/credit_card.dart';
 import 'package:get/get.dart';
 
-class CreditCardScreen extends StatelessWidget {
+class CreditCardScreen extends GetView<ModelController> {
 
-  final ModelController controller = Get.find();
+  final CreditCard creditCard;
+
+  CreditCardScreen({this.creditCard});
+
   @override
   Widget build(BuildContext context) {
     const OutlineInputBorder border =
@@ -20,7 +24,8 @@ class CreditCardScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             TextFormField(
-              onChanged: (txt) => controller.cc.name = txt,
+              initialValue: creditCard != null ? creditCard.name : "",
+              onChanged: (txt) => creditCard != null ? creditCard.name = txt : controller.cc.name = txt,
               decoration: InputDecoration(
                   isDense: true, hintText: "Nome do cartão", border: border),
             ),
@@ -28,7 +33,8 @@ class CreditCardScreen extends StatelessWidget {
               height: 10,
             ),
             TextFormField(
-              onChanged: (txt) => controller.cc.payDay = int.tryParse(txt),
+              initialValue: creditCard != null ? creditCard.payDay.toString() : "",
+              onChanged: (txt) => creditCard != null ? creditCard.payDay = int.tryParse(txt) : controller.cc.payDay = int.tryParse(txt),
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                   isDense: true, hintText: "Dia do vencimento", border: border),
@@ -37,7 +43,8 @@ class CreditCardScreen extends StatelessWidget {
               height: 10,
             ),
             TextFormField(
-              onChanged: (txt) => controller.cc.bestDay = int.tryParse(txt),
+              initialValue: creditCard != null ? creditCard.bestDay.toString() : "",
+              onChanged: (txt) => creditCard != null ? creditCard.bestDay = int.tryParse(txt) : controller.cc.bestDay = int.tryParse(txt),
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                   isDense: true,
@@ -48,7 +55,9 @@ class CreditCardScreen extends StatelessWidget {
               height: 10,
             ),
             TextFormField(
-              onChanged: (txt) => controller.cc.limitCredit =
+              initialValue: creditCard != null ? creditCard.limitCredit.toStringAsFixed(2) : "",
+              onChanged: (txt) =>  creditCard != null ?  creditCard.limitCredit = double.tryParse(txt.replaceAll(RegExp("[^0-9]"), "")) / 100 :
+              controller.cc.limitCredit =
                   double.tryParse(txt.replaceAll(RegExp("[^0-9]"), "")) / 100,
               keyboardType: TextInputType.number,
               inputFormatters: [
@@ -64,7 +73,9 @@ class CreditCardScreen extends StatelessWidget {
               height: 10,
             ),
             TextFormField(
-              onChanged: (txt) => controller.cc.usedLimit =
+              initialValue: creditCard != null ? creditCard.usedLimit.toStringAsFixed(2) : "",
+              onChanged: (txt) => creditCard != null ? creditCard.usedLimit = double.tryParse(txt.replaceAll(RegExp("[^0-9]"), "")) / 100 :
+              controller.cc.usedLimit =
                   double.tryParse(txt.replaceAll(RegExp("[^0-9]"), "")) / 100,
               keyboardType: TextInputType.number,
               inputFormatters: [
@@ -85,7 +96,7 @@ class CreditCardScreen extends StatelessWidget {
               children: [
                 TextButton(
                     onPressed: () {
-                      controller.insertCreditCard();
+                       creditCard != null ? controller.updateCreditCard(creditCard) : controller.insertCreditCard();
                     },
                     child: Text("Salvar")),
                 TextButton(onPressed: () => Get.back(), child: Text("Cancelar"))

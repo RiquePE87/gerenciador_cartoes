@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
 import 'package:gerenciador_cartoes/screens/components/debit_list_widget.dart';
+import 'package:gerenciador_cartoes/screens/dialogs/credit_card_dialog.dart';
 import 'package:gerenciador_cartoes/screens/dialogs/debit_dialog.dart';
 import 'package:get/get.dart';
 
@@ -34,8 +35,8 @@ class CardDetailsScreen extends GetView<ModelController> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(controller.selectedCard.value.name,
-                              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w400)),
+                          Obx(()=> Text(controller.selectedCard.value.name,
+                              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w400))),
                           SizedBox(
                             height: 5,
                           ),
@@ -44,15 +45,28 @@ class CardDetailsScreen extends GetView<ModelController> {
                               style: TextStyle(color: Colors.white)))
                         ],
                       ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.add_business_rounded,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            //value.selectedCard = cc;
-                            Get.dialog(DebitDialog());
-                          })
+                      Row(
+                        children: [
+                          IconButton(
+                              icon: Icon(
+                                Icons.add_business_rounded,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                //value.selectedCard = cc;
+                                Get.dialog(DebitDialog());
+                              }),
+                          IconButton(
+                              icon: Icon(
+                                Icons.edit_rounded,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                //value.selectedCard = cc;
+                                Get.dialog(CreditCardScreen(creditCard: controller.selectedCard.value,));
+                              })
+                        ],
+                      )
                     ],
                   ),
                 ),

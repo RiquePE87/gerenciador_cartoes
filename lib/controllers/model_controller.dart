@@ -216,10 +216,21 @@ class ModelController extends GetxController {
     }
   }
 
+  Future<void> updateCreditCard(CreditCard creditCard) async{
+    await dbRepository.update(keyCreditCardTable, creditCard.toMap(), creditCard.id);
+    getCreditCards();
+    selectedCard.refresh();
+    Get.back();
+  }
+
   Future<void> updateDebit(Debit debit) async {
+    List<int> owners = [];
     selectedOwners.forEach((id) async {
-      Owner owner = ownerList.firstWhere((o) => o.id == id);
-      if (!debit.owners.contains(owner)) {
+      debit.owners.forEach((element) {
+        owners.add(element.id);
+      });
+
+      if (!owners.contains(id)) {
         Map<String, dynamic> map = {};
         map.addAll({
           "$keyOwnerIDOwnerDebit": id,
@@ -262,6 +273,7 @@ class ModelController extends GetxController {
         isDismissible: true,
         duration: Duration(seconds: 2));
     updateAll();
+    Get.back();
   }
 
   Future<void> deleteOwner(Owner owner) async {
