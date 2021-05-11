@@ -9,8 +9,9 @@ class CreditCard {
   double limitCredit;
   double total;
   List<Debit> debits;
+  List<Debit> monthDebits;
 
-  CreditCard({this.id, this.name, this.payDay,this.bestDay ,this.usedLimit, this.limitCredit, this.total = 0, this.debits});
+  CreditCard({this.id, this.name, this.payDay,this.bestDay ,this.usedLimit, this.limitCredit, this.total = 0, this.debits, this.monthDebits});
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> creditCard = {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
+import 'package:gerenciador_cartoes/data/models/debit.dart';
+import 'package:gerenciador_cartoes/repositories/constants.dart';
 import 'package:gerenciador_cartoes/screens/components/debit_list_widget.dart';
 import 'package:gerenciador_cartoes/screens/dialogs/credit_card_dialog.dart';
 import 'package:gerenciador_cartoes/screens/dialogs/debit_dialog.dart';
@@ -7,9 +9,12 @@ import 'package:get/get.dart';
 
 class CardDetailsScreen extends GetView<ModelController> {
 
-
   @override
   Widget build(BuildContext context) {
+
+    final PageController pageController = PageController(initialPage: 0);
+    String month = MONTHS.elementAt(DateTime.now().month);
+
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -42,7 +47,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                           ),
                           Obx(()=> Text(
                               "Total R\$:${controller.selectedCard.value.getTotal.toStringAsFixed(2)}",
-                              style: TextStyle(color: Colors.white)))
+                              style: TextStyle(color: Colors.white))),
                         ],
                       ),
                       Row(
@@ -71,7 +76,33 @@ class CardDetailsScreen extends GetView<ModelController> {
                   ),
                 ),
               ),
-              DebitListWidget(controller.debitsList)
+              Expanded(
+                child: PageView(
+                  controller: pageController,
+                  children: [
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(month, style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w800),)
+                          ],
+                        ),
+                        FutureBuilder<bool>(
+                          future: controller.getDebitsByMonth(DateTime.now().month),
+                            builder: (context, snapshot){
+
+                            if (snapshot.hasData)
+                              return DebitListWidget(controller.debitsList);
+                            else
+                              return Center(child: CircularProgressIndicator(),);
+
+                        })
+                      ],
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),

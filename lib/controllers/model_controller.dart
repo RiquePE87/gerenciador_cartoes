@@ -61,9 +61,6 @@ class ModelController extends GetxController {
         total = 0;
       }
     }
-
-    print("Completado total");
-    print(list);
     return list;
   }
 
@@ -88,7 +85,6 @@ class ModelController extends GetxController {
       });
       debits[key] = l;
     });
-    print("Completado debitos");
     return debits;
   }
 
@@ -144,6 +140,7 @@ class ModelController extends GetxController {
   }
 
   Future<void> getDebits() async {
+
     isLoading.value = true;
     List<Debit> items = await dbRepository
         .getDebitEntries(cardId: selectedCard.value.id)
@@ -152,6 +149,29 @@ class ModelController extends GetxController {
     });
     debitsList.assignAll(items);
     selectedCard.value.debits = debitsList;
+  }
+
+  Future<void> getDebitsByMonth(int month) async {
+
+    RxList<Debit> monthDebits = <Debit>[].obs;
+
+    isLoading.value = true;
+    List<Debit> items = await dbRepository
+        .getDebitEntries(cardId: selectedCard.value.id)
+        .whenComplete(() {
+      isLoading.value = false;
+    });
+    debitsList.assignAll(items);
+
+    debitsList.forEach((element) {
+      if (element.months.contains(month)){
+        monthDebits.add(element);
+      }
+    });
+
+    debitsList = monthDebits;
+
+    selectedCard.value.monthDebits = monthDebits;
   }
 
   void selectOwners(Owner owner) {
@@ -190,6 +210,7 @@ class ModelController extends GetxController {
 
   Future<void> insertDebit() async {
     debit.value.creditCardId = selectedCard.value.id;
+    debit.value.bestDay = selectedCard.value.bestDay;
     if (validateDebit()) {
       int debitId;
       debitId = await dbRepository.insert(debit.value.toMap(), keyDebitTable);
@@ -216,8 +237,9 @@ class ModelController extends GetxController {
     }
   }
 
-  Future<void> updateCreditCard(CreditCard creditCard) async{
-    await dbRepository.update(keyCreditCardTable, creditCard.toMap(), creditCard.id);
+  Future<void> updateCreditCard(CreditCard creditCard) async {
+    await dbRepository.update(
+        keyCreditCardTable, creditCard.toMap(), creditCard.id);
     getCreditCards();
     selectedCard.refresh();
     Get.back();

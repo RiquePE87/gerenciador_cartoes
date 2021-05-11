@@ -8,6 +8,9 @@ class Debit {
   int creditCardId;
   DateTime purchaseDate;
   List<Owner> owners;
+  int payedQuotas;
+  int bestDay;
+  List<int> months;
 
   Debit(
       {this.id,
@@ -16,7 +19,10 @@ class Debit {
       this.quota,
       this.creditCardId,
       this.purchaseDate,
-      this.owners});
+      this.owners,
+      this.payedQuotas,
+      this.bestDay,
+      this.months});
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> debit = {
@@ -24,7 +30,8 @@ class Debit {
       "value": this.value,
       "quota": this.quota,
       "creditCardId": this.creditCardId,
-      "purchasedate": this.purchaseDate.toIso8601String()
+      "purchasedate": this.purchaseDate.toIso8601String(),
+      "bestday" : this.bestDay
     };
     return debit;
   }
@@ -36,6 +43,39 @@ class Debit {
     this.quota = map["quota"];
     this.creditCardId = map["creditCardID"];
     this.purchaseDate = DateTime.parse(map["purchasedate"]);
+    this.bestDay = map["bestday"];
     this.owners = [];
+    this.payedQuotas = setPayedQuotas();
+    this.months = setMonths();
+  }
+
+  int setPayedQuotas(){
+    DateTime today = DateTime.now();
+    int remainingQuotas;
+    if (purchaseDate.day < bestDay){
+      remainingQuotas = today.month - purchaseDate.month;
+    }else{
+      remainingQuotas = (today.month - purchaseDate.month) + 1;
+    }
+    return remainingQuotas;
+  }
+  
+  List<int> setMonths(){
+    List<int> list = [];
+    DateTime nextMonth = purchaseDate;
+
+    if (purchaseDate.day < bestDay){
+      list.add(purchaseDate.month);
+      for(int i = 1; i < quota; i++){
+        nextMonth = nextMonth.add(Duration(days: 30));
+        list.add(nextMonth.month);
+      }
+    }else{
+      for(int i = 1; i <= quota; i++){
+        nextMonth = nextMonth.add(Duration(days: 30));
+        list.add(nextMonth.month);
+      }
+    }
+    return list;
   }
 }

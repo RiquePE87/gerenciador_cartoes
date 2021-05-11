@@ -12,7 +12,8 @@ class DebitListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<ModelController>(builder: (value) {
       return Expanded(
-        child: Obx(()=>Container(
+        child: Obx(()=>
+            Container(
           padding: EdgeInsets.all(5),
           color: Colors.transparent,
           child: ListView.builder(
@@ -20,7 +21,8 @@ class DebitListWidget extends StatelessWidget {
                 return !value.isLoading.value ? DebitDetails(debitList[index]) : Center(child: CircularProgressIndicator());
               },
               itemCount: debitList != null ? debitList.length : 0),
-        ),)
+        ),
+        )
       );
     });
   }

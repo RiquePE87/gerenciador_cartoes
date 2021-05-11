@@ -16,6 +16,7 @@ const String keyValueDebit = "value";
 const String keyQuotaDebit = "quota";
 const String keyPurchaseDate = "purchasedate";
 const String keyCreditCardIdDebit = "creditCardID";
+const String keyBestDayDebit = "bestday";
 //
 
 const String keyIdOwner = "id";
@@ -27,6 +28,8 @@ const String keyOwnerIDOwnerDebit = "owner_id";
 const String keyCreditCardIDOwnerDebit = "credit_card_id";
 
 const String DATABASE = "database.db";
+
+const List<String> MONTHS = ["Nulo", "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Ago", "Set", "Out", "Nov", "Dez"];
 
 const String CREATE_CREDIT_CARD_TABLE = "CREATE TABLE $keyCreditCardTable"
     "($keyIdCreditCard INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -42,6 +45,7 @@ const String CREATE_DEBIT_TABLE = "CREATE TABLE $keyDebitTable"
     "$keyValueDebit REAL NOT NULL,"
     "$keyQuotaDebit INTEGER NOT NULL,"
     "$keyPurchaseDate STRING NOT NULL,"
+    "$keyBestDayDebit STRING NOT NULL,"
     "$keyCreditCardIdDebit INTEGER NOT NULL,"
     "FOREIGN KEY ($keyCreditCardIdDebit) REFERENCES $keyCreditCardTable($keyIdCreditCard) ON DELETE CASCADE)";
 

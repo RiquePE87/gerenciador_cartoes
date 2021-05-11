@@ -7,8 +7,8 @@ part './app_routes.dart';
 class AppPages{
 
   static final routes = [
-    GetPage(name: Routes.INITIAL, page:()=> HomeScreen()),
-    GetPage(name: Routes.CREDIT_CARD_DETAILS, page: ()=> CreditCardScreen()),
+    GetPage(name: Routes.INITIAL, page:()=> HomeScreen(), transition: Transition.fadeIn),
+    GetPage(name: Routes.CREDIT_CARD_DETAILS, page: ()=> CreditCardScreen(), transition: Transition.fadeIn),
     GetPage(name: Routes.OWNER_SCREEN, page: ()=> OwnerScreen(), transition: Transition.fadeIn)
   ];
 }
