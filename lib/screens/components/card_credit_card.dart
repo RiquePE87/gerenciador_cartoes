@@ -16,8 +16,8 @@ class CardCreditCard extends GetView<ModelController> {
       child: GestureDetector(
         onTap: () {
           controller.selectedCard.value = card;
-          //controller.getDebitsByMonth(5).whenComplete(() => Get.to(() => CardDetailsScreen(), preventDuplicates: true));
-          Get.to(() => CardDetailsScreen(), preventDuplicates: true);
+          controller.getDebitsByMonth(5).whenComplete(() => Get.to(() => CardDetailsScreen(), preventDuplicates: true));
+          //Get.to(() => CardDetailsScreen(), preventDuplicates: true);
         },
         onLongPress: () {
           Get.defaultDialog(

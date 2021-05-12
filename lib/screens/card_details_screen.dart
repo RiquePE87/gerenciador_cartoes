@@ -88,16 +88,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                             Text(month, style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w800),)
                           ],
                         ),
-                        FutureBuilder<bool>(
-                          future: controller.getDebitsByMonth(DateTime.now().month),
-                            builder: (context, snapshot){
-
-                            if (snapshot.hasData)
-                              return DebitListWidget(controller.debitsList);
-                            else
-                              return Center(child: CircularProgressIndicator(),);
-
-                        })
+                        DebitListWidget(controller.debitsList),
                       ],
                     ),
                   ],
