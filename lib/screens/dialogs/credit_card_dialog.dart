@@ -5,11 +5,11 @@ import 'package:gerenciador_cartoes/controllers/model_controller.dart';
 import 'package:gerenciador_cartoes/data/models/credit_card.dart';
 import 'package:get/get.dart';
 
-class CreditCardScreen extends GetView<ModelController> {
+class CreditCardDialog extends GetView<ModelController> {
 
   final CreditCard creditCard;
 
-  CreditCardScreen({this.creditCard});
+  CreditCardDialog({this.creditCard});
 
   @override
   Widget build(BuildContext context) {

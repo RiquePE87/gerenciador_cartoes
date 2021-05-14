@@ -1,3 +1,4 @@
+import 'package:gerenciador_cartoes/screens/card_details_screen.dart';
 import 'package:gerenciador_cartoes/screens/dialogs/credit_card_dialog.dart';
 import 'package:gerenciador_cartoes/screens/home_screen.dart';
 import 'package:gerenciador_cartoes/screens/owner_screen.dart';
@@ -8,7 +9,8 @@ class AppPages{
 
   static final routes = [
     GetPage(name: Routes.INITIAL, page:()=> HomeScreen(), transition: Transition.fadeIn),
-    GetPage(name: Routes.CREDIT_CARD_DETAILS, page: ()=> CreditCardScreen(), transition: Transition.fadeIn),
-    GetPage(name: Routes.OWNER_SCREEN, page: ()=> OwnerScreen(), transition: Transition.fadeIn)
+    GetPage(name: Routes.CREDIT_CARD_DIALOG, page: ()=> CreditCardDialog(), transition: Transition.fadeIn),
+    GetPage(name: Routes.OWNER_SCREEN, page: ()=> OwnerScreen(), transition: Transition.fadeIn),
+    GetPage(name: Routes.CREDIT_DETAILS_SCREEN, page: ()=> CardDetailsScreen(), transition: Transition.fadeIn),
   ];
 }

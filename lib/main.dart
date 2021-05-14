@@ -13,7 +13,7 @@ void main() => runApp(GetMaterialApp(
       backgroundColor: Colors.purple.shade500,
       primaryColor: Colors.purple,
       iconTheme: IconThemeData(color: Colors.white)), //Tema personalizado app
-  defaultTransition: Transition.fade, // Transição de telas padrão
+  defaultTransition: Transition.fadeIn, // Transição de telas padrão
   home: HomeScreen(), // Page inicial
   locale: Locale('pt', 'BR'), // Língua padrão// Suas chaves contendo as traduções<map>
 ));

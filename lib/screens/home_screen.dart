@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           children: [
                             createMenuItem("Adicionar Devedor", Icons.person_add, ()=> Get.dialog(OwnerDialog())),
-                            createMenuItem("Adicionar Cartão", Icons.credit_card, ()=> Get.dialog(CreditCardScreen())),
+                            createMenuItem("Adicionar Cartão", Icons.credit_card, ()=> Get.dialog(CreditCardDialog())),
                             createMenuItem("Devedores", Icons.person, ()=> Get.toNamed(Routes.OWNER_SCREEN)),
                           ],
                         ),

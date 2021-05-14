@@ -151,7 +151,7 @@ class ModelController extends GetxController {
     selectedCard.value.debits = debitsList;
   }
 
-  Future<void> getDebitsByMonth(int month) async {
+  void getDebitsByMonth(int month) async {
 
     RxList<Debit> monthDebits = <Debit>[].obs;
 
@@ -168,7 +168,6 @@ class ModelController extends GetxController {
         monthDebits.add(element);
       }
     });
-
     debitsList = monthDebits;
 
     selectedCard.value.monthDebits = monthDebits;

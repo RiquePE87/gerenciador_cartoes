@@ -10,18 +10,22 @@ class DebitListWidget extends GetView<ModelController> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Obx(()=>
-            Container(
-              padding: EdgeInsets.all(5),
+    return GetX<ModelController>(
+            initState: (_)=> controller.getDebitsByMonth(DateTime.now().month),
+            builder: (_){
+          return Expanded(
+            flex: 1,
+            child: Container(
+              padding: EdgeInsets.all(8),
               color: Colors.transparent,
               child: ListView.builder(
                   itemBuilder: (context, index) {
-                    return !controller.isLoading.value ? DebitDetails(debitList[index]) : Center(child: CircularProgressIndicator());
+                    return  DebitDetails(debitList[index]);
                   },
                   itemCount: debitList != null ? debitList.length : 0),
             ),
-        )
+          );
+        }
     );
   }
 }

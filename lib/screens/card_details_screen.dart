@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
-import 'package:gerenciador_cartoes/data/models/debit.dart';
 import 'package:gerenciador_cartoes/repositories/constants.dart';
 import 'package:gerenciador_cartoes/screens/components/debit_list_widget.dart';
 import 'package:gerenciador_cartoes/screens/dialogs/credit_card_dialog.dart';
@@ -9,9 +8,10 @@ import 'package:get/get.dart';
 
 class CardDetailsScreen extends GetView<ModelController> {
 
+
+
   @override
   Widget build(BuildContext context) {
-
     final PageController pageController = PageController(initialPage: 0);
     String month = MONTHS.elementAt(DateTime.now().month);
 
@@ -68,7 +68,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                               ),
                               onPressed: () {
                                 //value.selectedCard = cc;
-                                Get.dialog(CreditCardScreen(creditCard: controller.selectedCard.value,));
+                                Get.dialog(CreditCardDialog(creditCard: controller.selectedCard.value,));
                               })
                         ],
                       )
@@ -88,7 +88,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                             Text(month, style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w800),)
                           ],
                         ),
-                        DebitListWidget(controller.debitsList),
+                        DebitListWidget(controller.debitsList)
                       ],
                     ),
                   ],
