@@ -18,7 +18,8 @@ class CardCreditCard extends GetView<ModelController> {
         onTap: () {
           controller.selectedCard.value = card;
           // controller.getDebitsByMonth(5).whenComplete(() =>
-              Get.toNamed(Routes.CREDIT_DETAILS_SCREEN,preventDuplicates: true, arguments: [controller.getDebitsByMonth(DateTime.now().month)]);
+          controller.getMonthlyDebits().whenComplete(() => Get.toNamed(Routes.CREDIT_DETAILS_SCREEN,preventDuplicates: true));
+
           //Get.to(() => CardDetailsScreen(), preventDuplicates: true);
         },
         onLongPress: () {

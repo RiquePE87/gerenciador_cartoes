@@ -14,6 +14,7 @@ class ModelController extends GetxController {
   RxList<String> names = <String>[].obs;
   RxList<CreditCard> creditCards = <CreditCard>[].obs;
   RxList<Debit> debitsList = <Debit>[].obs;
+  RxList<RxList<Debit>> monthlyDebits = <RxList<Debit>>[].obs;
   RxList<Owner> ownerList = <Owner>[].obs;
   RxList<int> selectedOwners = <int>[].obs;
   Rx<CreditCard> selectedCard = CreditCard().obs;
@@ -151,7 +152,19 @@ class ModelController extends GetxController {
     selectedCard.value.debits = debitsList;
   }
 
-  void getDebitsByMonth(int month) async {
+  Future<void> getMonthlyDebits() async{
+
+    int numberOfMonths = 3;
+    int initialMonth = DateTime.now().month;
+    if (monthlyDebits.length == 0){
+      for (int i = 0; i < numberOfMonths; i++){
+        await getDebitsByMonth(initialMonth-1).then((value) => monthlyDebits.add(value));
+      }
+    }else{
+    }
+  }
+
+  Future<List<Debit>> getDebitsByMonth(int month) async {
 
     RxList<Debit> monthDebits = <Debit>[].obs;
 
@@ -171,7 +184,11 @@ class ModelController extends GetxController {
     debitsList = monthDebits;
 
     selectedCard.value.monthDebits = monthDebits;
+
+    return debitsList;
   }
+
+
 
   void selectOwners(Owner owner) {
     if (selectedOwners.contains(owner.id))

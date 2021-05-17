@@ -7,9 +7,6 @@ import 'package:gerenciador_cartoes/screens/dialogs/debit_dialog.dart';
 import 'package:get/get.dart';
 
 class CardDetailsScreen extends GetView<ModelController> {
-
-
-
   @override
   Widget build(BuildContext context) {
     final PageController pageController = PageController(initialPage: 0);
@@ -40,12 +37,15 @@ class CardDetailsScreen extends GetView<ModelController> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Obx(()=> Text(controller.selectedCard.value.name,
-                              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w400))),
+                          Obx(() => Text(controller.selectedCard.value.name,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400))),
                           SizedBox(
                             height: 5,
                           ),
-                          Obx(()=> Text(
+                          Obx(() => Text(
                               "Total R\$:${controller.selectedCard.value.getTotal.toStringAsFixed(2)}",
                               style: TextStyle(color: Colors.white))),
                         ],
@@ -68,7 +68,9 @@ class CardDetailsScreen extends GetView<ModelController> {
                               ),
                               onPressed: () {
                                 //value.selectedCard = cc;
-                                Get.dialog(CreditCardDialog(creditCard: controller.selectedCard.value,));
+                                Get.dialog(CreditCardDialog(
+                                  creditCard: controller.selectedCard.value,
+                                ));
                               })
                         ],
                       )
@@ -78,21 +80,27 @@ class CardDetailsScreen extends GetView<ModelController> {
               ),
               Expanded(
                 child: PageView(
-                  controller: pageController,
-                  children: [
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(month, style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w800),)
-                          ],
-                        ),
-                        DebitListWidget(controller.debitsList)
-                      ],
-                    ),
-                  ],
-                ),
+                    controller: pageController,
+                    children: controller.monthlyDebits.map((element) {
+                      print(element);
+                      return Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                month,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800),
+                              )
+                            ],
+                          ),
+                          DebitListWidget(element)
+                        ],
+                      );
+                    }).toList()),
               )
             ],
           ),
