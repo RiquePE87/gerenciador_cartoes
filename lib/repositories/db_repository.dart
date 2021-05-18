@@ -121,7 +121,7 @@ class DbRepository {
         debitsList = List<Debit>.generate(
             list.length, (index) => Debit.fromMap(list[index]));
 
-        print(list);
+        //print(list);
       } else {
         String query = "$SELECT_DEBITS ${cardId.toString()}";
 

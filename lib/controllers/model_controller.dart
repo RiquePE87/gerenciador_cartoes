@@ -22,6 +22,9 @@ class ModelController extends GetxController {
   Owner owner = new Owner();
   Rx<Debit> debit = new Debit().obs;
   RxString message = "".obs;
+  RxInt page = 1.obs;
+  //int numberOfMonths = 3;
+  int lastMonth;
 
   _init() {
     ever(selectedOwners, (_) {
@@ -33,6 +36,18 @@ class ModelController extends GetxController {
         else
           names.add(element.name);
       });
+    });
+
+    ever(selectedCard, (_)=> monthlyDebits.clear());
+
+    ever(page, (_)async{
+      print(page);
+      if (monthlyDebits.length == page.value + 1){
+        //numberOfMonths++;
+        lastMonth++;
+        await getDebitsByMonth(lastMonth).then((item) => monthlyDebits.insert(monthlyDebits.length,item));
+        update(monthlyDebits);
+      }
     });
   }
 
@@ -155,18 +170,25 @@ class ModelController extends GetxController {
   Future<void> getMonthlyDebits() async{
 
     int numberOfMonths = 3;
+    int selectedMonth = 0;
     int initialMonth = DateTime.now().month;
-    if (monthlyDebits.length == 0){
-      for (int i = 0; i < numberOfMonths; i++){
-        await getDebitsByMonth(initialMonth-1).then((value) => monthlyDebits.add(value));
-      }
-    }else{
-    }
+     if (monthlyDebits.length == 0){
+       lastMonth = initialMonth + 1;
+       selectedMonth = initialMonth - 1;
+       for (int i = 0; i < numberOfMonths; i++)
+         await getDebitsByMonth(selectedMonth).then((value){
+           monthlyDebits.add(value);
+           selectedMonth++;
+         });
+
+     }
+     print(monthlyDebits);
   }
 
   Future<List<Debit>> getDebitsByMonth(int month) async {
 
     RxList<Debit> monthDebits = <Debit>[].obs;
+    RxList<Debit> allDebits = <Debit>[].obs;
 
     isLoading.value = true;
     List<Debit> items = await dbRepository
@@ -174,18 +196,17 @@ class ModelController extends GetxController {
         .whenComplete(() {
       isLoading.value = false;
     });
-    debitsList.assignAll(items);
+    allDebits.assignAll(items);
 
-    debitsList.forEach((element) {
-      if (element.months.contains(month)){
+    allDebits.forEach((element) {
+      if (element.months.contains(month) ){
         monthDebits.add(element);
       }
     });
-    debitsList = monthDebits;
 
     selectedCard.value.monthDebits = monthDebits;
 
-    return debitsList;
+    return monthDebits;
   }
 
 
@@ -240,6 +261,7 @@ class ModelController extends GetxController {
         await dbRepository.insert(map, keyOwnerDebitTable);
       });
       selectedOwners.clear();
+      getMonthlyDebits();
       updateAll();
       Get.back();
     }

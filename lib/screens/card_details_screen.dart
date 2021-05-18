@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 class CardDetailsScreen extends GetView<ModelController> {
   @override
   Widget build(BuildContext context) {
-    final PageController pageController = PageController(initialPage: 0);
+    final PageController pageController = PageController(initialPage: 1);
     String month = MONTHS.elementAt(DateTime.now().month);
 
     return Scaffold(
@@ -79,10 +79,10 @@ class CardDetailsScreen extends GetView<ModelController> {
                 ),
               ),
               Expanded(
-                child: PageView(
+                child: Obx(()=> PageView(
                     controller: pageController,
+                    onPageChanged: (page)=> controller.page.value = page,
                     children: controller.monthlyDebits.map((element) {
-                      print(element);
                       return Column(
                         children: [
                           Row(
@@ -100,7 +100,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                           DebitListWidget(element)
                         ],
                       );
-                    }).toList()),
+                    }).toList()),)
               )
             ],
           ),
