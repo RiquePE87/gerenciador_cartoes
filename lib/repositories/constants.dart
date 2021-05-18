@@ -29,7 +29,7 @@ const String keyCreditCardIDOwnerDebit = "credit_card_id";
 
 const String DATABASE = "database.db";
 
-const List<String> MONTHS = ["Nulo", "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Ago", "Set", "Out", "Nov", "Dez"];
+const List<String> MONTHS = ["Nulo", "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul","Ago", "Set", "Out", "Nov", "Dez"];
 
 const String CREATE_CREDIT_CARD_TABLE = "CREATE TABLE $keyCreditCardTable"
     "($keyIdCreditCard INTEGER PRIMARY KEY AUTOINCREMENT,"

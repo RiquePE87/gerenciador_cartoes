@@ -11,21 +11,17 @@ class DebitListWidget extends GetView<ModelController> {
 
   @override
   Widget build(BuildContext context) {
-    return GetX<ModelController>(
-            builder: (_){
-          return Expanded(
-            flex: 1,
-            child: Container(
-              padding: EdgeInsets.all(8),
-              color: Colors.transparent,
-              child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    return  DebitDetails(debitList[index]);
-                  },
-                  itemCount: debitList != null ? debitList.length : 0),
-            ),
-          );
-        }
+    return Expanded(
+      flex: 1,
+      child: Container(
+        padding: EdgeInsets.all(8),
+        color: Colors.transparent,
+        child: ListView.builder(
+            itemBuilder: (context, index) {
+              return  DebitDetails(debitList[index]);
+            },
+            itemCount: debitList != null ? debitList.length : 0),
+      ),
     );
   }
 }

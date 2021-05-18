@@ -89,7 +89,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                month,
+                                MONTHS[element["month"]],
                                 style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.white,
@@ -97,7 +97,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                               )
                             ],
                           ),
-                          DebitListWidget(element)
+                          DebitListWidget(element["debits"])
                         ],
                       );
                     }).toList()),)
