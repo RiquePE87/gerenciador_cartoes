@@ -83,16 +83,32 @@ class CardDetailsScreen extends GetView<ModelController> {
                     controller: pageController,
                     onPageChanged: (page)=> controller.page.value = page,
                     children: controller.monthlyDebits.map((element) {
+                      int lastMonth = element["month"]+1;
+                      int firstMonth = element["month"]-1;
                       return Column(
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
+                              Text(
+                                MONTHS.length > firstMonth && MONTHS[firstMonth] != "Nulo" ? MONTHS[firstMonth] : "",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.w800),
+                              ),
                               Text(
                                 MONTHS[element["month"]],
                                 style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 22,
                                     color: Colors.white,
+                                    fontWeight: FontWeight.w800),
+                              ),
+                              Text(
+                                lastMonth < MONTHS.length ? MONTHS[lastMonth] : "",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.grey,
                                     fontWeight: FontWeight.w800),
                               )
                             ],

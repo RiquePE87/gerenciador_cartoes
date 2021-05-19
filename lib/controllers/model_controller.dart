@@ -41,13 +41,13 @@ class ModelController extends GetxController {
     ever(selectedCard, (_) => monthlyDebits.clear());
 
     ever(page, (_) async {
-      print(page);
-      if (monthlyDebits.length == page.value + 1) {
+      //print(page);
+      if (monthlyDebits.length == page.value + 1 && lastMonth < 12) {
         lastMonth++;
         await getDebitsByMonth(lastMonth).then((item) =>
             monthlyDebits.insert(monthlyDebits.length, {"month": lastMonth, "debits": item}));
         update(monthlyDebits);
-      }else if (page.value == 0){
+      }else if (page.value == 0 && firstMonth > 1){
         firstMonth--;
         await getDebitsByMonth(firstMonth).then((item) =>
             monthlyDebits.insert(0, {"month": firstMonth, "debits": item}));
@@ -193,7 +193,6 @@ class ModelController extends GetxController {
           selectedMonth++;
         });
     }
-    print(monthlyDebits);
   }
 
   Future<RxList<Debit>> getDebitsByMonth(int month) async {
