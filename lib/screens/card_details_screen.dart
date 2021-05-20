@@ -10,7 +10,6 @@ class CardDetailsScreen extends GetView<ModelController> {
   @override
   Widget build(BuildContext context) {
     final PageController pageController = PageController(initialPage: 1);
-    String month = MONTHS.elementAt(DateTime.now().month);
 
     return Scaffold(
       body: SafeArea(
@@ -45,9 +44,6 @@ class CardDetailsScreen extends GetView<ModelController> {
                           SizedBox(
                             height: 5,
                           ),
-                          Obx(() => Text(
-                              "Total R\$:${controller.selectedCard.value.getTotal.toStringAsFixed(2)}",
-                              style: TextStyle(color: Colors.white))),
                         ],
                       ),
                       Row(
@@ -113,6 +109,9 @@ class CardDetailsScreen extends GetView<ModelController> {
                               )
                             ],
                           ),
+                          Text(
+                              "Total R\$:${element["total"].toStringAsFixed(2)}",
+                              style: TextStyle(color: Colors.white, fontSize: 16)),
                           DebitListWidget(element["debits"])
                         ],
                       );

@@ -45,12 +45,12 @@ class ModelController extends GetxController {
       if (monthlyDebits.length == page.value + 1 && lastMonth < 12) {
         lastMonth++;
         await getDebitsByMonth(lastMonth).then((item) =>
-            monthlyDebits.insert(monthlyDebits.length, {"month": lastMonth, "debits": item}));
+            monthlyDebits.insert(monthlyDebits.length, {"month": lastMonth, "debits": item, "total": setTotalDebit(item)}));
         update(monthlyDebits);
       }else if (page.value == 0 && firstMonth > 1){
         firstMonth--;
         await getDebitsByMonth(firstMonth).then((item) =>
-            monthlyDebits.insert(0, {"month": firstMonth, "debits": item}));
+            monthlyDebits.insert(0, {"month": firstMonth, "debits": item, "total": setTotalDebit(item)}));
       }
     });
   }
@@ -58,7 +58,7 @@ class ModelController extends GetxController {
   double setTotalDebit(RxList<Debit> debits){
     double total = 0;
 
-    debits.forEach((element) {total+= element.value;});
+    debits.forEach((element) {total+= element.value / element.quota;});
 
     return total;
   }
@@ -188,7 +188,7 @@ class ModelController extends GetxController {
       selectedMonth = initialMonth - 1;
       for (int i = 0; i < numberOfMonths; i++)
         await getDebitsByMonth(selectedMonth).then((value) {
-          Map<String, dynamic> map = {"month": selectedMonth, "debits": value};
+          Map<String, dynamic> map = {"month": selectedMonth, "debits": value, "total": setTotalDebit(value)};
           monthlyDebits.add(map);
           selectedMonth++;
         });
