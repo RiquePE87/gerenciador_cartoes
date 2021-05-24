@@ -23,7 +23,6 @@ class ModelController extends GetxController {
   Owner owner = new Owner();
   Rx<Debit> debit = new Debit().obs;
   RxString message = "".obs;
-  RxInt page = 1.obs;
   int lastMonth;
   int firstMonth;
   final Rx<PageController> pageController = PageController(initialPage: 1).obs;
@@ -41,33 +40,6 @@ class ModelController extends GetxController {
     });
 
     ever(selectedCard, (_) => monthlyDebits.clear());
-
-    ever(page, (_) async {
-      //print(page);
-      if (monthlyDebits.length == page.value + 1 && lastMonth < 12) {
-        lastMonth++;
-        await getDebitsByMonth(lastMonth).then((item) => monthlyDebits.insert(
-                monthlyDebits.length, {
-              "month": lastMonth,
-              "debits": item,
-              "total": setTotalDebit(item)
-            }));
-      } else if (page.value == 0 && firstMonth > 1
-          //&& monthlyDebits[0]["month"] != firstMonth
-      ) {
-        firstMonth--;
-          await getDebitsByMonth(firstMonth).then((item) {
-            monthlyDebits.insert(0, {
-              "month": firstMonth,
-              "debits": item,
-              "total": setTotalDebit(item)
-            });
-          });
-      }
-      else{
-
-      }
-    });
   }
 
   double setTotalDebit(RxList<Debit> debits) {
@@ -84,6 +56,29 @@ class ModelController extends GetxController {
     getOwners();
     getDebits();
     getCreditCards();
+  }
+
+  void loadMonth(page) async{
+    if (monthlyDebits.length == page + 1 && lastMonth < 12){
+      lastMonth++;
+      await getDebitsByMonth(lastMonth).then((item) => monthlyDebits.insert(
+          monthlyDebits.length, {
+        "month": lastMonth,
+        "debits": item,
+        "total": setTotalDebit(item)
+      }));
+    } else if (page == 0 && firstMonth > 1
+    //&& monthlyDebits[0]["month"] != firstMonth
+    ) {
+      await getDebitsByMonth(firstMonth).then((item) {
+        monthlyDebits.insert(0, {
+          "month": firstMonth,
+          "debits": item,
+          "total": setTotalDebit(item)
+        });
+        firstMonth--;
+      });
+    }
   }
 
   Future<Map<String, double>> getTotalDebits(Owner owner) async {
