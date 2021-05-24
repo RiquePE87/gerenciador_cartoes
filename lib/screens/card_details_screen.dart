@@ -9,8 +9,6 @@ import 'package:get/get.dart';
 class CardDetailsScreen extends GetView<ModelController> {
   @override
   Widget build(BuildContext context) {
-    final PageController pageController = PageController(initialPage: 1);
-
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -29,7 +27,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                     children: [
                       IconButton(
                         icon: Icon(Icons.arrow_back_ios),
-                        onPressed: () => Get.back(),
+                        onPressed: () => Get.offNamed("/"),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -76,8 +74,8 @@ class CardDetailsScreen extends GetView<ModelController> {
               ),
               Expanded(
                 child: Obx(()=> PageView(
-                    controller: pageController,
-                    onPageChanged: (page)=> controller.page.value = page,
+                    controller: controller.pageController.value,
+                    onPageChanged: (page) => controller.page.value = page,
                     children: controller.monthlyDebits.map((element) {
                       int lastMonth = element["month"]+1;
                       int firstMonth = element["month"]-1;
@@ -87,7 +85,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Text(
-                                MONTHS.length > firstMonth && MONTHS[firstMonth] != "Nulo" ? MONTHS[firstMonth] : "",
+                                MONTHS.length > firstMonth && MONTHS[firstMonth] != "Nulo" ? MONTHS[firstMonth] : "${DateTime.now().year - 1}",
                                 style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.grey,

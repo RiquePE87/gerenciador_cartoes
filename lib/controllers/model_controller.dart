@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/data/models/credit_card.dart';
 import 'package:gerenciador_cartoes/data/models/debit.dart';
 import 'package:gerenciador_cartoes/data/models/owner.dart';
@@ -25,6 +26,7 @@ class ModelController extends GetxController {
   RxInt page = 1.obs;
   int lastMonth;
   int firstMonth;
+  final Rx<PageController> pageController = PageController(initialPage: 1).obs;
 
   _init() {
     ever(selectedOwners, (_) {
@@ -44,21 +46,36 @@ class ModelController extends GetxController {
       //print(page);
       if (monthlyDebits.length == page.value + 1 && lastMonth < 12) {
         lastMonth++;
-        await getDebitsByMonth(lastMonth).then((item) =>
-            monthlyDebits.insert(monthlyDebits.length, {"month": lastMonth, "debits": item, "total": setTotalDebit(item)}));
-        update(monthlyDebits);
-      }else if (page.value == 0 && firstMonth > 1){
+        await getDebitsByMonth(lastMonth).then((item) => monthlyDebits.insert(
+                monthlyDebits.length, {
+              "month": lastMonth,
+              "debits": item,
+              "total": setTotalDebit(item)
+            }));
+      } else if (page.value == 0 && firstMonth > 1
+          //&& monthlyDebits[0]["month"] != firstMonth
+      ) {
         firstMonth--;
-        await getDebitsByMonth(firstMonth).then((item) =>
-            monthlyDebits.insert(0, {"month": firstMonth, "debits": item, "total": setTotalDebit(item)}));
+          await getDebitsByMonth(firstMonth).then((item) {
+            monthlyDebits.insert(0, {
+              "month": firstMonth,
+              "debits": item,
+              "total": setTotalDebit(item)
+            });
+          });
+      }
+      else{
+
       }
     });
   }
 
-  double setTotalDebit(RxList<Debit> debits){
+  double setTotalDebit(RxList<Debit> debits) {
     double total = 0;
 
-    debits.forEach((element) {total+= element.value / element.quota;});
+    debits.forEach((element) {
+      total += element.value / element.quota;
+    });
 
     return total;
   }
@@ -185,10 +202,14 @@ class ModelController extends GetxController {
     if (monthlyDebits.length == 0) {
       lastMonth = initialMonth + 1;
       firstMonth = initialMonth - 1;
-      selectedMonth = initialMonth - 1;
+      selectedMonth = firstMonth;
       for (int i = 0; i < numberOfMonths; i++)
         await getDebitsByMonth(selectedMonth).then((value) {
-          Map<String, dynamic> map = {"month": selectedMonth, "debits": value, "total": setTotalDebit(value)};
+          Map<String, dynamic> map = {
+            "month": selectedMonth,
+            "debits": value,
+            "total": setTotalDebit(value)
+          };
           monthlyDebits.add(map);
           selectedMonth++;
         });
