@@ -72,56 +72,14 @@ class CardDetailsScreen extends GetView<ModelController> {
                   ),
                 ),
               ),
-              // Expanded(
-              //   child: Obx(()=> PageView(
-              //       controller: controller.pageController.value,
-              //       onPageChanged: (page) => controller.page.value = page,
-              //       children: controller.monthlyDebits.map((element) {
-              //         int lastMonth = element["month"]+1;
-              //         int firstMonth = element["month"]-1;
-              //         return Column(
-              //           children: [
-              //             Row(
-              //               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //               children: [
-              //                 Text(
-              //                   MONTHS.length > firstMonth && MONTHS[firstMonth] != "Nulo" ? MONTHS[firstMonth] : "${DateTime.now().year - 1}",
-              //                   style: TextStyle(
-              //                       fontSize: 18,
-              //                       color: Colors.grey,
-              //                       fontWeight: FontWeight.w800),
-              //                 ),
-              //                 Text(
-              //                   MONTHS[element["month"]],
-              //                   style: TextStyle(
-              //                       fontSize: 22,
-              //                       color: Colors.white,
-              //                       fontWeight: FontWeight.w800),
-              //                 ),
-              //                 Text(
-              //                   lastMonth < MONTHS.length ? MONTHS[lastMonth] : "",
-              //                   style: TextStyle(
-              //                       fontSize: 18,
-              //                       color: Colors.grey,
-              //                       fontWeight: FontWeight.w800),
-              //                 )
-              //               ],
-              //             ),
-              //             Text(
-              //                 "Total R\$:${element["total"].toStringAsFixed(2)}",
-              //                 style: TextStyle(color: Colors.white, fontSize: 16)),
-              //             DebitListWidget(element["debits"])
-              //           ],
-              //         );
-              //       }).toList()),)
-              // ),
               Expanded(
                   flex: 1,
                   child: Obx(
                     () => PageView.builder(
-                      onPageChanged: (page){
-                        controller.loadMonth(page);
-                      },
+                        pageSnapping: true,
+                        onPageChanged: (page) {
+                          //controller.loadMonth(page);
+                        },
                         controller: controller.pageController.value,
                         itemCount: controller.monthlyDebits.length,
                         itemBuilder: (_, position) {
@@ -136,7 +94,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                                     MainAxisAlignment.spaceAround,
                                 children: [
                                   Text(
-                                    MONTHS.length > firstMonth &&
+                                    MONTHS.length >= firstMonth &&
                                             MONTHS[firstMonth] != "Nulo"
                                         ? MONTHS[firstMonth]
                                         : "${DateTime.now().year - 1}",
@@ -167,8 +125,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                                   "Total R\$:${element["total"].toStringAsFixed(2)}",
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 16)),
-                              DebitListWidget(
-                                  element["debits"]),
+                              DebitListWidget(element["debits"]),
                             ],
                           );
                         }),

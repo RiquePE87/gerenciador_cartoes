@@ -25,7 +25,8 @@ class ModelController extends GetxController {
   RxString message = "".obs;
   int lastMonth;
   int firstMonth;
-  final Rx<PageController> pageController = PageController(initialPage: 1).obs;
+  final Rx<PageController> pageController =
+      PageController(initialPage: DateTime.now().month - 1).obs;
 
   _init() {
     ever(selectedOwners, (_) {
@@ -58,25 +59,19 @@ class ModelController extends GetxController {
     getCreditCards();
   }
 
-  void loadMonth(page) async{
-    if (monthlyDebits.length == page + 1 && lastMonth < 12){
+  void loadMonth(page) async {
+    if (monthlyDebits.length == page + 1 && lastMonth < 12) {
       lastMonth++;
-      await getDebitsByMonth(lastMonth).then((item) => monthlyDebits.insert(
-          monthlyDebits.length, {
-        "month": lastMonth,
-        "debits": item,
-        "total": setTotalDebit(item)
-      }));
-    } else if (page == 0 && firstMonth > 1
-    //&& monthlyDebits[0]["month"] != firstMonth
-    ) {
+      await getDebitsByMonth(lastMonth).then((item) => monthlyDebits.add(
+          {"month": lastMonth, "debits": item, "total": setTotalDebit(item)}));
+    } else if (page == 0 && firstMonth > 1) {
+      firstMonth--;
       await getDebitsByMonth(firstMonth).then((item) {
         monthlyDebits.insert(0, {
           "month": firstMonth,
           "debits": item,
           "total": setTotalDebit(item)
         });
-        firstMonth--;
       });
     }
   }
@@ -104,9 +99,10 @@ class ModelController extends GetxController {
     return list;
   }
 
-  Future<Map<String, List<Debit>>> getOwnerDebits(Owner owner) async {
+  Future<Map<String, List<Debit>>> getOwnerDebitsByMonth(Owner owner) async {
     Map<String, List<Debit>> debits = {};
     Map<String, List<Debit>> ownerDebits = {};
+    List<Map<String, dynamic>> ownerMonthlyDebits = [];
 
     for (int i = 0; i < creditCards.length; i++) {
       List<Debit> list =
@@ -125,6 +121,7 @@ class ModelController extends GetxController {
       });
       debits[key] = l;
     });
+
     return debits;
   }
 
@@ -191,23 +188,18 @@ class ModelController extends GetxController {
   }
 
   Future<void> getMonthlyDebits() async {
-    int numberOfMonths = 3;
-    int selectedMonth = 0;
-    int initialMonth = DateTime.now().month;
     if (monthlyDebits.length == 0) {
-      lastMonth = initialMonth + 1;
-      firstMonth = initialMonth - 1;
-      selectedMonth = firstMonth;
-      for (int i = 0; i < numberOfMonths; i++)
-        await getDebitsByMonth(selectedMonth).then((value) {
+      for (int i = 1; i <= 12; i++)
+        await getDebitsByMonth(i).then((value) {
           Map<String, dynamic> map = {
-            "month": selectedMonth,
+            "month": i,
             "debits": value,
             "total": setTotalDebit(value)
           };
           monthlyDebits.add(map);
-          selectedMonth++;
         });
+    } else {
+      monthlyDebits.refresh();
     }
   }
 
@@ -284,7 +276,7 @@ class ModelController extends GetxController {
         await dbRepository.insert(map, keyOwnerDebitTable);
       });
       selectedOwners.clear();
-      getMonthlyDebits();
+      //getMonthlyDebits();
       updateAll();
       Get.back();
     }
@@ -333,6 +325,7 @@ class ModelController extends GetxController {
 
     await dbRepository.update(keyDebitTable, debit.toMap(), debit.id);
     Get.back();
+    getMonthlyDebits();
     updateAll();
   }
 
@@ -369,7 +362,6 @@ class ModelController extends GetxController {
 
   @override
   void onReady() {
-    _init();
     getCreditCards();
     getOwners();
     super.onReady();
@@ -378,5 +370,6 @@ class ModelController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+    _init();
   }
 }
