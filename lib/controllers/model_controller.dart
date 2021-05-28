@@ -55,25 +55,7 @@ class ModelController extends GetxController {
 
   void updateAll() {
     getOwners();
-    getDebits();
     getCreditCards();
-  }
-
-  void loadMonth(page) async {
-    if (monthlyDebits.length == page + 1 && lastMonth < 12) {
-      lastMonth++;
-      await getDebitsByMonth(lastMonth).then((item) => monthlyDebits.add(
-          {"month": lastMonth, "debits": item, "total": setTotalDebit(item)}));
-    } else if (page == 0 && firstMonth > 1) {
-      firstMonth--;
-      await getDebitsByMonth(firstMonth).then((item) {
-        monthlyDebits.insert(0, {
-          "month": firstMonth,
-          "debits": item,
-          "total": setTotalDebit(item)
-        });
-      });
-    }
   }
 
   Future<Map<String, double>> getTotalDebits(Owner owner) async {
@@ -99,10 +81,9 @@ class ModelController extends GetxController {
     return list;
   }
 
-  Future<Map<String, List<Debit>>> getOwnerDebitsByMonth(Owner owner) async {
+  Future<Map<String, List<Debit>>> getOwnerDebits(Owner owner) async {
     Map<String, List<Debit>> debits = {};
     Map<String, List<Debit>> ownerDebits = {};
-    List<Map<String, dynamic>> ownerMonthlyDebits = [];
 
     for (int i = 0; i < creditCards.length; i++) {
       List<Debit> list =
@@ -176,23 +157,12 @@ class ModelController extends GetxController {
     if (list.length != 0) creditCards.assignAll(list);
   }
 
-  Future<void> getDebits() async {
-    isLoading.value = true;
-    List<Debit> items = await dbRepository
-        .getDebitEntries(cardId: selectedCard.value.id)
-        .whenComplete(() {
-      isLoading.value = false;
-    });
-    debitsList.assignAll(items);
-    selectedCard.value.debits = debitsList;
-  }
-
-  Future<void> getMonthlyDebits() async {
+  Future<void> getMonthlyDebits(CreditCard card) async {
     if (monthlyDebits.length == 0) {
-      for (int i = 1; i <= 12; i++)
-        await getDebitsByMonth(i).then((value) {
+      for (int i = 1; i <= DateTime.monthsPerYear; i++)
+        await getDebitsByMonth(i, card).then((value) {
           Map<String, dynamic> map = {
-            "month": i,
+            "month": DateTime(DateTime.now().year, i),
             "debits": value,
             "total": setTotalDebit(value)
           };
@@ -203,14 +173,13 @@ class ModelController extends GetxController {
     }
   }
 
-  Future<RxList<Debit>> getDebitsByMonth(int month) async {
+  Future<RxList<Debit>> getDebitsByMonth(int month, CreditCard card) async {
     RxList<Debit> monthDebits = <Debit>[].obs;
     RxList<Debit> allDebits = <Debit>[].obs;
 
     isLoading.value = true;
-    List<Debit> items = await dbRepository
-        .getDebitEntries(cardId: selectedCard.value.id)
-        .whenComplete(() {
+    List<Debit> items =
+        await dbRepository.getDebitEntries(cardId: card.id).whenComplete(() {
       isLoading.value = false;
     });
     allDebits.assignAll(items);
@@ -221,7 +190,7 @@ class ModelController extends GetxController {
       }
     });
 
-    selectedCard.value.monthDebits = monthDebits;
+    //selectedCard.value.monthDebits = monthDebits;
 
     return monthDebits;
   }
@@ -325,7 +294,7 @@ class ModelController extends GetxController {
 
     await dbRepository.update(keyDebitTable, debit.toMap(), debit.id);
     Get.back();
-    getMonthlyDebits();
+    //getMonthlyDebits();
     updateAll();
   }
 

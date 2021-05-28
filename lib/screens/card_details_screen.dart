@@ -85,8 +85,8 @@ class CardDetailsScreen extends GetView<ModelController> {
                         itemBuilder: (_, position) {
                           Map<String, dynamic> element =
                               controller.monthlyDebits[position];
-                          int lastMonth = element["month"] + 1;
-                          int firstMonth = element["month"] - 1;
+                          int lastMonth = element["month"].month + 1;
+                          int firstMonth = element["month"].month - 1;
                           return Column(
                             children: [
                               Row(
@@ -104,7 +104,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                                         fontWeight: FontWeight.w800),
                                   ),
                                   Text(
-                                    MONTHS[element["month"]],
+                                    MONTHS[element["month"].month],
                                     style: TextStyle(
                                         fontSize: 22,
                                         color: Colors.white,

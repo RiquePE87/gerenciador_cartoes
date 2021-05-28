@@ -8,10 +8,17 @@ class CreditCard {
   double usedLimit;
   double limitCredit;
   double total;
-  List<Debit> debits;
-  List<Debit> monthDebits;
+  List<Map<String, dynamic>> monthDebits;
 
-  CreditCard({this.id, this.name, this.payDay,this.bestDay ,this.usedLimit, this.limitCredit, this.total = 0, this.debits, this.monthDebits});
+  CreditCard(
+      {this.id,
+      this.name,
+      this.payDay,
+      this.bestDay,
+      this.usedLimit,
+      this.limitCredit,
+      this.total = 0,
+      this.monthDebits});
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> creditCard = {
@@ -34,12 +41,18 @@ class CreditCard {
     this.limitCredit = map["limitcredit"];
   }
 
-  double get getTotal{
+  double getTotal(int month) {
+    List<Debit> debits = [];
+    monthDebits.forEach((element) {
+      if (element["month"].month == month) {
+        debits.addAll(element["debits"]);
+      }
+    });
     this.total = 0.0;
     if (debits != null)
-    debits.forEach((element) {
-      total += (element.value / element.quota);
-    });
+      debits.forEach((element) {
+        total += (element.value / element.quota);
+      });
     return total;
   }
 }
