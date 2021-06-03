@@ -29,7 +29,8 @@ class HomeScreen extends StatelessWidget {
                           : ListView.builder(
                               itemCount: value.creditCards.length,
                               itemBuilder: (context, index) {
-                                return CardCreditCard(value.creditCards[index]);
+                                return Obx(() =>
+                                    CardCreditCard(value.creditCards[index]));
                               }),
                     ),
                   ),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
 import 'package:gerenciador_cartoes/data/models/credit_card.dart';
-import 'package:gerenciador_cartoes/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../card_details_screen.dart';
 
 class CardCreditCard extends GetView<ModelController> {
   final CreditCard card;
@@ -15,12 +16,16 @@ class CardCreditCard extends GetView<ModelController> {
     return Center(
         child: GestureDetector(
       onTap: () {
-        controller.selectedCard.value = card;
-        // controller.getDebitsByMonth(5).whenComplete(() =>
-        controller.getMonthlyDebits(card).whenComplete(() =>
-            Get.toNamed(Routes.CREDIT_DETAILS_SCREEN, preventDuplicates: true));
+        // controller.selectedCard.value = card;
+        // // controller.getDebitsByMonth(5).whenComplete(() =>
+        // controller.getMonthlyDebits(card).whenComplete(() =>
+        //Get.toNamed(Routes.CREDIT_DETAILS_SCREEN, preventDuplicates: true);
 
-        //Get.to(() => CardDetailsScreen(), preventDuplicates: true);
+        Get.to(
+            () => CardDetailsScreen(
+                  card: card,
+                ),
+            preventDuplicates: true);
       },
       onLongPress: () {
         Get.defaultDialog(

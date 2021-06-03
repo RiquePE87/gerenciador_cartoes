@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
+import 'package:gerenciador_cartoes/data/models/credit_card.dart';
 import 'package:gerenciador_cartoes/repositories/constants.dart';
 import 'package:gerenciador_cartoes/screens/components/debit_list_widget.dart';
 import 'package:gerenciador_cartoes/screens/dialogs/credit_card_dialog.dart';
@@ -7,6 +8,9 @@ import 'package:gerenciador_cartoes/screens/dialogs/debit_dialog.dart';
 import 'package:get/get.dart';
 
 class CardDetailsScreen extends GetView<ModelController> {
+  final CreditCard card;
+  CardDetailsScreen({this.card});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,11 +38,11 @@ class CardDetailsScreen extends GetView<ModelController> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Obx(() => Text(controller.selectedCard.value.name,
+                          Text(card.name,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
-                                  fontWeight: FontWeight.w400))),
+                                  fontWeight: FontWeight.w400)),
                           SizedBox(
                             height: 5,
                           ),
@@ -63,7 +67,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                               onPressed: () {
                                 //value.selectedCard = cc;
                                 Get.dialog(CreditCardDialog(
-                                  creditCard: controller.selectedCard.value,
+                                  creditCard: card,
                                 ));
                               })
                         ],
@@ -81,10 +85,10 @@ class CardDetailsScreen extends GetView<ModelController> {
                           //controller.loadMonth(page);
                         },
                         controller: controller.pageController.value,
-                        itemCount: controller.monthlyDebits.length,
+                        itemCount: card.monthDebits.length,
                         itemBuilder: (_, position) {
                           Map<String, dynamic> element =
-                              controller.monthlyDebits[position];
+                              card.monthDebits[position];
                           int lastMonth = element["month"].month + 1;
                           int firstMonth = element["month"].month - 1;
                           return Column(

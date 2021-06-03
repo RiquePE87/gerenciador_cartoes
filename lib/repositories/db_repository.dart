@@ -30,15 +30,6 @@ class DbRepository {
     return id;
   }
 
-  Future<void> deleteDebit(Debit d) async {
-    final Database db = await _getDatabase();
-    try {
-      await db.rawDelete("DELETE FROM debit where id=?;", [d.id]);
-    } catch (ex) {
-      print(ex);
-    }
-  }
-
   Future<void> delete({String table, dynamic entry, int iD}) async {
     final Database db = await _getDatabase();
     try {
@@ -103,12 +94,7 @@ class DbRepository {
 
   Future<List<Debit>> getDebitEntries({int cardId, int ownerId}) async {
     List<Map<String, dynamic>> list;
-    List<Map<String, dynamic>> selected;
     List<Debit> debitsList = [];
-    List<int> idList = [];
-    List<int> ids = [];
-    List<Owner> owners = [];
-    List<Owner> ownerList = await getEntries(keyOwnerTable);
 
     try {
       Database db = await _getDatabase();
@@ -120,37 +106,48 @@ class DbRepository {
 
         debitsList = List<Debit>.generate(
             list.length, (index) => Debit.fromMap(list[index]));
-
-        //print(list);
       } else {
         String query = "$SELECT_DEBITS ${cardId.toString()}";
 
         list = await db.rawQuery(query);
 
-        list.forEach((element) {
-          idList.add(element["debit_id"]);
-        });
-
-        ids = idList.toSet().toList();
-
-        for (int i = 0; i < ids.length; i++) {
-          await db.transaction((txn) async => selected =
-              await txn.rawQuery("$SELECT_DEBITS_WHERE2", [ids[i].toString()]));
-
-          for (int i = 0; i < selected.length; i++) {
-            if (selected != null)
-              owners.add(_getOwner(ownerList, selected[i]["owner_id"]));
-          }
-          Debit d = Debit.fromMap(selected[0]);
-          d.owners.addAll(owners);
-          debitsList.add(d);
-          owners.clear();
-        }
+        await _setOwners(list).then((value) => debitsList = value);
       }
       return debitsList;
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<List<Debit>> _setOwners(List<Map<String, dynamic>> list) async {
+    List<Map<String, dynamic>> selected;
+    List<Debit> debits = [];
+    List<int> idList = [];
+    List<int> ids = [];
+    List<Owner> owners = [];
+    List<Owner> ownerList = await getEntries(keyOwnerTable);
+    Database db = await _getDatabase();
+
+    list.forEach((element) {
+      idList.add(element["debit_id"]);
+    });
+
+    ids = idList.toSet().toList();
+
+    for (int i = 0; i < ids.length; i++) {
+      await db.transaction((txn) async => selected =
+          await txn.rawQuery("$SELECT_DEBITS_WHERE2", [ids[i].toString()]));
+
+      for (int i = 0; i < selected.length; i++) {
+        if (selected != null)
+          owners.add(_getOwner(ownerList, selected[i]["owner_id"]));
+      }
+      Debit d = Debit.fromMap(selected[0]);
+      d.owners.addAll(owners);
+      debits.add(d);
+      owners.clear();
+    }
+    return debits;
   }
 
   Future<void> update(String table, Map entry, int id) async {
