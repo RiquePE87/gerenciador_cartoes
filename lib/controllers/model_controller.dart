@@ -8,22 +8,36 @@ import 'package:gerenciador_cartoes/repositories/db_repository.dart';
 import 'package:get/get.dart';
 
 class ModelController extends GetxController {
-  final DbRepository dbRepository;
   ModelController({@required this.dbRepository});
 
-  RxBool isLoading = true.obs;
-  RxList<String> names = <String>[].obs;
-  RxList<CreditCard> creditCards = <CreditCard>[].obs;
-  RxList<Debit> debitsList = <Debit>[].obs;
-  RxList<Owner> ownerList = <Owner>[].obs;
-  RxList<int> selectedOwners = <int>[].obs;
-  Rx<CreditCard> selectedCard = CreditCard().obs;
   CreditCard cc = new CreditCard();
-  Owner owner = new Owner();
+  RxList<CreditCard> creditCards = <CreditCard>[].obs;
+  final DbRepository dbRepository;
   Rx<Debit> debit = new Debit().obs;
+  RxList<Debit> debitsList = <Debit>[].obs;
+  RxBool isLoading = true.obs;
   RxString message = "".obs;
+  RxList<String> names = <String>[].obs;
+  Owner owner = new Owner();
+  RxList<Owner> ownerList = <Owner>[].obs;
   final Rx<PageController> pageController =
       PageController(initialPage: DateTime.now().month - 1).obs;
+
+  Rx<CreditCard> selectedCard = CreditCard().obs;
+  RxList<int> selectedOwners = <int>[].obs;
+
+  @override
+  void onInit() async {
+    super.onInit();
+    _init();
+  }
+
+  @override
+  void onReady() {
+    getCreditCards();
+    getOwners();
+    super.onReady();
+  }
 
   _init() {
     ever(selectedOwners, (_) {
@@ -187,6 +201,8 @@ class ModelController extends GetxController {
     List<Debit> items =
         await dbRepository.getDebitEntries(cardId: card.id).whenComplete(() {
       isLoading.value = false;
+    }).onError((error, stackTrace){
+      
     });
     allDebits.assignAll(items);
 
@@ -336,18 +352,5 @@ class ModelController extends GetxController {
         snackPosition: SnackPosition.BOTTOM);
     updateAll();
     Get.back();
-  }
-
-  @override
-  void onReady() {
-    getCreditCards();
-    getOwners();
-    super.onReady();
-  }
-
-  @override
-  void onInit() async {
-    super.onInit();
-    _init();
   }
 }
