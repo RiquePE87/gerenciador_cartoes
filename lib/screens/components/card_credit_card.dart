@@ -16,7 +16,7 @@ class CardCreditCard extends GetView<ModelController> {
     return Center(
         child: GestureDetector(
       onTap: () {
-        // controller.selectedCard.value = card;
+        controller.selectedCard.value = card;
         // // controller.getDebitsByMonth(5).whenComplete(() =>
         // controller.getMonthlyDebits(card).whenComplete(() =>
         //Get.toNamed(Routes.CREDIT_DETAILS_SCREEN, preventDuplicates: true);
