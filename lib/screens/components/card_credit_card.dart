@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
 import 'package:gerenciador_cartoes/data/models/credit_card.dart';
+import 'package:gerenciador_cartoes/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../card_details_screen.dart';
 
 class CardCreditCard extends GetView<ModelController> {
-  final CreditCard card;
+  final Rx<CreditCard> card;
 
   CardCreditCard(this.card);
 
@@ -16,9 +17,7 @@ class CardCreditCard extends GetView<ModelController> {
     return Center(
         child: GestureDetector(
       onTap: () {
-        controller.selectedCard.value = card;
-        // // controller.getDebitsByMonth(5).whenComplete(() =>
-        // controller.getMonthlyDebits(card).whenComplete(() =>
+        controller.selectedCard.value = card.value;
         //Get.toNamed(Routes.CREDIT_DETAILS_SCREEN, preventDuplicates: true);
 
         Get.to(
@@ -32,7 +31,7 @@ class CardCreditCard extends GetView<ModelController> {
             title: "Atenção",
             middleText: "Você deseja excluir o cartão?",
             onConfirm: () {
-              controller.deleteCreditCard(card);
+              controller.deleteCreditCard(card.value);
               Get.back(closeOverlays: true);
             },
             textConfirm: "Sim",
@@ -50,7 +49,7 @@ class CardCreditCard extends GetView<ModelController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(card.name,
+              Text(card.value.name,
                   style: GoogleFonts.adamina(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
@@ -65,7 +64,7 @@ class CardCreditCard extends GetView<ModelController> {
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                           color: Colors.white)),
-                  Text(card.payDay.toString(),
+                  Text(card.value.payDay.toString(),
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -83,7 +82,7 @@ class CardCreditCard extends GetView<ModelController> {
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: Colors.white)),
-                  Text("R\$: ${card.usedLimit.toStringAsFixed(2)}",
+                  Text("R\$: ${card.value.usedLimit.toStringAsFixed(2)}",
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -93,7 +92,7 @@ class CardCreditCard extends GetView<ModelController> {
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: Colors.white)),
-                  Text("R\$: ${card.limitCredit.toStringAsFixed(2)}",
+                  Text("R\$: ${card.value.limitCredit.toStringAsFixed(2)}",
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,

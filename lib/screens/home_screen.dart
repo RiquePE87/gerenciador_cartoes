@@ -7,68 +7,59 @@ import 'components/card_credit_card.dart';
 import 'dialogs/owner_dialog.dart';
 import 'dialogs/credit_card_dialog.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends GetView<ModelController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.purple.shade500,
-      body: GetBuilder<ModelController>(
-        builder: (value) {
-          return SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Obx(
-                    () => Container(
-                      child: value.isLoading.value
-                          ? Center(
-                              child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation(Colors.white),
-                            ))
-                          : ListView.builder(
-                              itemCount: value.creditCards.length,
-                              itemBuilder: (context, index) {
-                                return Obx(() =>
-                                    CardCreditCard(value.creditCards[index]));
-                              }),
-                    ),
+        backgroundColor: Colors.purple.shade500,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Obx(
+                  () => Container(
+                    child: controller.isLoading.value
+                        ? Center(
+                            child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation(Colors.white),
+                          ))
+                        : ListView.builder(
+                            itemCount: controller.creditCards.length,
+                            itemBuilder: (context, index) {
+                              return Obx(() => CardCreditCard(
+                                  controller.creditCards[index].obs));
+                            }),
                   ),
                 ),
-                Container(
-                  height: 90,
-                  margin: const EdgeInsets.only(bottom: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            createMenuItem(
-                                "Adicionar Devedor",
-                                Icons.person_add,
-                                () => Get.dialog(OwnerDialog())),
-                            createMenuItem(
-                                "Adicionar Cartão",
-                                Icons.credit_card,
-                                () => Get.dialog(CreditCardDialog())),
-                            createMenuItem("Devedores", Icons.person,
-                                () => Get.toNamed(Routes.OWNER_SCREEN)),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
-          );
-        },
-      ),
-    );
+              ),
+              Container(
+                height: 90,
+                margin: const EdgeInsets.only(bottom: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          createMenuItem("Adicionar Devedor", Icons.person_add,
+                              () => Get.dialog(OwnerDialog())),
+                          createMenuItem("Adicionar Cartão", Icons.credit_card,
+                              () => Get.dialog(CreditCardDialog())),
+                          createMenuItem("Devedores", Icons.person,
+                              () => Get.toNamed(Routes.OWNER_SCREEN)),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ));
   }
 
   Widget createMenuItem(String description, IconData icon, Callback onPressed) {

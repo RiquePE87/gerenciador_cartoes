@@ -8,7 +8,7 @@ import 'package:gerenciador_cartoes/screens/dialogs/debit_dialog.dart';
 import 'package:get/get.dart';
 
 class CardDetailsScreen extends GetView<ModelController> {
-  final CreditCard card;
+  final Rx<CreditCard> card;
   CardDetailsScreen({this.card});
 
   @override
@@ -31,14 +31,14 @@ class CardDetailsScreen extends GetView<ModelController> {
                     children: [
                       IconButton(
                         icon: Icon(Icons.arrow_back_ios),
-                        onPressed: () => Get.offNamed("/"),
+                        onPressed: () => Get.back(),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(card.name,
+                          Text(card.value.name,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -56,7 +56,6 @@ class CardDetailsScreen extends GetView<ModelController> {
                                 color: Colors.white,
                               ),
                               onPressed: () {
-                                //value.selectedCard = cc;
                                 Get.dialog(DebitDialog());
                               }),
                           IconButton(
@@ -65,9 +64,8 @@ class CardDetailsScreen extends GetView<ModelController> {
                                 color: Colors.white,
                               ),
                               onPressed: () {
-                                //value.selectedCard = cc;
                                 Get.dialog(CreditCardDialog(
-                                  creditCard: card,
+                                  creditCard: card.value,
                                 ));
                               })
                         ],
@@ -81,14 +79,11 @@ class CardDetailsScreen extends GetView<ModelController> {
                   child: Obx(
                     () => PageView.builder(
                         pageSnapping: true,
-                        onPageChanged: (page) {
-                          //controller.loadMonth(page);
-                        },
                         controller: controller.pageController.value,
-                        itemCount: card.monthDebits.length,
+                        itemCount: card.value.monthDebits.length,
                         itemBuilder: (_, position) {
                           Map<String, dynamic> element =
-                              card.monthDebits[position];
+                              card.value.monthDebits[position];
                           int lastMonth = element["month"].month + 1;
                           int firstMonth = element["month"].month - 1;
                           return Column(

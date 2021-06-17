@@ -12,63 +12,69 @@ class OwnerDetails extends GetView<ModelController> {
 
   @override
   Widget build(BuildContext context) {
-    return ExpansionTile(
-        trailing: Icon(
-          Icons.arrow_drop_down_circle_rounded,
-          color: Colors.white,
-        ),
-        childrenPadding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
+    return Card(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          ListView(
-            shrinkWrap: true,
-            children: createList2(owner.debits),
-          )
-        ],
-        title: Card(
-            child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Text(
+                  owner.name,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Row(
-                children: [
-                  Text(
-                    owner.name,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              IconButton(
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.black,
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                      icon: Icon(
-                        Icons.edit,
-                        color: Colors.black,
-                      ),
-                      onPressed: () => Get.dialog(OwnerDialog(
-                            owner: owner,
-                          ))),
-                  IconButton(
-                      icon: Icon(
-                        Icons.delete,
-                        color: Colors.black,
-                      ),
-                      onPressed: () {
-                        Get.defaultDialog(
-                            title: "Atenção",
-                            middleText: "Deseja realmente excluir?",
-                            textConfirm: "Sim",
-                            onConfirm: () => controller.deleteOwner(owner),
-                            textCancel: "Não",
-                            onCancel: () => Get.back());
-                      })
-                ],
-              ),
-              createTotalText(owner)
+                  onPressed: () => Get.dialog(OwnerDialog(
+                        owner: owner,
+                      ))),
+              IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    Get.defaultDialog(
+                        title: "Atenção",
+                        middleText: "Deseja realmente excluir?",
+                        textConfirm: "Sim",
+                        onConfirm: () => controller.deleteOwner(owner),
+                        textCancel: "Não",
+                        onCancel: () => Get.back());
+                  })
             ],
           ),
-        )));
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: 4,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (_, index) {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: 4,
+                        itemBuilder: (_, index) {
+                          return Text("Teste");
+                        });
+                  }),
+            ),
+          )
+          //createList2(owner.debits)
+        ],
+      ),
+    );
   }
 
   Widget createTotalText(Owner owner) {
@@ -85,49 +91,65 @@ class OwnerDetails extends GetView<ModelController> {
         : Container();
   }
 
-  List<Widget> createList2(Map<String, List<Debit>> map) {
-    List<Widget> widgets = [];
-
-    map.keys.forEach((card) {
-      double tot = 0;
-      List<Debit> debits = map[card];
-      debits.forEach((element) {
-        double total = (element.value / element.quota) / element.owners.length;
-        tot += total;
-        widgets.add(Container(
-          color: Colors.purple,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(element.description,
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white)),
-              Text("R\$: ${total.toStringAsFixed(2)}",
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white))
-            ],
-          ),
-        ));
-      });
-      widgets.add(Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text("Total $card R\$: ${tot.toStringAsFixed(2)}",
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white))
-          ],
-        ),
-      ));
-    });
-    return widgets;
+  Widget createList2(Map<String, dynamic> map) {
+    PageController pageController = PageController();
+    Widget widget;
+    widget = Expanded(
+      flex: 1,
+      child: PageView.builder(
+          controller: pageController,
+          itemCount: 3,
+          itemBuilder: (_, position) {
+            //Map element = card.value[position];
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [Text("HHJHJ")],
+            );
+          }),
+    );
+    map.entries.forEach((card) {});
+    return widget;
   }
+
+  // Widget createPage(Map<String, dynamic> map) {
+  //   return Container(
+  //     child: Column(
+  //       children: [
+  //         Container(
+  //         color: Colors.purple,
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             Text(element.description,
+  //                 style: TextStyle(
+  //                     fontSize: 14,
+  //                     fontWeight: FontWeight.w500,
+  //                     color: Colors.white)),
+  //             Text("R\$: ${total.toStringAsFixed(2)}",
+  //                 style: TextStyle(
+  //                     fontSize: 14,
+  //                     fontWeight: FontWeight.w500,
+  //                     color: Colors.white))
+  //           ],
+  //         ),
+  //       ),
+  //       Padding(
+  //       padding: const EdgeInsets.only(bottom: 10),
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.end,
+  //         children: [
+  //           Text("Total $card R\$: ${tot.toStringAsFixed(2)}",
+  //               style: TextStyle(
+  //                   fontSize: 16,
+  //                   fontWeight: FontWeight.w700,
+  //                   color: Colors.white))
+  //         ],
+  //       ),
+  //     )
+  //       ],
+  //     ),
+  //   );
+  // }
 }
