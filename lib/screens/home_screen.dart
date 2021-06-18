@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
 import 'package:gerenciador_cartoes/routes/app_pages.dart';
+import 'package:gerenciador_cartoes/screens/teste.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'components/card_credit_card.dart';
@@ -51,6 +52,8 @@ class HomeScreen extends GetView<ModelController> {
                               () => Get.dialog(CreditCardDialog())),
                           createMenuItem("Devedores", Icons.person,
                               () => Get.toNamed(Routes.OWNER_SCREEN)),
+                          createMenuItem("Devedores teste", Icons.person,
+                              () => Get.to(Teste())),
                         ],
                       ),
                     )

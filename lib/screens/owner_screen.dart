@@ -22,23 +22,25 @@ class OwnerScreen extends GetView<ModelController> {
             ),
             Expanded(
               flex: 1,
-              child: Container(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: controller.ownerList.length,
-                  itemBuilder: (context, index) {
-                    Owner owner = controller.ownerList[index];
-                    return Obx(() => controller.isLoading.value
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                                child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation(Colors.white),
-                            )),
-                          )
-                        : OwnerDetails(owner));
-                  },
-                ),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: controller.ownerList.length,
+                itemBuilder: (context, index) {
+                  Owner owner = controller.ownerList[index];
+                  return
+                      // Obx(() => controller.isLoading.value
+                      //     ? Padding(
+                      //         padding: const EdgeInsets.all(8.0),
+                      //         child: Center(
+                      //             child: CircularProgressIndicator(
+                      //           valueColor: AlwaysStoppedAnimation(Colors.white),
+                      //         )),
+                      //       )
+                      //     :
+                      OwnerDetails(owner)
+                      // )
+                      ;
+                },
               ),
             ),
           ],

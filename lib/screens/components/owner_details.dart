@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
-import 'package:gerenciador_cartoes/data/models/debit.dart';
 import 'package:gerenciador_cartoes/data/models/owner.dart';
 import 'package:gerenciador_cartoes/screens/dialogs/owner_dialog.dart';
 import 'package:get/get.dart';
@@ -54,23 +53,18 @@ class OwnerDetails extends GetView<ModelController> {
                   })
             ],
           ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: 4,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (_, index) {
-                    return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: 4,
-                        itemBuilder: (_, index) {
-                          return Text("Teste");
-                        });
-                  }),
-            ),
-          )
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: 4,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (_, index) {
+                return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: 4,
+                    itemBuilder: (_, index) {
+                      return Text("Teste");
+                    });
+              })
           //createList2(owner.debits)
         ],
       ),
