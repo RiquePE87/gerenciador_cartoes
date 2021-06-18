@@ -67,6 +67,7 @@ class Teste extends StatelessWidget {
                           ],
                         ),
                         ListView.builder(
+                          scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
                           itemCount: 2,
                           itemBuilder: (BuildContext context, int index) {
