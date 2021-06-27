@@ -56,14 +56,21 @@ class OwnerDetails extends GetView<ModelController> {
           ListView.builder(
               shrinkWrap: true,
               itemCount: 4,
-              scrollDirection: Axis.horizontal,
+              scrollDirection: Axis.vertical,
               itemBuilder: (_, index) {
-                return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: 4,
-                    itemBuilder: (_, index) {
-                      return Text("Teste");
-                    });
+                owner.debits;
+                return Column(
+                  children: [
+                    Text("Card"),
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: 4,
+                        itemBuilder: (_, index) {
+                          return Text("Teste");
+                        }),
+                    Text("Total"),
+                  ],
+                );
               })
           //createList2(owner.debits)
         ],

@@ -66,19 +66,27 @@ class Teste extends StatelessWidget {
                                 })
                           ],
                         ),
-                        ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          itemCount: 2,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: 4,
+                        Flexible(
+                          fit: FlexFit.loose,
+                          flex: 1,
+                          child: SizedBox(
+                            height: 200,
+                            width: double.infinity,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: 2,
                               itemBuilder: (BuildContext context, int index) {
-                                return Text("Teste");
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: 4,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Text("Teste");
+                                  },
+                                );
                               },
-                            );
-                          },
+                            ),
+                          ),
                         )
                       ],
                     ),
