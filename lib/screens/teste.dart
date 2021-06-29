@@ -70,19 +70,21 @@ class Teste extends StatelessWidget {
                           fit: FlexFit.loose,
                           flex: 1,
                           child: SizedBox(
-                            height: 200,
-                            width: double.infinity,
+                            height: 150,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
-                              itemCount: 2,
+                              itemCount: 5,
                               itemBuilder: (BuildContext context, int index) {
-                                return ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: 4,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return Text("Teste");
-                                  },
+                                return SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: 25,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Text("Teste");
+                                    },
+                                  ),
                                 );
                               },
                             ),
