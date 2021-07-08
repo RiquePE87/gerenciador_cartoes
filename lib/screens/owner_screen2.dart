@@ -6,7 +6,7 @@ import 'package:gerenciador_cartoes/repositories/constants.dart';
 import 'package:get/get.dart';
 
 class OwnerScreen2 extends GetView<ModelController> {
-  PageController pageController =
+  final PageController pageController =
       PageController(initialPage: DateTime.now().month - 1);
   @override
   Widget build(BuildContext context) {
@@ -52,9 +52,11 @@ class OwnerScreen2 extends GetView<ModelController> {
                                       String cardName = cards[card];
                                       Map<String, dynamic> debits =
                                           owner.debits[cardName][month];
+                                      print(debits);
                                       double totalDebits =
                                           sumTotalDebit(debits["debits"]);
-                                      ownerTotal += totalDebits;
+                                      ownerTotal = controller.setCardsTotal(
+                                          owner.debits, month);
                                       return Column(
                                         children: [
                                           Text(owner.name),
@@ -135,8 +137,4 @@ class OwnerScreen2 extends GetView<ModelController> {
     });
     return total;
   }
-}
-
-double sumOwnerTotal(double total) {
-  double t = 0;
 }

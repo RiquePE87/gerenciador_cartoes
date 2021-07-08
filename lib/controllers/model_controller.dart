@@ -51,6 +51,17 @@ class ModelController extends GetxController {
     //ever(selectedCard, (_) => monthlyDebits.clear());
   }
 
+  double setCardsTotal(Map cards, int month) {
+    double total = 0;
+    cards.forEach((key, value) {
+      List<Debit> debits = value[month]["debits"];
+      debits.forEach((element) {
+        total += (element.value / element.quota) / element.owners.length;
+      });
+    });
+    return total;
+  }
+
   double setTotalDebit(RxList<Debit> debits) {
     double total = 0;
 
