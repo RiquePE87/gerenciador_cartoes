@@ -101,25 +101,44 @@ class ModelController extends GetxController {
 
   Future<Map<String, dynamic>> getOwnerDebits(Owner owner) async {
     Map<String, dynamic> ownerDebits = {};
-    List<Map<String, dynamic>> deb;
 
-    for (int i = 0; i < creditCards.length; i++) {
-      deb = creditCards[i].monthDebits;
+    creditCards.forEach((creditCard) {
+      List<Map<String, dynamic>> deb = [];
 
-      for (int k = 0; k < creditCards[i].monthDebits.length; k++) {
-        List<Debit> l = deb[i]["debits"];
-        List<Debit> list = [];
-        for (int j = 0; j > l.length; j++) {
-          l[i].owners.forEach((o) {
-            if (o.id == owner.id) {
-              list.add(l[i]);
-            }
-            deb[i]["debits"].addAll(list);
+      creditCard.monthDebits.forEach((debits) {
+        List<Debit> monthDebits = debits["debits"];
+        RxList<Debit> ownerDebits = <Debit>[].obs;
+
+        monthDebits.forEach((debit) {
+          debit.owners.forEach((element) {
+            if (element.id == owner.id) ownerDebits.add(debit);
           });
-        }
-      }
-      ownerDebits[creditCards[i].name] = deb;
-    }
+        });
+
+        deb.add(_createDebitsMap(ownerDebits, debits["month"].month));
+      });
+      ownerDebits[creditCard.name] = deb;
+    });
+
+    // for (int i = 0; i < creditCards.length; i++) {
+    //   deb = creditCards[i].monthDebits;
+
+    //   for (int k = 0; k < creditCards[i].monthDebits.length; k++) {
+    //     List<Debit> l = deb[i]["debits"];
+    //     List<Debit> list = [];
+    //     for (int j = 0; j < l.length; j++) {
+    //       l[i].owners.forEach((o) {
+    //         if (o.id == owner.id) {
+    //           list.add(l[i]);
+    //         }
+    //         deb[i]["debits"].clear;
+    //         deb[i]["debits"].addAll(list);
+    //       });
+    //     }
+    //   }
+    //   ownerDebits[creditCards[i].name] = deb;
+    // }
+    print("");
     return ownerDebits;
 
     // ownerDebits.forEach((key, value) {
@@ -196,16 +215,21 @@ class ModelController extends GetxController {
     }
   }
 
+  Map<String, dynamic> _createDebitsMap(RxList<Debit> list, int month) {
+    Map<String, dynamic> map = {
+      "month": DateTime(DateTime.now().year, month),
+      "debits": list,
+      "total": setTotalDebit(list)
+    };
+    return map;
+  }
+
   Future<List<Map<String, dynamic>>> getMonthlyDebits(CreditCard card) async {
     List<Map<String, dynamic>> debits = [];
     //if (monthlyDebits.length == 0) {
     for (int i = 1; i <= DateTime.monthsPerYear; i++)
       await getDebitsByMonth(i, card).then((value) {
-        Map<String, dynamic> map = {
-          "month": DateTime(DateTime.now().year, i),
-          "debits": value,
-          "total": setTotalDebit(value)
-        };
+        Map<String, dynamic> map = _createDebitsMap(value, i);
         debits.add(map);
       });
     // } else {

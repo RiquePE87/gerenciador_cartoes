@@ -17,114 +17,116 @@ class OwnerScreen2 extends GetView<ModelController> {
               controller: pageController,
               itemCount: 12,
               itemBuilder: (context, month) {
-                return Column(
-                  children: [
-                    Row(
-                      children: [
-                        IconButton(
-                            icon: Icon(Icons.arrow_back_ios),
-                            onPressed: () => Get.back())
-                      ],
-                    ),
-                    Center(
-                      child: Text(
-                        MONTHS[month + 1],
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800),
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          IconButton(
+                              icon: Icon(Icons.arrow_back_ios),
+                              onPressed: () => Get.back())
+                        ],
                       ),
-                    ),
-                    ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: controller.ownerList.length,
-                        itemBuilder: (context, index) {
-                          Owner owner = controller.ownerList[index];
-                          double ownerTotal = 0;
-                          List<dynamic> cards = owner.debits.keys.toList();
-                          return Card(
-                            child: Column(
-                              children: [
-                                ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: cards.length,
-                                    itemBuilder: (context, card) {
-                                      String cardName = cards[card];
-                                      Map<String, dynamic> debits =
-                                          owner.debits[cardName][month];
-                                      print(debits);
-                                      double totalDebits =
-                                          sumTotalDebit(debits["debits"]);
-                                      ownerTotal = controller.setCardsTotal(
-                                          owner.debits, month);
-                                      return Column(
-                                        children: [
-                                          Text(owner.name),
-                                          Text(cardName),
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: ListView.builder(
-                                                shrinkWrap: true,
-                                                itemCount:
-                                                    debits["debits"].length,
-                                                itemBuilder: (context, debit) {
-                                                  Debit d =
-                                                      debits["debits"][debit];
-                                                  double total =
-                                                      (d.value / d.quota) /
-                                                          d.owners.length;
-                                                  return Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 4,
-                                                            horizontal: 4),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Text(d.description),
-                                                        Text(
-                                                            "R\$:${(total.toStringAsFixed(2))}")
-                                                      ],
-                                                    ),
-                                                  );
-                                                }),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                "Total R\$:${totalDebits.toStringAsFixed(2)}",
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      );
-                                    }),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      "Total R\$:${ownerTotal.toStringAsFixed(2)}",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w800),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          );
-                        }),
-                  ],
+                      Center(
+                        child: Text(
+                          MONTHS[month + 1],
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800),
+                        ),
+                      ),
+                      ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: controller.ownerList.length,
+                          itemBuilder: (context, index) {
+                            Owner owner = controller.ownerList[index];
+                            double ownerTotal = 0;
+                            List<dynamic> cards = owner.debits.keys.toList();
+                            return Card(
+                              child: Column(
+                                children: [
+                                  ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: cards.length,
+                                      itemBuilder: (context, card) {
+                                        String cardName = cards[card];
+                                        Map<String, dynamic> debits =
+                                            owner.debits[cardName][month];
+                                        double totalDebits =
+                                            sumTotalDebit(debits["debits"]);
+                                        ownerTotal = controller.setCardsTotal(
+                                            owner.debits, month);
+                                        return Column(
+                                          children: [
+                                            Text(owner.name),
+                                            Text(cardName),
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              child: ListView.builder(
+                                                  shrinkWrap: true,
+                                                  itemCount:
+                                                      debits["debits"].length,
+                                                  itemBuilder:
+                                                      (context, debit) {
+                                                    Debit d =
+                                                        debits["debits"][debit];
+                                                    double total =
+                                                        (d.value / d.quota) /
+                                                            d.owners.length;
+                                                    return Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 4,
+                                                              horizontal: 4),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Text(d.description),
+                                                          Text(
+                                                              "R\$:${(total.toStringAsFixed(2))}")
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  "Total R\$:${totalDebits.toStringAsFixed(2)}",
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w800),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        );
+                                      }),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "Total R\$:${ownerTotal.toStringAsFixed(2)}",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w800),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            );
+                          }),
+                    ],
+                  ),
                 );
               })),
     );
