@@ -16,7 +16,7 @@ class CardDetailsScreen extends GetView<ModelController> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          color: Colors.purple,
+          color: Colors.green.shade500,
           child: Column(
             children: [
               Container(
@@ -25,7 +25,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                 padding: EdgeInsets.all(5),
                 margin: const EdgeInsets.fromLTRB(5, 5, 5, 0),
                 child: Card(
-                  color: Colors.purple.shade600,
+                  color: Colors.green.shade400,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -99,7 +99,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                                         : "${DateTime.now().year - 1}",
                                     style: TextStyle(
                                         fontSize: 18,
-                                        color: Colors.grey,
+                                        color: Colors.green[900],
                                         fontWeight: FontWeight.w800),
                                   ),
                                   Text(
@@ -115,7 +115,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                                         : "",
                                     style: TextStyle(
                                         fontSize: 18,
-                                        color: Colors.grey,
+                                        color: Colors.green[900],
                                         fontWeight: FontWeight.w800),
                                   )
                                 ],

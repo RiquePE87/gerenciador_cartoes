@@ -5,18 +5,23 @@ import 'package:gerenciador_cartoes/data/models/owner.dart';
 import 'package:gerenciador_cartoes/repositories/constants.dart';
 import 'package:get/get.dart';
 
+import 'dialogs/owner_dialog.dart';
+
 class OwnerScreen2 extends GetView<ModelController> {
   final PageController pageController =
       PageController(initialPage: DateTime.now().month - 1);
   @override
   Widget build(BuildContext context) {
+    Owner owner;
+    int month;
     return Scaffold(
-      backgroundColor: Colors.purple,
+      backgroundColor: Colors.green,
       body: SafeArea(
           child: PageView.builder(
               controller: pageController,
               itemCount: 12,
-              itemBuilder: (context, month) {
+              itemBuilder: (context, months) {
+                month = months;
                 return SingleChildScrollView(
                   child: Column(
                     children: [
@@ -40,12 +45,54 @@ class OwnerScreen2 extends GetView<ModelController> {
                           shrinkWrap: true,
                           itemCount: controller.ownerList.length,
                           itemBuilder: (context, index) {
-                            Owner owner = controller.ownerList[index];
-                            double ownerTotal = 0;
+                            owner = controller.ownerList[index];
                             List<dynamic> cards = owner.debits.keys.toList();
                             return Card(
+                              color: Colors.green[50],
                               child: Column(
                                 children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            owner.name,
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
+                                      IconButton(
+                                          icon: Icon(
+                                            Icons.edit,
+                                            color: Colors.black,
+                                          ),
+                                          onPressed: () =>
+                                              Get.dialog(OwnerDialog(
+                                                owner: owner,
+                                              ))),
+                                      IconButton(
+                                          icon: Icon(
+                                            Icons.delete,
+                                            color: Colors.black,
+                                          ),
+                                          onPressed: () {
+                                            Get.defaultDialog(
+                                                title: "Atenção",
+                                                middleText:
+                                                    "Deseja realmente excluir?",
+                                                textConfirm: "Sim",
+                                                onConfirm: () => controller
+                                                    .deleteOwner(owner),
+                                                textCancel: "Não",
+                                                onCancel: () => Get.back());
+                                          })
+                                    ],
+                                  ),
                                   ListView.builder(
                                       shrinkWrap: true,
                                       itemCount: cards.length,
@@ -55,12 +102,14 @@ class OwnerScreen2 extends GetView<ModelController> {
                                             owner.debits[cardName][month];
                                         double totalDebits =
                                             sumTotalDebit(debits["debits"]);
-                                        ownerTotal = controller.setCardsTotal(
-                                            owner.debits, month);
                                         return Column(
                                           children: [
-                                            Text(owner.name),
-                                            Text(cardName),
+                                            Text(
+                                              cardName,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                             SizedBox(
                                               width: MediaQuery.of(context)
                                                   .size
@@ -99,7 +148,7 @@ class OwnerScreen2 extends GetView<ModelController> {
                                                   MainAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                  "Total R\$:${totalDebits.toStringAsFixed(2)}",
+                                                  "R\$:${totalDebits.toStringAsFixed(2)}",
                                                   style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
@@ -114,7 +163,7 @@ class OwnerScreen2 extends GetView<ModelController> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
-                                        "Total R\$:${ownerTotal.toStringAsFixed(2)}",
+                                        "Total R\$:${controller.setCardsTotal(owner.debits, month).toStringAsFixed(2)}",
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w800),

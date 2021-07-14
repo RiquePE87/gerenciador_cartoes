@@ -11,9 +11,9 @@ class DebitDetails extends GetView<ModelController> {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+        padding: EdgeInsets.fromLTRB(4, 5, 4, 0),
         child: Card(
-          color: Colors.purple.shade600,
+          color: Colors.green.shade50,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -25,10 +25,20 @@ class DebitDetails extends GetView<ModelController> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(debit.description, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white),),
+                      Text(
+                        debit.description,
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.green[900]),
+                      ),
                       Text(
                         "R\$: ${debit.value.toStringAsFixed(2)} X ${debit.quota.toString()} = R\$: ${(debit.value / debit.quota).toStringAsFixed(2)}",
-                        style:TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),)
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.green[900]),
+                      )
                     ],
                   ),
                 ),
@@ -50,28 +60,45 @@ class DebitDetails extends GetView<ModelController> {
                               return Container(
                                   padding: const EdgeInsets.all(5),
                                   decoration: BoxDecoration(
-                                      border: Border.all(width: 1, color: Colors.white)),
-                                  child: Text(debit.owners[index].name, style: TextStyle(fontSize: 12, color: Colors.white),));
+                                      border: Border.all(
+                                          width: 1, color: Colors.green[900])),
+                                  child: Text(
+                                    debit.owners[index].name,
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.green[900]),
+                                  ));
                             }),
                       )
                     ],
                   ),
                 ),
               ),
-              IconButton(icon: Icon(Icons.delete), onPressed: (){
-                Get.defaultDialog(
-                    title: "Atenção!",
-                    middleText: "Você deseja realmente excluir?",
-                    textCancel: "Não",
-                    onCancel: () => Get.back(),
-                    textConfirm: "Sim",
-                    onConfirm: ()=>  controller.deleteDebit(debit).whenComplete(() => Get.back())
-                );
-
-              }),
-              IconButton(icon: Icon(Icons.edit), onPressed: (){
-                Get.dialog(DebitDialog(debit: debit,));
-              })
+              IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.green[900],
+                  ),
+                  onPressed: () {
+                    Get.defaultDialog(
+                        title: "Atenção!",
+                        middleText: "Você deseja realmente excluir?",
+                        textCancel: "Não",
+                        onCancel: () => Get.back(),
+                        textConfirm: "Sim",
+                        onConfirm: () => controller
+                            .deleteDebit(debit)
+                            .whenComplete(() => Get.back()));
+                  }),
+              IconButton(
+                  icon: Icon(
+                    Icons.edit,
+                    color: Colors.green[900],
+                  ),
+                  onPressed: () {
+                    Get.dialog(DebitDialog(
+                      debit: debit,
+                    ));
+                  })
             ],
           ),
         ),

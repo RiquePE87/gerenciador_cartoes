@@ -41,7 +41,7 @@ class CardCreditCard extends GetView<ModelController> {
         //
       },
       child: Card(
-        color: Colors.purple.shade400,
+        color: Colors.green[50],
         margin: const EdgeInsets.all(10),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -50,10 +50,10 @@ class CardCreditCard extends GetView<ModelController> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(card.value.name,
-                  style: GoogleFonts.adamina(
+                  style: TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white)),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green[900])),
               SizedBox(
                 height: 20,
               ),
@@ -63,12 +63,12 @@ class CardCreditCard extends GetView<ModelController> {
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          color: Colors.white)),
+                          color: Colors.green[900])),
                   Text(card.value.payDay.toString(),
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          color: Colors.white)),
+                          color: Colors.green[900])),
                 ],
               ),
               SizedBox(
@@ -81,22 +81,22 @@ class CardCreditCard extends GetView<ModelController> {
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          color: Colors.white)),
+                          color: Colors.green[900])),
                   Text("R\$: ${card.value.usedLimit.toStringAsFixed(2)}",
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          color: Colors.white)),
+                          color: Colors.green[900])),
                   Text("Total:",
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          color: Colors.white)),
+                          color: Colors.green[900])),
                   Text("R\$: ${card.value.limitCredit.toStringAsFixed(2)}",
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
-                          color: Colors.white)),
+                          color: Colors.green[900])),
                 ],
               ),
             ],

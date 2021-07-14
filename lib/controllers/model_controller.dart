@@ -120,40 +120,7 @@ class ModelController extends GetxController {
       ownerDebits[creditCard.name] = deb;
     });
 
-    // for (int i = 0; i < creditCards.length; i++) {
-    //   deb = creditCards[i].monthDebits;
-
-    //   for (int k = 0; k < creditCards[i].monthDebits.length; k++) {
-    //     List<Debit> l = deb[i]["debits"];
-    //     List<Debit> list = [];
-    //     for (int j = 0; j < l.length; j++) {
-    //       l[i].owners.forEach((o) {
-    //         if (o.id == owner.id) {
-    //           list.add(l[i]);
-    //         }
-    //         deb[i]["debits"].clear;
-    //         deb[i]["debits"].addAll(list);
-    //       });
-    //     }
-    //   }
-    //   ownerDebits[creditCards[i].name] = deb;
-    // }
-    print("");
     return ownerDebits;
-
-    // ownerDebits.forEach((key, value) {
-    //   List<Debit> l = [];
-    //   value.forEach((element) {
-    //     for (Owner o in element.owners) {
-    //       if (o.id == owner.id) {
-    //         l.add(element);
-    //       }
-    //     }
-    //   });
-    //   //debits[key] = l;
-    // });
-    // print(debits);
-    // //return debits;
   }
 
   void showErrorMessage(String error) {

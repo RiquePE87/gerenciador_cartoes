@@ -12,7 +12,7 @@ class HomeScreen extends GetView<ModelController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.purple.shade500,
+        backgroundColor: Colors.green,
         body: SafeArea(
           child: Column(
             children: [
@@ -39,24 +39,15 @@ class HomeScreen extends GetView<ModelController> {
                 margin: const EdgeInsets.only(bottom: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Expanded(
-                      flex: 1,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          createMenuItem("Adicionar Devedor", Icons.person_add,
-                              () => Get.dialog(OwnerDialog())),
-                          createMenuItem("Adicionar Cartão", Icons.credit_card,
-                              () => Get.dialog(CreditCardDialog())),
-                          createMenuItem("Devedores", Icons.person,
-                              () => Get.toNamed(Routes.OWNER_SCREEN)),
-                          createMenuItem("Devedores teste", Icons.person,
-                              () => Get.to(Teste())),
-                        ],
-                      ),
-                    )
+                    createMenuItem("Adicionar Devedor", Icons.person_add,
+                        () => Get.dialog(OwnerDialog())),
+                    createMenuItem("Adicionar Cartão", Icons.credit_card,
+                        () => Get.dialog(CreditCardDialog())),
+                    createMenuItem("Devedores", Icons.person,
+                        () => Get.toNamed(Routes.OWNER_SCREEN)),
                   ],
                 ),
               )
@@ -70,22 +61,23 @@ class HomeScreen extends GetView<ModelController> {
       onTap: onPressed,
       child: SizedBox(
         width: 100,
+        height: 100,
         child: Container(
-          color: Colors.purple.shade600,
-          margin: const EdgeInsets.only(left: 8, right: 8),
+          color: Colors.green.shade50,
+          margin: const EdgeInsets.only(left: 5, right: 5),
           padding: const EdgeInsets.all(8),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Icon(
                 icon,
-                color: Colors.white,
+                color: Colors.green[900],
               ),
               Text(
                 description,
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.green[900]),
               )
             ],
           ),
