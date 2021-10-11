@@ -74,6 +74,12 @@ class ModelController extends GetxController {
 
   void updateAll() {
     getCreditCards().whenComplete(() => getOwners());
+    if (selectedCard != null){
+      creditCards.forEach((element) {
+        if (element.id == selectedCard.value.id)
+          selectedCard.value = element;
+      });
+    }
   }
 
   Future<Map<String, double>> getTotalDebits(Owner owner) async {
@@ -324,6 +330,7 @@ class ModelController extends GetxController {
         });
         await dbRepository.insert(map, keyOwnerDebitTable);
       }
+      updateAll();
     });
 
     debit.owners.forEach((element) async {

@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:gerenciador_cartoes/controllers/model_controller.dart';
 import 'package:gerenciador_cartoes/data/models/credit_card.dart';
@@ -22,7 +23,7 @@ class CardCreditCard extends GetView<ModelController> {
 
         Get.to(
             () => CardDetailsScreen(
-                  card: card,
+                  //card: card,
                 ),
             preventDuplicates: true);
       },
@@ -104,5 +105,13 @@ class CardCreditCard extends GetView<ModelController> {
         ),
       ),
     ));
+  }
+
+  String setCurrencyValue(double value){
+    String currency;
+
+    if (value > 999.99){
+      String s = value.toStringAsFixed(2);
+    }
   }
 }

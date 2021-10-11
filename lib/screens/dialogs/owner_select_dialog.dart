@@ -53,7 +53,7 @@ class OwnerSelectDialog extends GetView<ModelController> {
     if (controller.selectedOwners.contains(owner)) {
       return ElevatedButton(
           style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.purple)),
+              backgroundColor: MaterialStateProperty.all(Colors.green.shade500)),
           onPressed: () => controller.selectOwners(owner),
           child: Text("${owner.name}"));
     } else {

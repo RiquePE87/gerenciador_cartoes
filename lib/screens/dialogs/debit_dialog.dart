@@ -164,7 +164,7 @@ class DebitDialog extends GetView<ModelController> {
         padding: const EdgeInsets.only(left: 5, right: 5),
         child: ElevatedButton(
             style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.purple)),
+                backgroundColor: MaterialStateProperty.all(Colors.green.shade500)),
             onPressed: () => controller.selectOwners(owner),
             child: Text("${owner.name}")),
       );

@@ -8,12 +8,13 @@ import 'package:gerenciador_cartoes/screens/dialogs/debit_dialog.dart';
 import 'package:get/get.dart';
 
 class CardDetailsScreen extends GetView<ModelController> {
-  final Rx<CreditCard> card;
-  CardDetailsScreen({this.card});
+  //final Rx<CreditCard> card;
+  //CardDetailsScreen({this.card});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green.shade500,
       body: SafeArea(
         child: Container(
           color: Colors.green.shade500,
@@ -38,7 +39,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(card.value.name,
+                          Text(controller.selectedCard.value.name,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -65,7 +66,7 @@ class CardDetailsScreen extends GetView<ModelController> {
                               ),
                               onPressed: () {
                                 Get.dialog(CreditCardDialog(
-                                  creditCard: card.value,
+                                  creditCard: controller.selectedCard.value,
                                 ));
                               })
                         ],
@@ -80,10 +81,10 @@ class CardDetailsScreen extends GetView<ModelController> {
                     () => PageView.builder(
                         pageSnapping: true,
                         controller: controller.pageController.value,
-                        itemCount: card.value.monthDebits.length,
+                        itemCount: controller.selectedCard.value.monthDebits.length,
                         itemBuilder: (_, position) {
                           Map<String, dynamic> element =
-                              card.value.monthDebits[position];
+                              controller.selectedCard.value.monthDebits[position];
                           int lastMonth = element["month"].month + 1;
                           int firstMonth = element["month"].month - 1;
                           return Column(
