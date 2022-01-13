@@ -1,3 +1,3 @@
 # gerenciador_cartoes
 
-This is a app for credit card management.
+This is an app for credit card management.
